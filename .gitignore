@@ -10,3 +10,5 @@ data/daily_volume.parquet
 research/results/ref_donchian*
 research/results/trades/ref_donchian*
 research/review/
+research/hunter/**/__pycache__/
+*.pkl

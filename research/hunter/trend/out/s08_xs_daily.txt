@@ -1,0 +1,16 @@
+H9 cross-sectional momentum: long top-k / short bottom-k of tradable set by L-bar return; signal 23:00 bar close, enter next open
+L=168 H=72 n_rebal=324 per-leg mean bps,t: LS (np.float64(27.8), np.float64(1.54)) long-mkt (np.float64(37.3), np.float64(1.62)) short+mkt (np.float64(18.4), np.float64(0.9)) | by year LS {2022: np.float64(53.0), 2023: np.float64(35.4), 2024: np.float64(3.3)}
+L=168 H=168 n_rebal=138 per-leg mean bps,t: LS (np.float64(66.9), np.float64(1.57)) long-mkt (np.float64(74.4), np.float64(1.26)) short+mkt (np.float64(59.5), np.float64(1.33)) | by year LS {2022: np.float64(45.4), 2023: np.float64(37.4), 2024: np.float64(111.8)}
+L=336 H=72 n_rebal=324 per-leg mean bps,t: LS (np.float64(20.7), np.float64(1.11)) long-mkt (np.float64(50.5), np.float64(2.07)) short+mkt (np.float64(-9.1), np.float64(-0.44)) | by year LS {2022: np.float64(37.0), 2023: np.float64(21.4), 2024: np.float64(8.8)}
+L=336 H=168 n_rebal=138 per-leg mean bps,t: LS (np.float64(96.4), np.float64(2.28)) long-mkt (np.float64(146.1), np.float64(2.67)) short+mkt (np.float64(46.6), np.float64(1.01)) | by year LS {2022: np.float64(56.9), 2023: np.float64(94.4), 2024: np.float64(125.4)}
+L=720 H=72 n_rebal=324 per-leg mean bps,t: LS (np.float64(31.1), np.float64(1.69)) long-mkt (np.float64(43.0), np.float64(1.76)) short+mkt (np.float64(19.3), np.float64(1.01)) | by year LS {2022: np.float64(27.9), 2023: np.float64(54.4), 2024: np.float64(10.0)}
+L=720 H=168 n_rebal=138 per-leg mean bps,t: LS (np.float64(50.6), np.float64(1.16)) long-mkt (np.float64(57.6), np.float64(1.05)) short+mkt (np.float64(43.5), np.float64(0.86)) | by year LS {2022: np.float64(16.6), 2023: np.float64(127.8), 2024: np.float64(-4.8)}
+
+H10 daily-scale with-trend impulse (24h ret > 2 sd, 24h volume > 2x)
+H=72 {'n': 335, 'mean': np.float64(133.3), 'med': np.float64(26.5), 'hit': np.float64(0.516), 't': np.float64(2.08), 't_day': np.float64(2.26)} L/S 248.6 -12.3 years [(97, np.float64(124.2)), (135, np.float64(76.1)), (103, np.float64(216.9))]
+H=168 {'n': 335, 'mean': np.float64(346.9), 'med': np.float64(159.9), 'hit': np.float64(0.573), 't': np.float64(3.66), 't_day': np.float64(3.31)} L/S 512.1 138.1 years [(97, np.float64(248.8)), (135, np.float64(230.0)), (103, np.float64(592.4))]
+
+H11 with-trend impulse (k2.5 v3) split by liq_vol/volume of the impulse bar, H=72
+liq share quantiles: {0.25: 0.0015, 0.5: 0.0154, 0.75: 0.0746, 0.9: 0.1997}
+liq share <= median {'n': 417, 'mean': np.float64(123.2), 'med': np.float64(12.3), 'hit': np.float64(0.511), 't': np.float64(2.66), 't_day': np.float64(1.09)} L/S 127.5 118.8 years [np.float64(230.2), np.float64(39.3), np.float64(94.1)]
+liq share > median {'n': 418, 'mean': np.float64(80.4), 'med': np.float64(40.5), 'hit': np.float64(0.538), 't': np.float64(1.78), 't_day': np.float64(1.55)} L/S 158.7 30.8 years [np.float64(112.6), np.float64(82.7), np.float64(55.4)]

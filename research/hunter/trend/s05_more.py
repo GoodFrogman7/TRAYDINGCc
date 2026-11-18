@@ -14,8 +14,6 @@ def h4(N=168, slow=2160, side=1):
         reg = btc_feat(data, df.index, lambda b: np.sign(b["close"] / ta.sma(b["close"], slow) - 1))
         return base.where(reg == side, 0)
     return sig
-tab("H4 LONG 168h-high break, coin 14d up, BTC > SMA90d", h4(168, 2160, 1))
-tab("H4 SHORT 168h-low break, coin 14d down, BTC < SMA90d", h4(168, 2160, -1))
 
 # H5: squeeze + trend direction
 def h5(q=0.2):
@@ -29,10 +27,8 @@ def h5(q=0.2):
         side[(c < ta.donchian_low(df, 48)) & sq & (tr < 0)] = -1
         return side
     return sig
-tab("H5 squeeze(q=.2) + 48h break in direction of 14d trend (long & short)", h5())
 def h5l(s, df, data):
     return h5()(s, df, data).clip(lower=0)
-tab("H5 squeeze + 48h-high break in uptrend, LONG only", h5l)
 
 # H6: trend + crowding. Uptrend with LOW premium (shorts paying / spot-led) vs HIGH premium (crowded longs)
 def h6(which="uncrowded", L=336):
@@ -50,8 +46,6 @@ def h6(which="uncrowded", L=336):
             side[(tr < 0) & (rk <= 0.25)] = -1
         return side
     return sig
-tab("H6 trend(14d) + UNCROWDED premium (long if premium rank<=.25, short if >=.75)", h6("uncrowded"), Hs=(24, 72, 168), gap=72)
-tab("H6 trend(14d) + CROWDED premium (control)", h6("crowded"), Hs=(24, 72, 168), gap=72)
 
 # H7: impulse bar: 1h move > k x ATR(24) with volume > 3x its 168h mean, in the direction of the 14d trend / against
 def h7(k=2.5, with_trend=True):
@@ -68,8 +62,6 @@ def h7(k=2.5, with_trend=True):
         side[m] = d[m]
         return side
     return sig
-tab("H7 impulse bar (>2.5 ATR, vol>3x) WITH 14d trend -> follow", h7(2.5, True), Hs=(6, 24, 72))
-tab("H7 impulse bar (>2.5 ATR, vol>3x) AGAINST 14d trend -> follow", h7(2.5, False), Hs=(6, 24, 72))
 
 # H8: OI-confirmed breakout (needs oi, 2023-03+): 48h-high break in uptrend with OI up vs down over 24h
 def h8(oi_up=True):
@@ -84,5 +76,16 @@ def h8(oi_up=True):
         side[m] = 1
         return side
     return sig
-tab("H8 uptrend 48h-high break with OI +3% in 24h (new longs) -> LONG", h8(True))
-tab("H8 uptrend 48h-high break with OI falling (short cover) -> LONG", h8(False))
+
+
+if __name__ == "__main__":
+    tab("H4 LONG 168h-high break, coin 14d up, BTC > SMA90d", h4(168, 2160, 1))
+    tab("H4 SHORT 168h-low break, coin 14d down, BTC < SMA90d", h4(168, 2160, -1))
+    tab("H5 squeeze(q=.2) + 48h break in direction of 14d trend (long & short)", h5())
+    tab("H5 squeeze + 48h-high break in uptrend, LONG only", h5l)
+    tab("H6 trend(14d) + UNCROWDED premium (long if premium rank<=.25, short if >=.75)", h6("uncrowded"), Hs=(24, 72, 168), gap=72)
+    tab("H6 trend(14d) + CROWDED premium (control)", h6("crowded"), Hs=(24, 72, 168), gap=72)
+    tab("H7 impulse bar (>2.5 ATR, vol>3x) WITH 14d trend -> follow", h7(2.5, True), Hs=(6, 24, 72))
+    tab("H7 impulse bar (>2.5 ATR, vol>3x) AGAINST 14d trend -> follow", h7(2.5, False), Hs=(6, 24, 72))
+    tab("H8 uptrend 48h-high break with OI +3% in 24h (new longs) -> LONG", h8(True))
+    tab("H8 uptrend 48h-high break with OI falling (short cover) -> LONG", h8(False))

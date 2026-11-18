@@ -1,0 +1,44 @@
+### QuietTrend, 168-bar time stop
+                              label   n   win   avgR  ret    dd  streak  hold    L     S  fees  fund   p22  p23  p24  gross_bps
+              long only q.8 s5 L336 351 0.442  0.114 20.0 -14.7      10  92.7 1997     0   325   738  -728 1400 1325      156.9
+                         both sides 738 0.373 -0.022 -8.3 -27.6      16  81.5 1449 -2277   737   770 -1390 1045 -483       14.9
+                               q .7 483 0.412  0.144 34.9 -16.8      14  89.8 3487     0   482   987 -1110 2248 2349      151.7
+                               q .9 206 0.422  0.221 22.7 -11.3      10  99.3 2274     0   180   516  -441 1614 1101      217.5
+                               s3.5 456 0.379  0.057 13.0 -32.4      14  61.9 1295     0   592   898  -603  222 1676       94.7
+                                 s7 301 0.449  0.224 33.7 -12.7      10 118.9 3369     0   204   612  -776 2108 2037      288.2
+                               L168 448 0.377  0.088 19.6 -26.2      13  83.6 1961     0   450   778  -846 2730   77       63.5
+                               L720 291 0.378  0.127 18.5 -18.8      13 100.4 1850     0   246   736  -276  642 1484      186.2
+long only q.8 s5 L336 | no guardian 307 0.391  0.281 43.1 -19.3      22 113.9 4311     0   293   840  -887 2654 2544      258.3
+    long only q.8 s5 L336 | fees x2 351 0.436  0.100 17.5 -15.0      10  92.5 1750     0   649   736  -775 1257 1268      157.1
+   long only q.8 s5 L336 | no costs 351 0.453  0.197 34.5 -14.1      10  92.7 3451     0     0     0  -614 2026 2038      168.6
+exits(default): {'guardian': np.int64(133), 'stop': np.int64(131), 'time': np.int64(87)}
+
+### ImpulseCap (with-trend hourly impulse, max entries per bar)
+label   n   win  avgR  ret    dd  streak  hold    L    S  fees  fund  p22  p23  p24  gross_bps
+ cap3 616 0.390 0.206 63.6 -26.5      14  37.0 2944 3415  1106   447 1196 2416 2747       63.6
+ cap2 568 0.377 0.193 54.7 -33.1      11  35.1 2502 2965  1021   415 1546 1570 2351       63.0
+ cap1 455 0.385 0.250 56.9 -18.3      11  36.2 4147 1542   805   334 1242 2656 1792       77.9
+ cap5 676 0.396 0.227 76.7 -25.1      15  37.0 3875 3794  1195   474 2318 2336 3015       65.3
+exits(default): {'stop': np.int64(324), 'time': np.int64(196), 'guardian': np.int64(96)}
+
+### XSMom extra cells
+  label   n   win  avgR  ret    dd  streak  hold   L    S  fees  fund  p22  p23  p24  gross_bps
+L168 s8 534 0.436 0.046 12.3 -10.4      10 109.7 910  323   394   159 -759 1831  161       27.3
+L336 s8 538 0.457 0.059 15.9  -7.2       6 111.3 162 1431   398   138  476 1290 -173        7.7
+exits(default): {'time': np.int64(244), 'stop': np.int64(233), 'guardian': np.int64(53), 'end_of_data': np.int64(4)}
+
+### TrendDay extra cells (corners)
+         label   n   win   avgR  ret    dd  streak  hold    L     S  fees  fund   p22  p23  p24  gross_bps
+     k1.5 s3.5 436 0.321 -0.033 -7.2 -35.4      18  60.7 1030 -1748   458   484 -1428  158  552      -26.7
+       k2.5 s7 219 0.507  0.206 22.5 -10.2       7 130.7 1722   529   113   318   312  545 1395      238.5
+k2.5 s3.5 L168 276 0.351  0.012  1.7 -18.2      12  57.3 1203 -1037   264   321  -688  242  613        7.4
+  k1.5 s7 L720 348 0.463  0.085 14.8 -11.6      10 123.6 1161   322   185   399  -135  666  951      134.2
+exits(default): {'stop': np.int64(201), 'guardian': np.int64(178), 'time': np.int64(57)}
+
+trend_day_follow: maxDD -0.164 trough 2023-01-06 10:00:00+00:00 | peak before 2022-07-30 15:00:00+00:00 | worst R -1.26 best R 10.38 | mean win R 1.52 mean loss R -0.87
+quarterly pnl %: {Timestamp('2022-04-01 00:00:00+0000', tz='UTC'): 10.8, Timestamp('2022-07-01 00:00:00+0000', tz='UTC'): -1.2, Timestamp('2022-10-01 00:00:00+0000', tz='UTC'): -10.0, Timestamp('2023-01-01 00:00:00+0000', tz='UTC'): 3.1, Timestamp('2023-04-01 00:00:00+0000', tz='UTC'): 6.7, Timestamp('2023-07-01 00:00:00+0000', tz='UTC'): -0.0, Timestamp('2023-10-01 00:00:00+0000', tz='UTC'): 6.5, Timestamp('2024-01-01 00:00:00+0000', tz='UTC'): -0.6, Timestamp('2024-04-01 00:00:00+0000', tz='UTC'): -1.7, Timestamp('2024-07-01 00:00:00+0000', tz='UTC'): 0.4, Timestamp('2024-10-01 00:00:00+0000', tz='UTC'): 18.5}
+max concurrent positions approx (gross/10000 max): 0.85
+
+trend_impulse_cap: maxDD -0.265 trough 2023-05-07 20:00:00+00:00 | peak before 2023-01-14 08:00:00+00:00 | worst R -1.33 best R 10.25 | mean win R 2.10 mean loss R -1.00
+quarterly pnl %: {Timestamp('2022-04-01 00:00:00+0000', tz='UTC'): 20.7, Timestamp('2022-07-01 00:00:00+0000', tz='UTC'): -7.6, Timestamp('2022-10-01 00:00:00+0000', tz='UTC'): -0.9, Timestamp('2023-01-01 00:00:00+0000', tz='UTC'): -5.4, Timestamp('2023-04-01 00:00:00+0000', tz='UTC'): 1.3, Timestamp('2023-07-01 00:00:00+0000', tz='UTC'): 16.6, Timestamp('2023-10-01 00:00:00+0000', tz='UTC'): 11.4, Timestamp('2024-01-01 00:00:00+0000', tz='UTC'): 0.1, Timestamp('2024-04-01 00:00:00+0000', tz='UTC'): 7.4, Timestamp('2024-07-01 00:00:00+0000', tz='UTC'): 4.9, Timestamp('2024-10-01 00:00:00+0000', tz='UTC'): 15.1}
+max concurrent positions approx (gross/10000 max): 2.29
