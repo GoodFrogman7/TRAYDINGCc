@@ -100,10 +100,11 @@ def test_live_mode_is_refused_and_processes_nothing(tmp_path):
     assert sorted(p.name for p in (tmp_path / "state").iterdir()) == ["alerts.jsonl", "heartbeat.json"]
 
 
-def test_shipped_config_is_paper_with_no_strategy_and_no_credentials():
+def test_shipped_config_is_paper_with_no_champion_and_no_credentials():
     raw = yaml.safe_load((ROOT / "config" / "bot.yaml").read_text())
     assert raw["mode"] == "paper" and raw["kill"] is False
-    assert raw["champion"] is None and raw["challengers"] == []
+    assert raw["champion"] is None                               # nothing earned champion (2026-11-18)
+    assert all(c["strategy"].startswith("desk.strategies.s_") for c in raw["challengers"]) and len(raw["challengers"]) <= 2
     assert not re.search(SECRET_WORDS + "|" + AUTH_WORDS, (ROOT / "config" / "bot.yaml").read_text(),
                          flags=re.IGNORECASE)
     C.load_config(ROOT / "config" / "bot.yaml")

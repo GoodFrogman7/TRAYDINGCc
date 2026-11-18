@@ -10,9 +10,18 @@ account: {equity0: 10000, risk_per_trade: 0.005}        # per book
 # The strategy that trades. null = the book stays flat. Example:
 #   champion: {strategy: desk.strategies.s_name, params: {n: 96}}
 champion: null
+# 2026-11-18: no strategy earned champion. Of 40 ideas drafted and 18 audited, 5 passed every gate on unseen
+# data, none was distinguishable from luck, and the three best were refuted by independent skeptics
+# (research/results/leaderboard.md). The book stays flat until one does.
 
 # Up to two shadow books (challenger_1, challenger_2), same shape as champion.
-challengers: []
+# WATCH LIST, paper only. These two passed every gate (also on Coinbase-listed coins only) but were refuted as
+# champions: their profits cannot be told apart from luck. They trade here in shadow books so that forward
+# results can settle it. Parameters are the ones the walk-forward chose for its last unseen quarter
+# (2026-04-01), so the sealed holdout was not used to pick them.
+challengers:
+  - {strategy: desk.strategies.s_cross_weekend_follow_alts, params: {look: 48, thr: 0.0, stop_atr: 4.0, n_alt: 3}}
+  - {strategy: desk.strategies.s_trend_quiet_grind, params: {L: 336, q: 0.9, stop_atr: 7.0}}
 
 guardian:
   daily_loss_limit: 0.03       # stop for the day at -3%
@@ -25,7 +34,8 @@ guardian:
   max_stop_pct: 0.25           # ... and 25% from the price
 
 feed:
-  window_bars: 3000            # hours of history given to the strategies (125 days)
+  window_bars: 5200            # hours of history given to the strategies; trend_quiet_grind ranks against
+                               # 4320 hours plus a 336-hour lookback and gives NO signals on less
   settle_seconds: 120          # a bar counts as closed this long after its hour ends
   extra_symbols: []            # fetched in addition to BTC, ETH and the month's top 10
   stale_feed_minutes: 90       # a feed older than this is frozen: everything is closed

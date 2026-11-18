@@ -41,12 +41,14 @@ def test_minimal_config_gets_every_default(tmp_path):
         cfg.kill = True
 
 
-def test_shipped_config_is_paper_with_no_strategy_yet():
+def test_shipped_config_is_paper_with_no_champion_and_the_watch_list():
+    # 2026-11-18: no strategy earned champion; two refuted finalists trade as paper-only shadow books.
     cfg = C.load_config(ROOT / "config" / "bot.yaml")
     assert cfg.kill is False
-    assert all(b is None for b in cfg.books.values())
+    assert cfg.books["champion"] is None
+    assert tuple(b.module for k, b in cfg.books.items() if k != "champion" and b is not None) == ("desk.strategies.s_cross_weekend_follow_alts", "desk.strategies.s_trend_quiet_grind")
     assert cfg.risk == Risk()
-    assert cfg.window_bars == 3000
+    assert cfg.window_bars == 5200          # trend_quiet_grind gives no signal on less than about 4660 bars
 
 
 def test_books_and_strategy_loading(tmp_path):

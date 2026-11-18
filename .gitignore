@@ -4,6 +4,9 @@ __pycache__/
 .venv/
 *.log
 state/*.lock
+state/*.tmp
+paper_state/*.lock
+paper_state/*.tmp
 # market data is re-downloaded (3-4 min); provenance lives in data/manifest.json
 data/kraken_futures/
 data/daily_volume.parquet

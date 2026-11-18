@@ -16,6 +16,15 @@ that document was written, the list at the top of `desk/bot/paper.py` says how.
 | Try a strategy on the side | Add it under `challengers:` (at most two) |
 | Understand a red (failed) run | Find its code in "Alerts and what to do" |
 
+## Where it stands (2026-11-18)
+- **No champion.** Nothing earned it: see `research/results/leaderboard.md`. The champion book is empty.
+- **Two watch-list strategies** trade on paper in shadow books (`challenger_1`, `challenger_2`). They passed
+  the audit's gates but could not be told apart from luck, so they are being watched, not trusted.
+- Until the hourly GitHub job is switched on, the books live in `paper_state/` on the working branch and are
+  brought up to date once a day (`python -m desk.bot.paper tick --state paper_state`). The bot replays every
+  hour it missed, so the result is the same as hourly runs. The first hourly GitHub run copies `paper_state/`
+  into the `bot-state` branch and carries on from there.
+
 ## Starting it the first time
 1. Get `.github/workflows/paper-bot.yml` onto the default branch (`main`). Until then nothing runs.
 2. On the Actions tab choose "paper-bot" and press "Run workflow" (or wait for minute 7 of the next hour).

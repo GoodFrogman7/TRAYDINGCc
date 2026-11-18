@@ -640,12 +640,15 @@ def test_null_champion_with_a_challenger(world):
     assert_book_equals(world, "challenger_1", reference(world, K0, K0 + 29))
 
 
-def test_the_shipped_config_ticks_cleanly_with_nothing_to_trade(world):
+def test_the_shipped_config_ticks_cleanly_with_no_champion(world):
+    # The shipped config has no champion and a two-strategy watch list (2026-11-18). In this small fake
+    # world the champion book must be empty and the tick must finish without an error.
     from pathlib import Path
     shipped = Path(__file__).resolve().parents[1] / "config" / "bot.yaml"
     world.source.now = world.bar(K0) + HOUR + pd.Timedelta(minutes=7)
     hb = paper.tick(shipped, world.state, now=world.source.now, source=world.source)
-    assert hb["ok"] and {b["status"] for b in hb["books"].values()} == {"empty"}
+    assert hb["error"] in (None, "") and hb["books"]["champion"]["status"] == "empty"
+    assert {b["status"] for k, b in hb["books"].items() if k != "champion"} <= {"ok", "idle", "waiting"}
 
 
 # -------------------------------------------------------- month without universe

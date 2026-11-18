@@ -44,6 +44,13 @@ jobs:
           ref: bot-state
           path: state
 
+      - name: "First run only - carry over the books kept in paper_state/ before this workflow existed"
+        run: |
+          if [ ! -f state/heartbeat.json ] && [ -d paper_state ]; then
+            cp -r paper_state/. state/
+            rm -f state/*.lock state/*.tmp
+          fi
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
