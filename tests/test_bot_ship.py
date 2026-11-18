@@ -674,3 +674,47 @@ def test_every_alert_the_bot_can_raise_is_explained_in_the_runbook():
     raised = set(re.findall(rf'(?:alert|Alert)\(\s*{level}(?: if [^,]+ else {level})?,\s*"([a-z_]+)"', source))
     explained = set(re.findall(r"^\| `([a-z_]+)`", (root / "docs" / "RUNBOOK.md").read_text(), flags=re.M))
     assert len(raised) >= 22 and raised == explained
+
+
+# ------------------------------------------------------------------------------ report
+def test_the_report_says_when_the_backtest_used_other_parameters_than_the_book(world):
+    world.write_config(challengers=[{"strategy": DON, "params": {**PARAMS, "n": 12}}])
+    world.tick(world.bar(K0))
+    results = world.root / "results"
+    results.mkdir()
+    audited = {**DONCHIAN.params, **PARAMS}                   # the champion's full parameter set
+    (results / "ref_donchian.json").write_text(json.dumps({
+        "default_params": audited, "wf_validation": {"years": 1.0, "total_return": 0.1, "n_trades": 10}}))
+    rep = R.build_report(world.state, now=world.bar(K0 + 2), results_dir=results)
+    assert rep["books"]["champion"]["backtest"]["same_params"] is True
+    assert rep["books"]["challenger_1"]["backtest"]["same_params"] is False
+    text = R.render(rep)
+    assert text.count("Same strategy in the backtest") == 1 and text.count("OTHER parameters than this book") == 1
+    (results / "ref_donchian.json").write_text(json.dumps({"wf_validation": {"years": 1.0, "total_return": 0.1}}))
+    rep = R.build_report(world.state, now=world.bar(K0 + 2), results_dir=results)      # the file does not say
+    assert rep["books"]["challenger_1"]["backtest"]["same_params"] is None
+    assert R.render(rep).count("Same strategy in the backtest") == 2
+
+
+# ---------------------------------------------------------------------- silent strategy
+def test_a_new_book_whose_strategy_never_signals_in_the_window_is_reported_once(world, monkeypatch):
+    from desk.strategies.base import Strategy, blank_intents
+
+    class NeedsMoreHistory(Strategy):
+        name = "needs_more_history"
+
+        def intents(self, data, p):                # like a 4320-bar rank on a 300-bar window: all blank
+            return {s: blank_intents(df.index) for s, df in data.items()}
+
+    mod = fake_strategy_module(monkeypatch, "zz_ship_silent", NeedsMoreHistory())
+    world.write_config(champion={"strategy": mod}, challengers=[{"strategy": DON, "params": PARAMS}])
+    hb = world.tick(world.bar(K0))
+    assert hb["ok"] and hb["alerts"] == {"info": 0, "warn": 1, "critical": 0}      # a warning, not a failed run
+    silent = world.alerts("strategy_silent")
+    assert [(a["book"], a["level"]) for a in silent] == [("champion", "warn")]      # not the Donchian challenger
+    assert "needs_more_history" in silent[0]["message"] and "feed.window_bars (300)" in silent[0]["message"]
+    assert silent[0]["detail"]["window_bars"] == 300 and silent[0]["detail"]["symbols"] == len(SYMBOLS)
+    assert world.book()["engine"]["last_time"] == world.bar(K0).isoformat()         # the book runs all the same
+    for k in (K0 + 1, K0 + 2):
+        assert world.tick(world.bar(k))["ok"]
+    assert len(world.alerts("strategy_silent")) == 1                                # said once, at the start

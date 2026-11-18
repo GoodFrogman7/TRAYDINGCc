@@ -1,0 +1,10 @@
+# TEMPORARY config for the builder's live paper test of a longer window: trend_quiet_grind ranks a value
+# against its own last 4320 hours, so it needs feed.window_bars: 5000 (it never signals on 3000).
+# NOT the bot's config (config/bot.yaml ships with champion: null). Paper only, no credentials.
+mode: paper
+kill: false
+champion: {strategy: desk.strategies.s_trend_quiet_grind}
+challengers:
+  - {strategy: desk.strategies.s_trend_impulse_follow}
+  - {strategy: desk.strategies.s_cross_ratio_break}
+feed: {window_bars: 5000}

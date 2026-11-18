@@ -1268,5 +1268,347 @@
   "fading_sign": "Not applicable; not traded.",
   "would_trade": false,
   "lens": "cross"
+ },
+ {
+  "id": "carry_cascade_discount",
+  "idea": "Buy a perp that trades unusually far below its index, but only when at least two of the tradable top-10 perps are at an unusual discount at the same time (a market-wide leverage flush, not coin-specific news).",
+  "cause": "Cross-margined longs are liquidated at market in a cascade, pushing perps below index and price below where unforced sellers would trade; once the forced flow ends the gap closes and price rebounds.",
+  "loser": "Over-leveraged longs being liquidated at market and late momentum shorts who sell the perp below index.",
+  "regime": "wild",
+  "direction": "long",
+  "entry": "At the close of bar t, for every symbol u in data: pm_u = premium.rolling(pm_n=8, min_periods=8).mean(); med_u = pm_u.rolling(720, min_periods=360).median(); sd_u = premium.rolling(720, min_periods=360).std() (std of the RAW hourly premium, not of pm); z_u = (pm_u - med_u) / sd_u. Breadth B(t) = number of symbols u with z_u(t) <= -zb (zb fixed at 2.0) AND store.tradable_mask(u, index)[t] AND not bar_missing[t], summed on a union hourly index (absent symbol = 0). Go long symbol s at market on the open of t+1 when z_s(t) <= -z AND pm_s(t) < 0 AND B(t) >= k AND ta.atr(df,24)[t] is not NaN. The signal is emitted on every qualifying bar (no cooldown); the engine ignores it while a position is open.",
+  "stop": "close[t] - stop_atr * ta.atr(df, 24)[t]  (default 3.0 ATR, typically 4-5% below entry)",
+  "exit": "Time stop only: close at 36 bars (max_hold=36). No take-profit, no trailing stop, no exit signal.",
+  "params": {
+   "pm_n": 8,
+   "norm_n": 720,
+   "z": 2,
+   "zb": 2,
+   "k": 2,
+   "atr_n": 24,
+   "stop_atr": 3
+  },
+  "grid": {
+   "z": [
+    1.5,
+    2,
+    2.5
+   ],
+   "k": [
+    2,
+    3
+   ],
+   "stop_atr": [
+    2.5,
+    3,
+    4
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 36,
+  "needs": [
+   "premium"
+  ],
+  "events_in_design": 199,
+  "est_gross_edge_bps": 130,
+  "evidence": "Event study (36h, de-clustered 24 bars, tradable bars only): 199 events, mean +330 bps, median +184, hit 0.62, t 4.9; by-day t 2.5 on 59 distinct days. By year 2022 +157 (n=53, t 0.9) / 2023 +262 (73) / 2024 +525 (73). BTC/ETH +146 (35), alts +370 (164). One bar late +345. Long only. Longs received ~10 bps estimated funding. Control with breadth==1 (discount on that coin alone): 226 events, +60 bps, t 1.3, 2022 -156 bps, by-day t 0.5. Unconditional 36h drift +12 bps (2022 -46). Desk engine on the design window with all costs: 185 trades, win 0.61, avgR 0.38, gross 276 bps/net 273 bps per trade, total +35.2%, max DD -4.9%, 20% stopped; 2022 +3.8%/46 trades, 2023 +8.5%/68, 2024 +23.0%/71; t(R) 4.4, by-entry-day t 2.6. One bar late avgR 0.32; fees doubled 0.36; slippage x3 0.33. Neighbours: z 1.5/2.5 -> avgR 0.28/0.26; k=3 -> 0.43; stop 2.5/4 ATR -> 0.28/0.28; hold 48/72 -> 0.39/0.45. est_gross_edge_bps is the in-sample 276 cut by half.",
+  "why_it_could_fail": "Only 59 independent entry days in 33 months and the best 5 days are 67% of total R, so a 16-month test rests on ~30 days and a handful decide it. 2024 supplied two thirds of the profit; in the 2022 bear it made +3.8%, not +23%. It is threshold-sensitive in one place: loosening the BREADTH threshold to z<=-1.5 collapses avgR to 0.05-0.10 (2022 negative) and k=4 gives 0.12. It buys falling knives: a cascade that keeps going (exchange failure, depeg) stops out every position on the same day. Alts carry the edge and their real slippage in those hours is worse than average. Long-only.",
+  "fading_sign": "The breadth==1 control starts doing as well as breadth>=2, or the median 36h return of the last 15 cascade trades is below zero; also discounts closing within an hour so the 8h z rarely reaches -2 (events per quarter falling well under ~15).",
+  "would_trade": true,
+  "lens": "carry"
+ },
+ {
+  "id": "carry_deep_discount",
+  "idea": "Buy the first hour a perp's 8h average premium is both 2 standard deviations below its own 30-day norm and at least 5 bps below index.",
+  "cause": "A sustained perp discount means sellers are paying up to get out through the perp (liquidations, panic hedging) while longs are paid funding, and the gap closes when the forced flow stops.",
+  "loser": "Forced and panicked perp sellers who accept a price below the spot index.",
+  "regime": "wild",
+  "direction": "long",
+  "entry": "pm = premium.rolling(8, min_periods=8).mean(); med = pm.rolling(720, min_periods=360).median(); sd = premium.rolling(720, min_periods=360).std() (raw hourly premium); zs = (pm - med)/sd. raw[t] = (zs[t] <= -z) AND (pm[t] <= -floor_bp/1e4) AND ATR(24) not NaN. Signal only on the first qualifying bar: raw[t] is True and raw was False on every one of the previous 24 bars (raw.shift(1).rolling(24, min_periods=1).max() == 0). Long at market on the open of t+1.",
+  "stop": "close[t] - stop_atr * ta.atr(df, 24)[t]  (default 3.0 ATR)",
+  "exit": "Time stop only: close at 36 bars. No take-profit, no trail.",
+  "params": {
+   "pm_n": 8,
+   "norm_n": 720,
+   "z": 2,
+   "floor_bp": 5,
+   "cool": 24,
+   "atr_n": 24,
+   "stop_atr": 3
+  },
+  "grid": {
+   "z": [
+    2,
+    2.5,
+    3
+   ],
+   "stop_atr": [
+    2.5,
+    3,
+    4
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 36,
+  "needs": [
+   "premium"
+  ],
+  "events_in_design": 295,
+  "est_gross_edge_bps": 80,
+  "evidence": "Event study (36h): 295 events, mean +236 bps, median +131, hit 0.60, t 4.9; by-day t 2.6 on 183 days. By year 2022 -7 (n=95, vs unconditional -46) / 2023 +224 (121) / 2024 +545 (79). BTC/ETH +74 (32, t 0.6), alts +256 (263). One bar late +228. Longs received ~12 bps estimated funding. Dose-response on absolute depth (24h hold): 8h premium -8..-5 bps +27, -12..-8 +56, -20..-12 +119, -30..-20 +361. Engine: 205 trades, win 0.55, avgR 0.29, gross 156/net 152 bps, total +30.1%, max DD -5.3%, 32% stopped; 2022 +2.3%/63, 2023 +7.7%/83, 2024 +20.1%/59; t(R) 3.2, by-day t 2.5 on 144 days. One bar late avgR 0.28; fees doubled 0.27. Grid z{2,2.5,3} x stop{2.5,3,4}: 9/9 cells profitable, avgR 0.14-0.32. Floor 0/3/8 bps -> 0.17/0.23/0.19. est is the in-sample 156 cut by half.",
+  "why_it_could_fail": "Same bet as carry_cascade_discount on the big days, without the breadth check that removed the coin-specific losers (those lost 156 bps on average in 2022); do not run both at full risk. Flat in the 2022 bear before stops. BTC/ETH contribute nothing. z=2.5 is the weakest cell (avgR 0.14-0.17) between two better ones, which smells of noise. If the venue's premium behaviour changes (tighter arbitrage, different funding formula) the 5 bps floor stops firing.",
+  "fading_sign": "Trade count drops below ~3 a month, or 2022-style results (flat or negative after costs) for two consecutive quarters while the market is not in a bear.",
+  "would_trade": true,
+  "lens": "carry"
+ },
+ {
+  "id": "carry_oi_washout",
+  "idea": "Buy the first new 72-hour closing low that comes with open interest down 15% or more in 24 hours.",
+  "cause": "A new low on collapsing open interest is positions being closed or liquidated rather than new shorts being opened, so the selling is exhaustible and stops when the leverage is gone.",
+  "loser": "Leveraged longs closed out at the low and traders who short the breakdown after the fuel is spent.",
+  "regime": "wild",
+  "direction": "long",
+  "entry": "d = oi / oi.shift(24) - 1. raw[t] = (close[t] < ta.donchian_low(df, don_n)[t], the lowest low of the previous don_n bars excluding the current one) AND (d[t] <= -oi_drop) AND ATR(24) not NaN; no signal while oi is NaN. Signal only on the first qualifying bar in 24 (raw False on all of the previous 24 bars). Long at market on the open of t+1.",
+  "stop": "close[t] - stop_atr * ta.atr(df, 24)[t]  (3.0 ATR)",
+  "exit": "Time stop only: close at 36 bars.",
+  "params": {
+   "don_n": 72,
+   "oi_n": 24,
+   "oi_drop": 0.15,
+   "cool": 24,
+   "atr_n": 24,
+   "stop_atr": 3
+  },
+  "grid": {
+   "oi_drop": [
+    0.1,
+    0.15,
+    0.2
+   ],
+   "don_n": [
+    48,
+    72,
+    96
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 36,
+  "needs": [
+   "oi"
+  ],
+  "events_in_design": 181,
+  "est_gross_edge_bps": 60,
+  "evidence": "OI exists only from 2023-03, so 22 months and no bear market. Event study (36h): 181 events, mean +205 bps, median +176, hit 0.62, t 3.6; by-day t 2.1 on 109 days. 2023 +91 (n=60, t 1.4) / 2024 +261 (121). One bar late +200. Funding ~0. Control at 24h: new 72h low with no OI filter +68 bps, with OI rising +43, with OI -10% +184, -15% +259, -20% +281 (dose-response). Engine: 166 trades, win 0.54, avgR 0.18, gross 136/net 125 bps, total +15.1%, max DD -7.2%, 34% stopped; 2023 +7.3%/56, 2024 +7.8%/110; t(R) 1.9, by-day t 1.5. One bar late avgR 0.19; fees doubled 0.16. Grid 9/9 profitable but avgR only 0.09-0.18 and t(R) 1.1-1.9. Trades after a stop-out within 24h lost 76 bps on average, hence the first-signal rule. est is the in-sample 136 cut by more than half.",
+  "why_it_could_fail": "Statistically thin: t(R) under 2 and by-day t 1.5 in a pure bull sample; the event-study +205 bps shrinks to 0.18R because 37% of entries go 3 ATR against you first. Never seen a bear market. A third of the losers come from a wide-window setting (96h) going negative in 2023. Overlaps with the cascade idea on the big flush days. OI is a venue statistic that can be restated or lag.",
+  "fading_sign": "The control (new 72h low without the OI filter) matches or beats it over a quarter, or stop-out share rises above 45%.",
+  "would_trade": true,
+  "lens": "carry"
+ },
+ {
+  "id": "carry_flush_basket",
+  "idea": "NEAR-MISS: when three or more of the tradable top-10 perps are at an unusual discount at once, buy every tradable symbol for 48 hours.",
+  "cause": "A simultaneous perp discount across coins marks a market-wide liquidation flush, after which the whole market rebounds, not only the coins that were hit hardest.",
+  "loser": "Liquidated longs across the market and whoever sells the index low into the flush.",
+  "regime": "wild",
+  "direction": "long",
+  "entry": "Compute z_u and breadth B(t) exactly as in carry_cascade_discount with zb=2.0. on[t] = B(t) >= k. For every symbol: signal on the first bar where on is True after 24 bars of False (on.shift(1).rolling(24, min_periods=1).max() == 0) and ATR(24) not NaN. Long at market on the open of t+1. The engine only fills symbols in the tradable set.",
+  "stop": "close[t] - 3.0 * ta.atr(df, 24)[t]",
+  "exit": "Time stop only: close at 48 bars.",
+  "params": {
+   "pm_n": 8,
+   "norm_n": 720,
+   "zb": 2,
+   "k": 3,
+   "cool": 24,
+   "atr_n": 24,
+   "stop_atr": 3
+  },
+  "grid": {
+   "k": [
+    2,
+    3,
+    4
+   ],
+   "stop_atr": [
+    2.5,
+    3,
+    4
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 48,
+  "needs": [
+   "premium"
+  ],
+  "events_in_design": 270,
+  "est_gross_edge_bps": 100,
+  "evidence": "Event study (48h): 270 symbol-events on only 27 distinct days, mean +337 bps, t 6.8 per event but by-day t 2.7. 2022 +55 (n=70, t 0.5) / 2023 +425 (70) / 2024 +442 (130). BTC/ETH +191 (54), alts +374 (216). One bar late +415. Engine k=3: 190 trades, avgR 0.39, total +36.6%, max DD -8.7%, 2022 +8.9% / 2023 +0.8% / 2024 +26.9%, by-day t 1.8 on 19 days; one bar late 0.40; fees doubled 0.37. But k=2: 2022 -3.2%, 2023 -1.8%, max DD -30%, 121 Guardian exits; k=4: avgR 0.03; breadth z 1.5: avgR 0.01; breadth z 2.5: 2022 and 2023 negative. BTC/ETH-only versions are all positive (avgR 0.23-0.67 across four settings) but make only 28-60 trades in 33 months.",
+  "why_it_could_fail": "Knife-edge on k and on the breadth threshold: the neighbours either lose two of three years or earn nothing, so it would fail the nearby-settings gate. 19 entry days is not evidence. Ten correlated longs opened in the same hour is the opposite of what a desk that has blown up before should run. The majors-only version cannot reach 50 trades in the test window. Kept because it shows the own-discount condition in carry_cascade_discount is doing real work.",
+  "fading_sign": "Already unstable in-sample; any quarter where the k=3 default loses while the cascade idea wins confirms it.",
+  "would_trade": false,
+  "lens": "carry"
+ },
+ {
+  "id": "carry_hot_dip",
+  "idea": "NEAR-MISS: buy a new 24-hour closing low while the 24h average premium is still 5 bps or more above index.",
+  "cause": "When longs keep paying a premium through a dip, real demand is still there and the dip is short-term profit-taking that gets bought.",
+  "loser": "Short-term sellers and breakdown shorts in a market where buyers are still paying up.",
+  "regime": "trending",
+  "direction": "long",
+  "entry": "raw[t] = (close[t] < ta.donchian_low(df, don_n)[t]) AND (premium.rolling(24, min_periods=24).mean()[t] >= thr_bp/1e4) AND ATR(24) not NaN. Signal on the first qualifying bar in 24 (raw False on all of the previous 24 bars). Long at market on the open of t+1.",
+  "stop": "close[t] - 3.0 * ta.atr(df, 24)[t]",
+  "exit": "Time stop only: close at 24 bars.",
+  "params": {
+   "pm_n": 24,
+   "thr_bp": 5,
+   "don_n": 24,
+   "cool": 24,
+   "atr_n": 24,
+   "stop_atr": 3
+  },
+  "grid": {
+   "thr_bp": [
+    3,
+    5,
+    8
+   ],
+   "don_n": [
+    12,
+    24,
+    48
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 24,
+  "needs": [
+   "premium"
+  ],
+  "events_in_design": 909,
+  "est_gross_edge_bps": 30,
+  "evidence": "Event study (24h): 909 events, mean +87 bps, median +68, hit 0.57, t 4.7, by-day t 3.9 on 359 days. 2022 +44 (n=36) / 2023 +109 (282) / 2024 +79 (591). BTC/ETH +78, alts +88. One bar late +73. Longs PAY ~8 bps funding. By premium bucket at a new 24h low: 0..3 bps +14, 3..8 +78, 8..15 +83, >15 +125. Engine: 784 trades, win 0.47, avgR 0.06, gross 57/net 39 bps, total +23.9%, max DD -20.4%, 96 Guardian exits, losing streak 20; 2022 -2.6%/33, 2023 +21.6%/246, 2024 +4.9%/505; t(R) 1.2. Grid: 5/9 cells profitable, median total +0.4%; don_n=12 loses 18-34%.",
+  "why_it_could_fail": "It already fails: 4 of 9 neighbouring settings lose money, drawdown is 20%, and nearly all the profit is one year (2023). 96% of events are in the 2023-24 bull, so it is mostly 'buy dips in a bull market' with a premium label on it. Longs pay rich funding while they wait. In a bear, rich premium at a new low is trapped longs, and the two 2022 results are negative.",
+  "fading_sign": "Net bps per trade under 20 for a quarter, or the neutral-premium control (0..3 bps) performing the same.",
+  "would_trade": false,
+  "lens": "carry"
+ },
+ {
+  "id": "carry_premium_spike_short",
+  "idea": "NEAR-MISS: short a perp in the hour its average premium over index reaches 40 bps and hold 8 hours.",
+  "cause": "A 40 bps premium means longs are paying far above spot and a punitive funding rate to chase, which should be unsustainable for a few hours.",
+  "loser": "Late leveraged longs paying 40 bps over index plus funding.",
+  "regime": "wild",
+  "direction": "short",
+  "entry": "premium[t] >= thr_bp/1e4 (the hour-average premium of bar t) AND ATR(24) not NaN -> short at market on the open of t+1. Signal on every qualifying bar.",
+  "stop": "close[t] + 3.0 * ta.atr(df, 24)[t]",
+  "exit": "Time stop only: close at 8 bars.",
+  "params": {
+   "thr_bp": 40,
+   "atr_n": 24,
+   "stop_atr": 3
+  },
+  "grid": {
+   "thr_bp": [
+    20,
+    40,
+    60
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 8,
+  "needs": [
+   "premium"
+  ],
+  "events_in_design": 77,
+  "est_gross_edge_bps": 20,
+  "evidence": "Event study (short 8h, de-clustered 24 bars): 77 events on 53 days, mean +75 bps, median +84, hit 0.62, t 1.2, by-day t 1.1. 2022 -164 (n=20) / 2023 +85 (9) / 2024 +173 (48). BTC/ETH +309 (7), alts +52 (70). One bar late +133. Shorts received ~9 bps funding. At a 24h hold the same signal loses 146 bps; with price stalled it loses 431 bps (t -3.6). The 20 bps version: 1,203 events, +22 bps at 8h, t 1.8, 2022 and 2023 negative. Engine at 40 bps: 108 trades, win 0.56, avgR 0.11, gross 41 bps, total +6.0%, max DD -3.0%; 2022 -1.1%/25, 2023 -0.6%/14, 2024 +7.7%/69. The mirror of the cascade (short when two or more perps are unusually rich) lost: 467 events, -50 bps, engine avgR -0.02 with -28% drawdown.",
+  "why_it_could_fail": "Two of three years lose and all the profit is 2024 memecoin spikes (WIF, PEPE, BONK, POPCAT). t-stat 1.2. Holding longer than 8 hours turns it into a large loss, so the result depends on the exit hour. A 40 bps premium on a small alt is exactly when the book is thinnest and a squeeze can run 20% in an hour. This is the only short this lens produced and it is not good enough.",
+  "fading_sign": "It never demonstrably worked outside 2024; one more losing year closes it.",
+  "would_trade": false,
+  "lens": "carry"
+ },
+ {
+  "id": "carry_short_pile_squeeze",
+  "idea": "NEAR-MISS: buy after a 5% one-day drop when open interest ROSE 5% or more and the perp trades below index, betting on a squeeze of the new shorts.",
+  "cause": "Rising open interest into a falling price with the perp below index means fresh shorts are being opened at the low, and they must buy back when the selling runs out.",
+  "loser": "Shorts who opened late into the drop.",
+  "regime": "wild",
+  "direction": "long",
+  "entry": "raw[t] = (close/close.shift(24) - 1 <= -drop) AND (oi/oi.shift(24) - 1 >= oi_up) AND (premium.rolling(8, min_periods=8).mean() < 0) AND ATR(24) not NaN; no signal while oi is NaN. Signal on the first qualifying bar in 24. Long at market on the open of t+1.",
+  "stop": "close[t] - 3.0 * ta.atr(df, 24)[t]",
+  "exit": "Time stop only: close at 24 bars.",
+  "params": {
+   "drop": 0.05,
+   "oi_up": 0.05,
+   "pm_n": 8,
+   "cool": 24,
+   "atr_n": 24,
+   "stop_atr": 3
+  },
+  "grid": {
+   "drop": [
+    0.03,
+    0.05,
+    0.08
+   ],
+   "oi_up": [
+    0.05,
+    0.1
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 24,
+  "needs": [
+   "oi",
+   "premium"
+  ],
+  "events_in_design": 195,
+  "est_gross_edge_bps": 20,
+  "evidence": "Event study (24h, 2023-03 onward): 195 events on 116 days, mean +125 bps, median +131, hit 0.67, t 3.0, by-day t 3.0. 2023 +119 (113) / 2024 +135 (82, t 1.5). One bar late +101. Same drop and OI build with premium above zero: +37 bps (t 1.3), so the discount is the part that matters. Engine: 174 trades, win 0.56, avgR 0.01, gross 75/net 67 bps, total +1.1%, max DD -9.1%, t(R) 0.2; one bar late avgR 0.01. Neighbours avgR 0.06 (OI +10%), 0.06 (drop 3%), 0.15 (drop 8%, 78 trades).",
+  "why_it_could_fail": "It does: a healthy-looking event study (+125 bps, hit 0.67) turns into zero once a stop is attached, because the winners are small and the 31% that stop out lose a full R. One more bar of delay removes a fifth of the event-study edge. No bear data. Included as the clearest example in this lens of an event study that does not survive execution.",
+  "fading_sign": "Not applicable; it does not clear costs and stops in-sample.",
+  "would_trade": false,
+  "lens": "carry"
+ },
+ {
+  "id": "carry_retail_capitulation",
+  "idea": "NEAR-MISS: buy when the share of accounts net long is in the bottom 10% of its last 30 days after a 3% one-day drop.",
+  "cause": "Retail accounts giving up their longs after a drop would mark capitulation, leaving fewer sellers.",
+  "loser": "Retail accounts that close longs at the low.",
+  "regime": "wild",
+  "direction": "long",
+  "entry": "rk = ls_ratio.rolling(720, min_periods=360).rank(pct=True). Signal when rk[t] <= q AND close/close.shift(24) - 1 <= -drop AND ATR(24) not NaN; no signal while ls_ratio is NaN. Long at market on the open of t+1; every qualifying bar.",
+  "stop": "close[t] - 3.0 * ta.atr(df, 24)[t]",
+  "exit": "Time stop only: close at 24 bars.",
+  "params": {
+   "q": 0.1,
+   "drop": 0.03,
+   "rank_n": 720,
+   "atr_n": 24,
+   "stop_atr": 3
+  },
+  "grid": {
+   "q": [
+    0.05,
+    0.1,
+    0.2
+   ],
+   "drop": [
+    0.02,
+    0.03,
+    0.05
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 24,
+  "needs": [
+   "ls_ratio"
+  ],
+  "events_in_design": 368,
+  "est_gross_edge_bps": 10,
+  "evidence": "ls_ratio exists from 2023-05 only. Event study (24h): 368 events on 210 days, mean +87 bps, median +74, hit 0.58, t 3.1, by-day t 3.0. 2023 +38 (77, t 0.8) / 2024 +100 (291). One bar late +71. Control (3% drop, no ls filter): 2,085 events, +49 bps. Engine: 378 trades, win 0.49, avgR -0.02, gross 23/net 11 bps, total -3.2%, max DD -11.8%; q=0.05: avgR -0.06, total -6.8%. High long share as a short signal: +13 to +36 bps the wrong way. Fast 24h changes in ls_ratio: no consistent sign.",
+  "why_it_could_fail": "It loses money in the engine at both settings tried. The event-study edge over the plain 'price dropped 3%' control is about 38 bps, which is the bull-market dip-buying drift plus noise. The ratio counts accounts, not size, so one whale and a thousand small accounts are indistinguishable. 19 months of data, no bear.",
+  "fading_sign": "Not applicable; dead on arrival after stops and costs.",
+  "would_trade": false,
+  "lens": "carry"
  }
 ]

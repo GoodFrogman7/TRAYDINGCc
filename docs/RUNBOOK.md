@@ -16,6 +16,18 @@ that document was written, the list at the top of `desk/bot/paper.py` says how.
 | Try a strategy on the side | Add it under `challengers:` (at most two) |
 | Understand a red (failed) run | Find its code in "Alerts and what to do" |
 
+## Starting it the first time
+1. Get `.github/workflows/paper-bot.yml` onto the default branch (`main`). Until then nothing runs.
+2. On the Actions tab choose "paper-bot" and press "Run workflow" (or wait for minute 7 of the next hour).
+   The first run creates the branch `bot-state` and puts `heartbeat.json` and `report.md` on it. It takes
+   about two minutes and should be green.
+3. As shipped, `config/bot.yaml` says `champion: null`: the bot wakes every hour, checks the price feed and
+   trades nothing. `report.md` then reads `HEALTHY` and `Trading: nothing: no champion strategy is configured`.
+   That is the expected state until a champion is chosen.
+4. When the champion is chosen, follow "config/bot.yaml: champion and challengers" below. The run after the
+   change shows the champion book with $10,000.00 and "new book" among its decisions. A first trade can take
+   hours or days, depending on the strategy.
+
 ## What the bot does each hour
 One run is called a **tick**. It handles the hour that has just closed. In order:
 1. **Reads `config/bot.yaml`** and checks whether the kill switch is on.
@@ -96,6 +108,16 @@ challengers:
   `python -m pytest tests/test_bot_window.py -q` (needs the research data, `python -m desk.data.download`).
   It checks that the strategy decides the same on the bot's 125 days of history as on the full history. If it
   fails, raise `feed.window_bars` until it passes, or do not use that strategy.
+- **`trend_quiet_grind` needs a longer window.** Checked on 2026-11-18 for all 18 strategies in
+  `desk/strategies` (`PYTHONPATH=.:tests python research/builder/probe_window_all.py 3000 5000`): 17 decide
+  the same on the default 3000 hours as on the full history. `trend_quiet_grind` does not: it compares a
+  value with its own last 4320 hours, so on 3000 hours it would **never signal, without any error**. If it is
+  used in any book, the config must also say
+  ```yaml
+  feed: {window_bars: 5000}
+  ```
+  (verified: same decisions as on the full history, and a live run then takes about 22 seconds instead of
+  12). A strategy added later must be checked the same way.
 - Commit the change. The next run starts the book flat with $10,000 of paper money. It never trades hours
   from before it existed.
 - **Changing a book's strategy, its params or `equity0` ends that book**: its positions are sold at the next
@@ -148,6 +170,7 @@ A run is marked failed (red) when it raised a `critical` alert. `warn` and `info
 | `inputs_missing` | warn | a data column a strategy needs went empty | watch; while it lasts that strategy cannot signal on that coin |
 | `log_rollback` | warn | an earlier run died midway; its half-written lines were removed and the hour redone | nothing |
 | `lock_stale` | warn | an earlier run died and left its lock | nothing |
+| `strategy_silent` | warn | a book was started and its strategy has not one entry signal in all the history the bot holds; it will probably never trade | the strategy needs more history than `feed.window_bars` (see `trend_quiet_grind` above) or is broken: run the window check before relying on that book |
 | `strategy_changed` | info | a book was closed and archived after a config change | nothing |
 | `book_error` | critical | a strategy crashed; that book skipped the hour (it is redone later), the others ran. With the kill switch on or a frozen feed the book is still flattened | send the alert's `detail` to whoever maintains the strategy; set that book to another strategy or `null` meanwhile |
 | `state_unreadable` | critical | a book's file was damaged; it was archived and the book restarted flat | look in `archive/`; ask a maintainer how the file got damaged |

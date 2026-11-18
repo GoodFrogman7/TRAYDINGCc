@@ -98,6 +98,11 @@ def to_markdown(rows: list[dict]) -> str:
                   "", "`p` = bootstrap probability that the average trade is not positive. `Holm` = still "
                       "significant after correcting for every idea drafted. `Skeptic` = verdict of an independent "
                       "attempt to refute each strategy that passed the gates (research/verify/verdicts.json)."]
+        unrev = [r for r in rows if r["passed"] and not r["skeptic"]]
+        if unrev:
+            lines += ["", "Passed the gates but not sent to a skeptic, because a luck p-value this weak already rules "
+                          "them out as champion: " + ", ".join(f"`{r['name']}` (p = {r['p_value']:.2f})" for r in unrev)
+                      + "."]
         ref = [r for r in rows if r["skeptic"]]
         if ref:
             lines += ["", "## Skeptic verdicts"] + [f"- `{r['name']}`: {r['skeptic_one_line']}" for r in ref]

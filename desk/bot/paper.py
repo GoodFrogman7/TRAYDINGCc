@@ -30,6 +30,8 @@ Where this file goes beyond docs/BOT_SPEC.md (changes made after the review):
     as missing;
   * challenger books keep their slot when the `challengers` list is reordered;
   * the Guardian's own loss halts raise the alert `guardian_halt`.
+  * a new book whose strategy has no entry signal anywhere in the window raises `strategy_silent`
+    (the sign of a strategy that needs more history than `feed.window_bars`).
 """
 from __future__ import annotations
 
@@ -664,6 +666,15 @@ def _advance(t: _Tick, cfg: BotConfig, b: _Book, market: _Market | None, frozen:
                     f"{b.name}: {trouble}. The book is being flattened ({MANUAL_KILL if t.killed else FROZEN_FEED}), "
                     f"so its bars were processed without the strategy's signals.", book=b.name,
                     detail={"traceback": trace})
+        if new and not any(f.side.any() for f in bars.sym.values()):
+            # e.g. a strategy that ranks against more history than feed.window_bars: it would never trade,
+            # and nothing else would ever say so
+            t.alert("warn", "strategy_silent",
+                    f"{b.name}: {b.fp['name']} gives no entry signal anywhere in the {len(market.base.index)} hours "
+                    f"of history the bot holds ({len(bars.sym)} symbols). A strategy that needs more history than "
+                    f"feed.window_bars ({cfg.window_bars}) never trades: run the window check in docs/RUNBOOK.md "
+                    f"before relying on this book.", book=b.name,
+                    detail={"window_bars": cfg.window_bars, "bars": len(market.base.index), "symbols": len(bars.sym)})
     _play(t, cfg, b, eng, bars, bars, i0, i1, frozen)
     if not new and i1 - i0 > 1:
         t.alert("warn", "missed_bars", f"{b.name}: {i1 - i0} bars were processed in one tick (ticks were missed "

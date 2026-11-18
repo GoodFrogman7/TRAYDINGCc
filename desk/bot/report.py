@@ -110,7 +110,9 @@ def _backtest(results_dir: Path, fp: dict) -> dict | None:
             w = doc.get(window) if isinstance(doc, dict) else None
             if isinstance(w, dict) and w.get("years"):
                 days = float(w["years"]) * 365.25
+                audited = doc.get("default_params")       # what the audit ran; None if the file does not say
                 return {"file": str(path), "window": window, "years": w["years"],
+                        "same_params": audited == fp["params"] if isinstance(audited, dict) else None,
                         "total_return": w.get("total_return"), "trades": w.get("n_trades"),
                         "return_per_day": (w.get("total_return") or 0.0) / days,
                         "trades_per_day": (w.get("n_trades") or 0) / days,
@@ -241,7 +243,9 @@ def _book_text(name: str, b: dict | None, hours: int) -> list[str]:
                f"win rate {_pct(p['win_rate'], 0).lstrip('+')}, average {_r(p['avg_r'])}, "
                f"worst drawdown {_pct(p['max_dd'])}.")
     if bt:
-        out.append(f"- Same strategy in the backtest ({bt['window']}, {bt['years']} years): return "
+        label = ("Same strategy in the backtest" if bt.get("same_params") is not False else
+                 "The backtest of this strategy used OTHER parameters than this book, so it is only a rough guide")
+        out.append(f"- {label} ({bt['window']}, {bt['years']} years): return "
                    f"{_pct(bt['total_return'])} ({_pct(bt['return_per_day'], 3)} per day), {bt['trades']} trades "
                    f"({bt['trades_per_day']:.2f} per day), win rate {_pct(bt['win_rate'], 0).lstrip('+')}, "
                    f"average {_r(bt['avg_r'])}, worst drawdown {_pct(bt['max_dd'])}. "

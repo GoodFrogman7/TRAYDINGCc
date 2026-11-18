@@ -1,0 +1,48 @@
+### OI washout: new N-bar low AND OI change over M bars <= thr -> long 24h (control = no OI filter / OI not down)
+don72 low & OI 24h chg None long 24h
+    n=1154 mean=67.6 med=76.5 hit=0.59 t=4.67 | byday t=5.78 days=309 | 2023:71(501) 2024:65(654) | L:68(1155) | maj=21(194) alts=77(960) | delay1=56.2 | fund=1.6
+don72 low & OI 24h chg -0.1 long 24h
+    n=297 mean=183.5 med=146.6 hit=0.63 t=5.28 | byday t=4.43 days=149 | 2023:68(93) 2024:236(204) | L:184(297) | maj=23(30) alts=202(267) | delay1=141.6 | fund=0.3
+don72 low & OI 24h chg -0.15 long 24h
+    n=181 mean=258.6 med=174.7 hit=0.66 t=5.12 | byday t=3.77 days=109 | 2023:124(60) 2024:325(121) | L:259(181) | maj=223(10) alts=261(171) | delay1=217.1 | fund=-0.5
+don72 low & OI 24h chg -0.2 long 24h
+    n=121 mean=280.6 med=156.1 hit=0.65 t=4.33 | byday t=3.88 days=86 | 2023:71(36) 2024:369(85) | L:281(121) | maj=220(5) alts=283(116) | delay1=230.0 | fund=-0.6
+don72 low & OI 24h chg 0.0001 long 24h
+    n=586 mean=42.7 med=53.2 hit=0.56 t=1.99 | byday t=4.52 days=251 | 2023:78(279) 2024:10(308) | L:43(587) | maj=25(87) alts=46(499) | delay1=39.5 | fund=1.8
+don48 low & OI 24h chg -0.15 long 24h
+    n=225 mean=228.7 med=145.7 hit=0.64 t=5.15 | byday t=3.55 days=137 | 2023:82(74) 2024:301(151) | L:229(225) | maj=253(13) alts=227(212) | delay1=189.1 | fund=0.2
+don24 low & OI 24h chg -0.15 long 24h
+    n=315 mean=178.6 med=118.0 hit=0.61 t=4.84 | byday t=3.21 days=193 | 2023:97(119) 2024:228(196) | L:179(315) | maj=147(20) alts=181(295) | delay1=141.4 | fund=1.0
+don72 low & OI 72h chg -0.15 long 24h
+    n=255 mean=214.4 med=156.3 hit=0.62 t=5.69 | byday t=4.69 days=148 | 2023:75(81) 2024:279(174) | L:214(255) | maj=120(19) alts=222(236) | delay1=186.2 | fund=-0.5
+don72 low & OI 8h chg -0.1 long 24h
+    n=227 mean=202.4 med=145.7 hit=0.62 t=4.76 | byday t=3.86 days=120 | 2023:85(60) 2024:245(167) | L:202(227) | maj=62(17) alts=214(210) | delay1=151.8 | fund=-0.1
+### same, 48h hold
+don72 low & OI 24h chg -0.15 long 48h
+    n=173 mean=251.9 med=179.7 hit=0.61 t=4.02 | byday t=3.26 days=107 | 2023:98(59) 2024:332(114) | L:252(173) | maj=298(10) alts=249(163) | delay1=229.5 | fund=1.0
+don48 low & OI 24h chg -0.15 long 48h
+    n=216 mean=215.4 med=125.1 hit=0.59 t=4.05 | byday t=3.36 days=135 | 2023:101(73) 2024:274(143) | L:215(216) | maj=308(13) alts=209(203) | delay1=201.3 | fund=2.4
+### first-discount flip robustness across windows (long 24h)
+prem_ma36 flips DOWN after 36h>=0 -> LONG 24h
+    n=514 mean=-20.9 med=-10.9 hit=0.48 t=-1.01 | byday t=0.34 days=342 | 2022:-35(134) 2023:40(210) 2024:-85(171) | L:-21(515) | maj=-10(95) alts=-23(419) | delay1=-18.7 | fund=-1.3
+prem_ma48 flips DOWN after 48h>=0 -> LONG 24h
+    n=389 mean=41.1 med=36.1 hit=0.54 t=1.65 | byday t=0.86 days=285 | 2022:32(94) 2023:27(161) 2024:65(134) | L:41(389) | maj=-20(60) alts=52(329) | delay1=34.5 | fund=-1.5
+prem_ma60 flips DOWN after 60h>=0 -> LONG 24h
+    n=319 mean=50.4 med=14.3 hit=0.52 t=1.74 | byday t=0.99 days=240 | 2022:46(77) 2023:22(131) 2024:87(111) | L:50(319) | maj=-9(52) alts=62(267) | delay1=47.4 | fund=-1.8
+prem_ma72 flips DOWN after 72h>=0 -> LONG 24h
+    n=280 mean=83.3 med=58.8 hit=0.57 t=2.68 | byday t=2.25 days=202 | 2022:29(66) 2023:64(116) 2024:142(98) | L:83(280) | maj=80(48) alts=84(232) | delay1=86.2 | fund=-2.0
+prem_ma96 flips DOWN after 96h>=0 -> LONG 24h
+    n=220 mean=-33.4 med=-44.4 hit=0.44 t=-0.98 | byday t=-0.64 days=167 | 2022:47(53) 2023:-4(92) 2024:-126(75) | L:-33(220) | maj=-29(35) alts=-34(185) | delay1=-39.4 | fund=-2.8
+prem_ma120 flips DOWN after 120h>=0 -> LONG 24h
+    n=179 mean=57.3 med=48.5 hit=0.55 t=1.34 | byday t=1.99 days=141 | 2022:15(38) 2023:118(77) 2024:10(64) | L:57(179) | maj=-17(28) alts=71(151) | delay1=35.8 | fund=-3.1
+### retail capitulation: ls_ratio trailing-30d rank <= q and price down >= pthr over 24h -> long 24h; control = price down only
+ls rank<=1.01 & 24h ret<=-0.03
+    n=2085 mean=49.4 med=46.5 hit=0.54 t=4.11 | byday t=6.11 days=463 | 2023:86(542) 2024:37(1547) | L:49(2089) | maj=28(224) alts=52(1861) | delay1=42.8 | fund=3.9
+ls rank<=0.05 & 24h ret<=-0.03
+    n=231 mean=114.4 med=77.3 hit=0.59 t=2.73 | byday t=1.72 days=150 | 2023:20(42) 2024:135(189) | L:114(231) | maj=169(22) alts=109(209) | delay1=88.4 | fund=2.0
+ls rank<=0.1 & 24h ret<=-0.03
+    n=368 mean=86.8 med=74.4 hit=0.58 t=3.14 | byday t=2.98 days=210 | 2023:38(77) 2024:100(291) | L:87(368) | maj=160(33) alts=80(335) | delay1=70.9 | fund=2.4
+ls rank<=0.05 & 24h ret<=-0.05
+    n=134 mean=214.8 med=166.5 hit=0.66 t=3.44 | byday t=1.63 days=83 | 2023:45(12) 2024:232(122) | L:215(134) | maj=194(14) alts=217(120) | delay1=194.2 | fund=1.6
+ls rank<=0.02 & 24h ret<=-0.03
+    n=119 mean=137.6 med=89.5 hit=0.61 t=2.36 | byday t=1.54 days=88 | 2023:216(17) 2024:125(102) | L:138(119) | maj=210(15) alts=127(104) | delay1=95.7 | fund=1.5

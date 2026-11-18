@@ -59,3 +59,19 @@ def months_where(universe: dict[str, list[str]], pick) -> dict[str, np.ndarray]:
         for s_ in pick(syms):
             out.setdefault(s_, []).append(int(m.replace("-", "")))
     return {k: np.array(v) for k, v in out.items()}
+
+
+def premium_z(df: pd.DataFrame, pm_n: int = 8, norm_n: int = 720) -> tuple[pd.Series, pd.Series]:
+    """(pm, z): the pm_n-hour average premium and how unusual it is against the trailing norm_n hours.
+    z = (pm - rolling median of pm) / rolling std of the RAW hourly premium."""
+    prem = df["premium"].astype("float64")
+    pm = prem.rolling(pm_n, min_periods=pm_n).mean()
+    med = pm.rolling(norm_n, min_periods=norm_n // 2).median()
+    sd = prem.rolling(norm_n, min_periods=norm_n // 2).std()
+    return pm, (pm - med) / sd
+
+
+def first_in(raw: pd.Series, cool: int) -> pd.Series:
+    """True where `raw` is True and was False on every one of the previous `cool` bars."""
+    r = raw.fillna(False).astype(float)
+    return (r > 0) & (r.shift(1).rolling(cool, min_periods=1).max() == 0)

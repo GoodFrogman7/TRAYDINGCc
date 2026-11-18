@@ -1,0 +1,15 @@
+oiwash all n 185 gross 74.0 avgR 0.121
+   re-entry-after-stop<24h=False: n=161 gross=96.3bp net=84.9bp avgR=0.144 stop%=0.35
+   re-entry-after-stop<24h=True: n=24 gross=-75.6bp net=-82.3bp avgR=-0.037 stop%=0.46
+   by exit reason: {'guardian': {'n': 6, 'avgR': -0.129, 'gross': -46.582}, 'stop': {'n': 68, 'avgR': -1.054, 'gross': -508.131}, 'time': {'n': 111, 'avgR': 0.854, 'gross': 437.145}}
+   days with >=4 entries: 5 sum R on those days: -15.0 | other days sum R: 37.3 | worst day R: -6.23
+discount all n 153 gross 53.9 avgR 0.118
+   re-entry-after-stop<24h=False: n=130 gross=53.9bp net=53.5bp avgR=0.130 stop%=0.30
+   re-entry-after-stop<24h=True: n=23 gross=54.1bp net=56.6bp avgR=0.048 stop%=0.39
+   by exit reason: {'guardian': {'n': 7, 'avgR': -0.233, 'gross': -110.123}, 'signal': {'n': 36, 'avgR': 0.482, 'gross': 326.466}, 'stop': {'n': 48, 'avgR': -1.039, 'gross': -632.168}, 'time': {'n': 62, 'avgR': 0.84, 'gross': 445.402}}
+   days with >=4 entries: 8 sum R on those days: 23.2 | other days sum R: -5.2 | worst day R: -4.43
+hotdip all n 939 gross 52.3 avgR 0.044
+   re-entry-after-stop<24h=False: n=820 gross=53.9bp net=36.8bp avgR=0.052 stop%=0.30
+   re-entry-after-stop<24h=True: n=119 gross=41.0bp net=26.6bp avgR=-0.009 stop%=0.27
+   by exit reason: {'guardian': {'n': 148, 'avgR': -0.143, 'gross': -59.953}, 'stop': {'n': 282, 'avgR': -1.082, 'gross': -376.378}, 'time': {'n': 509, 'avgR': 0.722, 'gross': 322.402}}
+   days with >=4 entries: 92 sum R on those days: 18.8 | other days sum R: 22.5 | worst day R: -11.08
