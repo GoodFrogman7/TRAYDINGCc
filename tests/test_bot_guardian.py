@@ -65,9 +65,11 @@ def test_preflight_required_symbol_missing_is_not_usable(cfg):
     assert codes(v) == ["feed_incomplete"] and v.alerts[0].level == "warn"
     assert v.alerts[0].detail["failed"] == {ALTS[0]: "RuntimeError: outage"}
     assert v.age_minutes == pytest.approx(67.0)               # measured from the last good feed time
-    # BTC itself missing
+    assert v.unusable_since == NOW and v.t_feed is None       # the run of unusable ticks starts now
+    # BTC itself missing, and no earlier feed time: aged from the bar an hourly bot would have had
     v = G.preflight(fetched(syms=(ETH,), errors={BTC: "x"}), [BTC, ETH], NOW, ASOF, cfg, None)
-    assert not v.usable and codes(v) == ["feed_incomplete"] and v.age_minutes is None and not v.frozen
+    assert not v.usable and codes(v) == ["feed_incomplete"] and not v.frozen
+    assert v.age_minutes == pytest.approx(67.0) and v.unusable_since == NOW
 
 
 def test_preflight_failed_context_symbol_is_only_a_warning(cfg):
@@ -98,12 +100,75 @@ def test_preflight_late_then_frozen(cfg):
     assert v.alerts[1].level == "critical" and v.age_minutes == pytest.approx(127.0)
 
 
-def test_preflight_unusable_feed_freezes_from_the_last_good_feed_time(cfg):
+def test_preflight_unusable_feed_freezes_on_what_the_bot_saw_while_awake(cfg):
     f = fetched(syms=(BTC, ETH), errors={ALTS[0]: "x"})
-    v = G.preflight(f, [BTC, ETH, ALTS[0]], NOW, ASOF, cfg, ts("2026-07-10 11:00"))
+    req = [BTC, ETH, ALTS[0]]
+    first_bad = ts("2026-07-10 13:07:00")                     # the previous tick, an hour ago, was unusable too
+    # hourly ticks: good at 12:07 (bar 11:00), bad at 13:07, bad again now: 127 minutes without data
+    v = G.preflight(f, req, NOW, ASOF, cfg, ts("2026-07-10 11:00"), first_bad)
     assert not v.usable and v.frozen and codes(v) == ["feed_incomplete", "feed_frozen"]
-    v = G.preflight(f, [BTC, ETH, ALTS[0]], NOW, ASOF, cfg, None)          # never had a feed: unknown, not frozen
-    assert not v.usable and not v.frozen
+    assert v.age_minutes == pytest.approx(127.0) and v.unusable_since == first_bad and v.alerts[1].level == "critical"
+    # the scheduler slept for hours and THIS is the first failed fetch: 67 minutes, not the age of the old bar
+    v = G.preflight(f, req, NOW, ASOF, cfg, ts("2026-07-10 07:00"), None)
+    assert not v.usable and not v.frozen and v.age_minutes == pytest.approx(67.0) and v.unusable_since == NOW
+    # ... a second failed tick three minutes later is still not frozen, one an hour later is
+    soon = fetched(syms=(BTC, ETH), errors={ALTS[0]: "x"}, server="2026-07-10 14:10:00")
+    v = G.preflight(soon, req, NOW + pd.Timedelta(minutes=3), ASOF, cfg, ts("2026-07-10 07:00"), NOW)
+    assert not v.frozen and v.age_minutes == pytest.approx(70.0)
+    later = fetched(syms=(BTC, ETH), errors={ALTS[0]: "x"}, server="2026-07-10 15:07:00")
+    v = G.preflight(later, req, NOW + pd.Timedelta(hours=1), ASOF + pd.Timedelta(hours=1), cfg,
+                    ts("2026-07-10 07:00"), NOW)
+    assert v.frozen and v.age_minutes == pytest.approx(127.0) and v.unusable_since == NOW
+    # a feed that has NEVER been usable (first deployment) freezes the same way: there is no feed time to wait for
+    v = G.preflight(f, req, NOW, ASOF, cfg, None, None)
+    assert not v.usable and not v.frozen and v.unusable_since == NOW
+    v = G.preflight(f, req, NOW, ASOF, cfg, None, first_bad)
+    assert v.frozen and codes(v) == ["feed_incomplete", "feed_frozen"]
+    # a second tick inside the same hour as the last good one: the data is only minutes old
+    v = G.preflight(f, req, NOW, ASOF, cfg, ts("2026-07-10 13:00"), None)
+    assert not v.frozen and v.age_minutes == pytest.approx(7.0)
+    # an `unusable_since` from the future (the clock was set back) is not believed
+    v = G.preflight(f, req, NOW, ASOF, cfg, None, NOW + pd.Timedelta(days=3))
+    assert v.unusable_since == NOW and not v.frozen
+
+
+def test_preflight_never_freezes_on_a_clock_that_disagrees_with_the_venue(cfg):
+    ahead = NOW + pd.Timedelta(hours=3)                       # this machine's clock is three hours fast
+    f = fetched(server="2026-07-10 14:07:00")
+    v = G.preflight(f, [BTC, ETH], ahead, ASOF + pd.Timedelta(hours=3), cfg, ts("2026-07-10 13:00"), NOW)
+    assert not v.usable and not v.frozen and codes(v) == ["clock_skew"] and v.clock == "skew"
+    assert v.age_minutes is None and v.unusable_since == NOW  # nothing is concluded from the wrong clock
+    assert G.check_clock(None, 0.0, NOW, cfg)[0] == "unknown"
+    assert G.check_clock(ts("2026-07-10 14:07:10"), 0.0, NOW, cfg) == ("ok", [])
+    # an unreadable venue clock is an unusable feed like any other and does freeze if it lasts
+    v = G.preflight(fetched(server=None), [BTC, ETH], NOW, ASOF, cfg, ts("2026-07-10 11:00"), ts("2026-07-10 13:07"))
+    assert not v.usable and v.frozen and v.clock == "unknown" and codes(v) == ["feed_incomplete", "feed_frozen"]
+
+
+def test_preflight_waits_one_tick_for_a_held_symbols_newest_bar(cfg):
+    f = fetched()
+    f.frames[ALTS[0]] = f.frames[ALTS[0]].iloc[:-1]            # its 13:00 candle is not served yet
+    req = [BTC, ETH, ALTS[0]]
+    v = G.preflight(f, req, NOW, ASOF, cfg, None)             # nobody holds it: the bar is simply missing
+    assert v.usable and v.t_last == ts("2026-07-10 13:00") and v.alerts == []
+    v = G.preflight(f, req, NOW, ASOF, cfg, None, None, {ALTS[0]})
+    assert v.usable and not v.frozen and v.t_last == ts("2026-07-10 12:00") and v.t_feed == ts("2026-07-10 13:00")
+    assert codes(v) == ["feed_late"] and v.alerts[0].symbol == ALTS[0] and v.alerts[0].level == "warn"
+    assert v.age_minutes == pytest.approx(7.0)                # the feed itself is fresh: waiting is not freezing
+    f.frames[ALTS[0]] = f.frames[ALTS[0]].iloc[:-1]            # two bars behind: accepted as missing bars
+    v = G.preflight(f, req, NOW, ASOF, cfg, None, None, {ALTS[0]})
+    assert v.usable and v.t_last == ts("2026-07-10 13:00") and v.alerts == []
+
+
+def test_kill_file_is_found_under_the_names_an_editor_may_give_it(tmp_path, cfg):
+    for name in ("KILL", "kill", "Kill.txt", "KILL.md"):
+        (tmp_path / name).write_text("")
+        assert G.kill_requested(cfg, tmp_path) is True and G.kill_file(tmp_path).name == name
+        (tmp_path / name).unlink()
+    for name in ("killer.txt", "skill", "KILLED"):
+        (tmp_path / name).write_text("")
+    (tmp_path / "kill.d").mkdir()                             # a folder is not the switch
+    assert G.kill_requested(cfg, tmp_path) is False and G.kill_file(tmp_path / "absent") is None
 
 
 def test_preflight_ignores_trailing_missing_bars_when_finding_the_newest_real_bar(cfg):

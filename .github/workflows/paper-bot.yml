@@ -1,6 +1,12 @@
+# NOTE: this workflow only takes effect once this file is on the repository's DEFAULT branch (normally
+# `main`). GitHub ignores the schedule, and hides the "Run workflow" button, for a workflow file that
+# exists only on another branch. Merge it first; the first run then creates the `bot-state` branch.
+#
 # Hourly PAPER-trading tick. Public market data only: this workflow uses no credentials of any kind
 # beyond the repository's own built-in write access, which it needs to save the bot's files.
 # The bot's files live on the branch `bot-state`, checked out into state/. See docs/RUNBOOK.md.
+# A tick that raised a critical alert exits 1, so the job fails and GitHub notifies the owner; the
+# report and the bot's files are saved all the same.
 name: paper-bot
 
 on:

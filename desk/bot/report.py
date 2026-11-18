@@ -180,7 +180,8 @@ def build_report(state_dir=STATE, hours: int = 24, now=None, results_dir="resear
         g["level"], g["last_utc"], g["last_message"] = a.get("level"), a.get("tick_utc"), a.get("message")
     return to_jsonable({
         "generated_utc": now.isoformat(), "hours": hours, "since_utc": since.isoformat(), "mode": "paper",
-        "health": {"healthy": st["healthy"], "why": st["why"], "last_tick_utc": hb.get("tick_utc"),
+        "health": {"healthy": st["healthy"], "why": st["why"], "trading": st["trading"],
+                   "last_tick_utc": hb.get("tick_utc"),
                    "killed": bool(hb.get("killed")), "feed": hb.get("feed")},
         "books": {name: _book_report(state_dir, name, since, Path(results_dir)) for name in BOOK_NAMES},
         "alerts": alerts,
@@ -261,6 +262,7 @@ def render(report: dict) -> str:
            f"Generated {report['generated_utc'][:16]} UTC. **PAPER TRADING ONLY: no real orders, no real money.**", "",
            "## Health",
            f"- **{'HEALTHY' if h['healthy'] else 'NOT HEALTHY'}**: {h['why']}",
+           f"- **Trading**: {h.get('trading') or 'nothing'}",
            f"- Last tick: {h['last_tick_utc'] or 'never'}"]
     feed = h.get("feed") or {}
     if feed:

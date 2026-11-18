@@ -18,6 +18,7 @@ from .config import BotConfig
 from .feed import BTC, HOUR, Fetched, utc
 
 LEVELS = ("info", "warn", "critical")
+LATE_GRACE_BARS = 1        # ticks a held symbol's newest bar may lag BTC's before it counts as missing
 
 
 @dataclass
@@ -33,15 +34,30 @@ class Alert:
 @dataclass
 class Verdict:
     usable: bool                      # the bars may be processed this tick
-    frozen: bool                      # the feed is older than stale_feed_minutes: halt every book
-    t_last: pd.Timestamp | None       # BTC's newest real bar (None while not usable)
+    frozen: bool                      # no usable data for longer than stale_feed_minutes: halt every book
+    t_last: pd.Timestamp | None       # the newest bar the books may process (None while not usable)
     age_minutes: float | None
     alerts: list[Alert] = field(default_factory=list)
+    t_feed: pd.Timestamp | None = None        # BTC's newest real bar (>= t_last; None while not usable)
+    unusable_since: pd.Timestamp | None = None   # clock time of the first tick of this run of unusable ticks
+    clock: str = "ok"                 # ok | skew | unknown
+
+
+def kill_file(state_dir: Path) -> Path | None:
+    """The kill-switch file in the state directory: KILL, in any letter case, with or without an
+    extension (an editor may save it as KILL.txt)."""
+    try:
+        for p in sorted(Path(state_dir).iterdir()):
+            if p.name.lower().split(".", 1)[0] == "kill" and p.is_file():
+                return p
+    except OSError:
+        pass
+    return None
 
 
 def kill_requested(cfg: BotConfig, state_dir: Path) -> bool:
     """The manual kill switch: `kill: true` in the config, or a file named KILL in the state directory."""
-    return bool(cfg.kill) or (Path(state_dir) / "KILL").exists()
+    return bool(cfg.kill) or kill_file(state_dir) is not None
 
 
 def _newest_real_bar(df: pd.DataFrame) -> pd.Timestamp | None:
@@ -50,54 +66,97 @@ def _newest_real_bar(df: pd.DataFrame) -> pd.Timestamp | None:
     return None if df.empty else utc(df.index[-1])
 
 
+def check_clock(server_time: pd.Timestamp | None, delay: float, now: pd.Timestamp, cfg: BotConfig
+                ) -> tuple[str, list[Alert]]:
+    """Compare this machine's clock with the venue's BEFORE anything is decided on it:
+    ("ok" | "skew" | "unknown", alerts). Nothing is processed, retired or halted on a clock that is not ok."""
+    if server_time is None:
+        return "unknown", [Alert("warn", "feed_incomplete",
+                                 "could not read the venue clock, so this machine's clock cannot be checked: "
+                                 "no book advances", detail={"failed": {"venue clock": "no serverTime"}})]
+    # our clock when the venue answered = the tick's clock + the time the answer took
+    skew = (utc(now) - utc(server_time)).total_seconds() + delay
+    if abs(skew) > cfg.max_clock_skew_seconds:
+        return "skew", [Alert("critical", "clock_skew",
+                              f"this machine's clock differs from the venue's by {skew:+.0f} s "
+                              f"(limit {cfg.max_clock_skew_seconds} s): nothing is processed and no book is "
+                              f"touched until the clock is right", detail={"skew_seconds": skew})]
+    return "ok", []
+
+
 def preflight(fetched: Fetched, required: list[str], now: pd.Timestamp, asof: pd.Timestamp, cfg: BotConfig,
-              prev_feed_time: pd.Timestamp | None) -> Verdict:
-    """Decide whether this tick may process bars, and whether the feed is frozen."""
+              prev_feed_time: pd.Timestamp | None, unusable_since: pd.Timestamp | None = None,
+              held: set[str] | frozenset = frozenset()) -> Verdict:
+    """Decide whether this tick may process bars, up to which bar, and whether the feed is frozen.
+
+    `prev_feed_time` is the feed time of the last usable tick and `unusable_since` the clock time of the
+    first tick of the current run of unusable ticks (both from the previous heartbeat; None = unknown or
+    the previous tick was usable). `held` = symbols with a position or an order in any book.
+
+    Frozen means more than `stale_feed_minutes` without data, counted only over time the bot was awake:
+      * usable feed: minutes from the close of BTC's newest real bar to now;
+      * unusable feed: minutes from the newest data the bot could have had if it had been ticking every
+        hour, i.e. the later of (close of the last usable feed bar) and (close of the bar before the one
+        the first unusable tick should have processed). One failed tick after a pause of the scheduler is
+        therefore 60-odd minutes old, not frozen; a second failed tick an hour later is;
+      * a clock that disagrees with the venue's: never frozen (this machine's time cannot be trusted)."""
     now, asof = utc(now), utc(asof)
-    alerts: list[Alert] = []
-    usable = True
-    failed = {s: fetched.errors.get(s, "no data") for s in required if s not in fetched.frames}
-    t_last = _newest_real_bar(fetched.frames[BTC]) if BTC in fetched.frames else None
-    if t_last is None and BTC not in failed:
-        failed[BTC] = fetched.errors.get(BTC, "no real bar")
-    if failed:
-        usable = False
-        alerts.append(Alert("warn", "feed_incomplete",
-                            f"could not fetch {', '.join(sorted(failed))}: no book advances; the missed bars are "
-                            f"replayed on the next good tick", detail={"failed": failed}))
-    context = {s: e for s, e in fetched.errors.items() if s not in required}
-    if context:
-        alerts.append(Alert("warn", "context_missing",
-                            f"left out {', '.join(sorted(context))} (not required this month): fetch failed",
-                            detail={"failed": context}))
-    if fetched.server_time is None:
-        usable = False
-        if not failed:
-            alerts.append(Alert("warn", "feed_incomplete",
-                                "could not read the venue clock, so this machine's clock cannot be checked: "
-                                "no book advances", detail={"failed": {"venue clock": "no serverTime"}}))
-    else:
-        # our clock when the venue answered = the tick's clock + the time the answer took
-        skew = (now - utc(fetched.server_time)).total_seconds() + fetched.server_time_delay
-        if abs(skew) > cfg.max_clock_skew_seconds:
+    clock, alerts = check_clock(fetched.server_time, fetched.server_time_delay, now, cfg)
+    usable = clock == "ok"
+    t_feed = t_last = None
+    if clock == "ok":                         # with a doubtful clock no bars were asked for
+        failed = {s: fetched.errors.get(s, "no data") for s in required if s not in fetched.frames}
+        t_feed = _newest_real_bar(fetched.frames[BTC]) if BTC in fetched.frames else None
+        if t_feed is None and BTC not in failed:
+            failed[BTC] = fetched.errors.get(BTC, "no real bar")
+        if failed:
             usable = False
-            alerts.append(Alert("critical", "clock_skew",
-                                f"this machine's clock differs from the venue's by {skew:+.0f} s "
-                                f"(limit {cfg.max_clock_skew_seconds} s): nothing is processed",
-                                detail={"skew_seconds": skew}))
-    if usable and t_last < asof - HOUR:
-        behind = int(round((asof - HOUR - t_last) / HOUR))
-        alerts.append(Alert("warn", "feed_late", f"the newest BTC bar is {t_last.isoformat()}, {behind} bar(s) behind: "
-                                                 f"waiting", detail={"bars_behind": behind}))
-    since = t_last if usable else prev_feed_time
-    age = None if since is None else (now - (utc(since) + HOUR)).total_seconds() / 60.0
-    frozen = age is not None and age > cfg.stale_feed_minutes
+            alerts.append(Alert("warn", "feed_incomplete",
+                                f"could not fetch {', '.join(sorted(failed))}: no book advances; the missed bars "
+                                f"are replayed on the next good tick", detail={"failed": failed}))
+        context = {s: e for s, e in fetched.errors.items() if s not in required}
+        if context:
+            alerts.append(Alert("warn", "context_missing",
+                                f"left out {', '.join(sorted(context))} (not required this month): fetch failed",
+                                detail={"failed": context}))
+    if usable:
+        t_last = t_feed
+        if t_feed < asof - HOUR:
+            behind = int(round((asof - HOUR - t_feed) / HOUR))
+            alerts.append(Alert("warn", "feed_late", f"the newest BTC bar is {t_feed.isoformat()}, {behind} bar(s) "
+                                                     f"behind: waiting", detail={"bars_behind": behind}))
+        # a held symbol whose newest candle is not served yet: wait for it instead of inventing an empty
+        # bar that would never be redone (its stop would not be checked against the real bar)
+        for s in sorted(held):
+            newest = _newest_real_bar(fetched.frames[s]) if s in fetched.frames else None
+            if newest is None or not newest < t_feed or t_feed - newest > LATE_GRACE_BARS * HOUR:
+                continue
+            t_last = min(t_last, newest)
+            alerts.append(Alert("warn", "feed_late",
+                                f"{s} is held and its bar {(newest + HOUR).isoformat()} is not published yet (BTC's "
+                                f"is): waiting one tick before treating that bar as missing", symbol=s,
+                                detail={"newest_bar": newest.isoformat(), "btc_newest_bar": t_feed.isoformat()}))
+        since, unusable_since = t_feed + HOUR, None
+    elif clock == "skew":
+        return Verdict(False, False, None, None, alerts, clock=clock, unusable_since=unusable_since)
+    else:
+        if unusable_since is None or not utc(unusable_since) <= now:
+            unusable_since = now
+        unusable_since = utc(unusable_since)
+        # the close of the bar before the newest one that was closed at the first unusable tick
+        since = (unusable_since - pd.Timedelta(seconds=cfg.settle_seconds)).floor("h") - HOUR
+        if prev_feed_time is not None:
+            since = max(since, utc(prev_feed_time) + HOUR)
+    age = (now - since).total_seconds() / 60.0
+    frozen = age > cfg.stale_feed_minutes
     if frozen:
         alerts.append(Alert("critical", "feed_frozen",
-                            f"no fresh market data for {age:.0f} minutes (limit {cfg.stale_feed_minutes}): every book "
+                            f"no usable market data for {age:.0f} minutes (limit {cfg.stale_feed_minutes}): every book "
                             f"is halted, orders cancelled, positions closed at the next bar",
                             detail={"age_minutes": age}))
-    return Verdict(usable=usable, frozen=frozen, t_last=t_last if usable else None, age_minutes=age, alerts=alerts)
+    return Verdict(usable=usable, frozen=frozen, t_last=t_last, age_minutes=age, alerts=alerts,
+                   t_feed=t_feed if usable else None,
+                   unusable_since=unusable_since, clock=clock)
 
 
 def universe_cap(t_last: pd.Timestamp, universe: dict[str, list[str]]) -> pd.Timestamp | None:
@@ -131,8 +190,9 @@ def check_data(data: dict, gaps: dict, bad: dict, watched: set[str], needs: dict
                                 f"{s} has printed no bar for {g} hour(s): positions kept at the last price, "
                                 f"no new entries", symbol=s, detail={"hours": g}))
         if bad.get(s):
-            alerts.append(Alert("warn", "bad_bar", f"{s}: {bad[s]} bar(s) with impossible prices in the window were "
-                                                   f"treated as missing", symbol=s, detail={"bars": bad[s]}))
+            alerts.append(Alert("warn", "bad_bar", f"{s}: {bad[s]} bar(s) with impossible or off-market prices in "
+                                                   f"the window were treated as missing", symbol=s,
+                                detail={"bars": bad[s]}))
     for book, cols in needs.items():
         for s in sorted(watched):
             df = data.get(s)
@@ -185,7 +245,12 @@ def write_alerts(state_dir: Path, alerts: list[Alert], tick_utc: str) -> None:
              for a in alerts]
     path = Path(state_dir) / "alerts.jsonl"
     path.parent.mkdir(parents=True, exist_ok=True)
-    with open(path, "ab") as f:
+    with open(path, "ab+") as f:
+        size = f.seek(0, os.SEEK_END)
+        if size:                              # a line torn by a crash must not swallow the next alert
+            f.seek(size - 1)
+            if f.read(1) != b"\n":
+                lines.insert(0, "")
         f.write(("\n".join(lines) + "\n").encode())
         f.flush()
         os.fsync(f.fileno())

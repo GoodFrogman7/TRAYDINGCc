@@ -29,7 +29,9 @@ FEED_DEFAULTS = {"window_bars": 3000, "settle_seconds": 120, "extra_symbols": []
                  "max_clock_skew_seconds": 30, "delist_after_bars": 72, "max_catchup_bars": 2000}
 # the loosest value allowed: "max" = may not be above the default, "min" = may not be below it
 TIGHTEN_ONLY = {"risk_per_trade": "max", "daily_loss_limit": "max", "max_consec_losses": "max", "max_pos_mult": "max",
-                "max_gross_mult": "max", "max_positions": "max", "max_stop_pct": "max", "min_stop_pct": "min"}
+                "max_gross_mult": "max", "max_positions": "max", "max_stop_pct": "max", "min_stop_pct": "min",
+                # the frozen-feed rule is one of the Guardian's kill conditions, and it rests on a checked clock
+                "stale_feed_minutes": "max", "max_clock_skew_seconds": "max"}
 INT_KEYS = ("max_consec_losses", "max_positions", "window_bars", "stale_feed_minutes", "max_clock_skew_seconds",
             "delist_after_bars", "max_catchup_bars")
 

@@ -93,8 +93,13 @@ def test_hourly_ticks_equal_one_engine_run(full_world):
     eng = reference(world, K0, last)
     assert len(eng.trades) >= 5                               # the comparison is not vacuous
     assert_book_equals(world, "champion", eng)
-    assert all(hb["ok"] and hb["mode"] == "paper" for hb in hbs)
-    assert world.alerts() == []                               # a healthy run raises nothing
+    assert all(hb["mode"] == "paper" and hb["error"] is None for hb in hbs)
+    # a healthy run raises nothing, except that every loss halt of the Guardian is announced, once, as critical
+    halts = [(e["time"], e["reason"]) for e in eng.events if e["event"] == "guardian_halt"]
+    alerts = world.alerts()
+    assert [(a["code"], a["level"], a["book"]) for a in alerts] == [("guardian_halt", "critical", "champion")] * len(halts)
+    assert [(a["detail"]["bar"], a["detail"]["reason"]) for a in alerts] == halts
+    assert [hb["tick_utc"] for hb in hbs if not hb["ok"]] == [a["tick_utc"] for a in alerts]
     doc = world.book()
     assert doc["schema"] == 1 and doc["book"] == "champion" and doc["started_bar"] == world.bar(K0).isoformat()
     assert doc["strategy"] == {"module": DON, "name": "ref_donchian", "params": {**DONCHIAN.params, **PARAMS},
@@ -691,11 +696,17 @@ def test_a_held_symbol_that_stops_printing_bars_is_kept_then_closed_as_delisted(
     k = tick_until(world, K0, lambda st: any(s in ALTS for s in st["positions"]))
     sym = next(s for s in world.book()["engine"]["positions"] if s in ALTS)
     world.source.last_bar[sym] = world.bar(k)
-    run_ticks(world, [k + 1, k + 2])
+    hb = world.tick(world.bar(k + 1))                         # a held symbol's first silent hour is waited for:
+    assert hb["ok"] and hb["feed"]["usable"] and not hb["feed"]["frozen"]       # the candle may only be late
+    assert hb["books"]["champion"]["status"] == "idle" and hb["books"]["champion"]["lag_bars"] == 1
+    late = world.alerts("feed_late")
+    assert [a["symbol"] for a in late] == [sym] and late[0]["level"] == "warn" and not world.alerts("bar_missing")
+    hb = world.tick(world.bar(k + 2))                         # still silent: both hours are now missing bars
+    assert hb["books"]["champion"]["lag_bars"] == 0 and world.alerts("missed_bars")[-1]["detail"]["bars"] == 2
     pos = world.book()["engine"]["positions"]
     assert sym in pos and pos[sym]["last_price"] == pytest.approx(float(world.frames[sym].loc[world.bar(k), "close"]))
     gaps = [a for a in world.alerts("bar_missing") if a["symbol"] == sym]
-    assert [a["detail"]["hours"] for a in gaps] == [1, 2] and gaps[0]["level"] == "warn"
+    assert [a["detail"]["hours"] for a in gaps] == [2] and gaps[0]["level"] == "warn"
     world.tick(world.bar(k + 3))
     assert sym not in world.book()["engine"]["positions"]
     trade = [t for t in read_jsonl(world.state / "ledger_champion.jsonl") if t["symbol"] == sym][-1]

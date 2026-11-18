@@ -1,0 +1,6 @@
+# TEMPORARY config for the builder's live paper test (stage "Ship"). NOT the bot's config: that is
+# config/bot.yaml, which ships with champion: null. Paper only, public market data, no credentials.
+mode: paper
+kill: false
+champion: {strategy: desk.strategies.ref_donchian}
+challengers: []

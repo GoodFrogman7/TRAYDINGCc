@@ -31,6 +31,7 @@ COLUMNS = OHLC + ["volume", "bar_missing", "mark_close", "spot_close", "premium"
                   "funding_is_est", "funding"]                      # the research parquet layout
 FLOAT32 = ("oi", "liq_vol", "ls_ratio", "buy_vol", "sell_vol", "premium")   # as download.fit_funding casts them
 CLOCK_PATHS = ("/derivatives/api/v3/tickers", "/derivatives/api/v3/instruments")
+MAX_PRINT_DEVIATION = 0.25     # a trade open/close this far from the venue's own mark AND index price is a bad print
 
 
 def utc(t) -> pd.Timestamp:
@@ -131,17 +132,24 @@ def symbols_needed(universe: dict[str, list[str]], start: pd.Timestamp, asof: pd
     return required, sorted(earlier - set(required))
 
 
-def fetch(source, symbols: list[str], start: pd.Timestamp, asof: pd.Timestamp, workers: int = 8) -> Fetched:
-    """`source.bars` for every symbol (one retry each); only rows with start <= bar time < asof are kept."""
-    start, asof = utc(start), utc(asof)
-    out = Fetched()
+def venue_clock(source) -> tuple[pd.Timestamp | None, float]:
+    """(the venue's clock or None if it could not be read, seconds the answer took)."""
     asked = time.monotonic()
     try:
         st = source.server_time()
-        out.server_time = None if st is None else utc(st)
+        st = None if st is None else utc(st)
     except Exception:
-        out.server_time = None
-    out.server_time_delay = time.monotonic() - asked
+        st = None
+    return st, time.monotonic() - asked
+
+
+def fetch(source, symbols: list[str], start: pd.Timestamp, asof: pd.Timestamp, workers: int = 8,
+          clock: tuple[pd.Timestamp | None, float] | None = None) -> Fetched:
+    """`source.bars` for every symbol (one retry each); only rows with start <= bar time < asof are kept.
+    `clock` is a `venue_clock` result read earlier in the tick; without it the venue is asked here."""
+    start, asof = utc(start), utc(asof)
+    out = Fetched()
+    out.server_time, out.server_time_delay = venue_clock(source) if clock is None else clock
     a, b = int(start.timestamp()), int(asof.timestamp())
 
     def one(sym: str) -> pd.DataFrame:
@@ -175,6 +183,30 @@ def funding_model() -> dict:
     return json.loads((store.DATA / "manifest.json").read_text())["funding_model"]
 
 
+def _off_market(df: pd.DataFrame, o: np.ndarray, c: np.ndarray) -> np.ndarray:
+    """Bars whose trade open or close is more than MAX_PRINT_DEVIATION away from EVERY reference price the
+    venue itself published: its mark and index (spot) closes of the same bar and, for the open, of the bar
+    before. A real move shows in those prices too; a bad print does not. A bar without any reference is
+    left alone, and so are wicks (the engine never fills at a high or a low). The research data has no
+    such bar (checked 2026-11-18: 0 of 1.26 million rows, research/builder/probe_badprint.py)."""
+    n = len(df)
+    refs = [df[x].to_numpy(dtype="float64") for x in ("mark_close", "spot_close") if x in df]
+    if not refs or n == 0:
+        return np.zeros(n, dtype=bool)
+    follows = np.r_[False, np.asarray((df.index[1:] - df.index[:-1]) == HOUR)]   # the row before is the hour before
+
+    def far(price: np.ndarray, references: list[np.ndarray]) -> np.ndarray:
+        known, near = np.zeros(n, dtype=bool), np.zeros(n, dtype=bool)
+        for ref in references:
+            dev = np.abs(price / np.where(ref > 0, ref, np.nan) - 1.0)
+            known |= np.isfinite(dev)
+            near |= dev <= MAX_PRINT_DEVIATION
+        return known & ~near
+
+    before = [np.where(follows, np.r_[np.nan, ref[:-1]], np.nan) for ref in refs]
+    return far(c, refs) | far(o, refs + before)
+
+
 def _prepare_one(raw: pd.DataFrame, t_last: pd.Timestamp, delist_after_bars: int, a: float, k: float
                  ) -> tuple[pd.DataFrame | None, int, int]:
     """One symbol: (frame or None, gap hours, bad bars). Mostly numpy: this runs for every symbol every tick."""
@@ -189,9 +221,11 @@ def _prepare_one(raw: pd.DataFrame, t_last: pd.Timestamp, delist_after_bars: int
         return None, 0, 0
     flagged = df["bar_missing"].fillna(True).to_numpy(dtype=bool) if "bar_missing" in df else np.zeros(len(df), bool)
     o, h, lo, c = (df[x].to_numpy(dtype="float64") for x in OHLC)
-    with np.errstate(invalid="ignore"):
-        invalid = (np.isnan(o) | np.isnan(h) | np.isnan(lo) | np.isnan(c)
-                   | (o <= 0) | (h <= 0) | (lo <= 0) | (c <= 0) | (h < lo))
+    with np.errstate(invalid="ignore", divide="ignore"):
+        invalid = (~(np.isfinite(o) & np.isfinite(h) & np.isfinite(lo) & np.isfinite(c))
+                   | (o <= 0) | (h <= 0) | (lo <= 0) | (c <= 0)
+                   | (h < lo) | (h < np.maximum(o, c)) | (lo > np.minimum(o, c)))
+        invalid |= _off_market(df, o, c)
     real = ~(flagged | invalid)
     if not real.any():
         return None, 0, 0
@@ -262,8 +296,21 @@ def prepare(frames: dict[str, pd.DataFrame], t_last: pd.Timestamp, delist_after_
     return data, gaps, bad
 
 
-def build_base(data: dict[str, pd.DataFrame], t_cap: pd.Timestamp) -> FeedBase:
+def build_base(data: dict[str, pd.DataFrame], t_cap: pd.Timestamp, ghosts: dict[str, float] | None = None
+               ) -> FeedBase:
     """Prices, funding, slippage and universe membership up to and including bar `t_cap`,
-    built the same way as `desk.engine.runner.load_market`."""
+    built the same way as `desk.engine.runner.load_market`.
+
+    `ghosts` = {symbol: last known price} for held symbols the venue no longer answers for. Each gets one
+    bar at the very start of the window and none after it, so the engine sees "no bar" on every bar it
+    processes: it closes the position as `delisted` and cancels the order. Strategies never see a ghost."""
     tradable = {s: store.tradable_mask(s, df.index) & ~df["bar_missing"].astype(bool) for s, df in data.items()}
+    ghosts = {s: px for s, px in (ghosts or {}).items() if s not in data}
+    if ghosts and data:
+        data = dict(data)
+        first = pd.DatetimeIndex([min(df.index[0] for df in data.values())], name="time")
+        for s, px in ghosts.items():
+            px = float(px) if px is not None and np.isfinite(px) and px > 0 else 1.0
+            data[s] = pd.DataFrame({"open": px, "high": px, "low": px, "close": px, "funding": 0.0}, index=first)
+            tradable[s] = pd.Series(False, index=first)
     return make_base(data, tradable=tradable, slip_bps=slip_table(data), end=utc(t_cap) + HOUR)
