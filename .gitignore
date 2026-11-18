@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+*.log
+state/*.lock
+# market data is re-downloaded (3-4 min); provenance lives in data/manifest.json
+data/kraken_futures/
+data/daily_volume.parquet
+research/results/ref_donchian*
+research/results/trades/ref_donchian*
+research/review/

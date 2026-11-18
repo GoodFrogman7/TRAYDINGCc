@@ -1,0 +1,2148 @@
+{
+ "source": "https://futures.kraken.com",
+ "endpoints": {
+  "candles": "/api/charts/v1/{trade|mark|spot}/{symbol}/{1h|1d}",
+  "analytics": "/api/charts/v1/analytics/{symbol}/{open-interest|liquidation-volume|long-short-ratio|cvd|slippage}",
+  "funding": "/derivatives/api/v4/historicalfundingrates",
+  "instruments": "/derivatives/api/v3/instruments"
+ },
+ "downloaded_at_utc": "2026-11-18T02:11:22+00:00",
+ "asof_bar_cutoff_utc": "2026-11-18T02:00:00+00:00",
+ "api_calls": 5901,
+ "seconds": 310.6,
+ "symbols_in_charts_api": 503,
+ "symbols_delisted": 294,
+ "funding_model": {
+  "pooled_a": 2.1878989942384616e-06,
+  "pooled_k": 0.06730932384811869,
+  "per_symbol": {
+   "PF_BONKUSD": {
+    "n": 8771,
+    "a": 7.694541304588109e-06,
+    "k": 0.09022280682568712,
+    "corr": 0.813104109051691,
+    "mae_per_hour": 2.8578547791279e-05,
+    "mean_actual_per_hour": -1.6509249226598046e-05,
+    "mean_est_per_hour": -1.6509249226598056e-05
+   },
+   "PF_BNBUSD": {
+    "n": 8772,
+    "a": 1.0219578845142793e-07,
+    "k": 0.05866303563339711,
+    "corr": 0.808076575191996,
+    "mae_per_hour": 7.831266636149715e-06,
+    "mean_actual_per_hour": 3.1949389102776693e-06,
+    "mean_est_per_hour": 3.194938910277669e-06
+   },
+   "PF_ARBUSD": {
+    "n": 8772,
+    "a": 2.471987125460842e-07,
+    "k": 0.05490567969164802,
+    "corr": 0.7572617248665083,
+    "mae_per_hour": 9.389493711893577e-06,
+    "mean_actual_per_hour": -3.7478439094854853e-06,
+    "mean_est_per_hour": -3.7478439094854853e-06
+   },
+   "PF_AAVEUSD": {
+    "n": 8772,
+    "a": -5.196608201241255e-07,
+    "k": 0.051289883030173816,
+    "corr": 0.7371088803412561,
+    "mae_per_hour": 7.89509078265925e-06,
+    "mean_actual_per_hour": -2.486104018368387e-06,
+    "mean_est_per_hour": -2.4861040183683875e-06
+   },
+   "PF_ADAUSD": {
+    "n": 8772,
+    "a": -3.5909336649436184e-08,
+    "k": 0.053198877389189325,
+    "corr": 0.7834513320957532,
+    "mae_per_hour": 7.2103399490927274e-06,
+    "mean_actual_per_hour": -2.5336370818284163e-06,
+    "mean_est_per_hour": -2.5336370818284168e-06
+   },
+   "PF_AVAXUSD": {
+    "n": 8772,
+    "a": -3.2195984924437026e-07,
+    "k": 0.04887902192027349,
+    "corr": 0.8133304210789079,
+    "mae_per_hour": 6.755916108387982e-06,
+    "mean_actual_per_hour": -3.7574389391361734e-06,
+    "mean_est_per_hour": -3.7574389391361725e-06
+   },
+   "PF_ATOMUSD": {
+    "n": 8770,
+    "a": -3.7161630822488496e-06,
+    "k": 0.04802181461432706,
+    "corr": 0.788628942653681,
+    "mae_per_hour": 1.4587631598174285e-05,
+    "mean_actual_per_hour": -2.319438358415623e-05,
+    "mean_est_per_hour": -2.319438358415623e-05
+   },
+   "PF_BCHUSD": {
+    "n": 8772,
+    "a": 1.9643789287642753e-06,
+    "k": 0.047074545490020374,
+    "corr": 0.428803262222736,
+    "mae_per_hour": 1.0597058130549413e-05,
+    "mean_actual_per_hour": -2.195378409304726e-06,
+    "mean_est_per_hour": -2.195378409304726e-06
+   },
+   "PF_FARTCOINUSD": {
+    "n": 8772,
+    "a": 2.90199114196864e-06,
+    "k": 0.06066769945108277,
+    "corr": 0.7926248440997123,
+    "mae_per_hour": 1.849891368396245e-05,
+    "mean_actual_per_hour": 1.6246037982391615e-05,
+    "mean_est_per_hour": 1.6246037982391615e-05
+   },
+   "PF_DASHUSD": {
+    "n": 8772,
+    "a": 1.5725812288525752e-06,
+    "k": 0.05318734530383847,
+    "corr": 0.8933170447039678,
+    "mae_per_hour": 2.1367904611353443e-05,
+    "mean_actual_per_hour": -1.6201807847829196e-05,
+    "mean_est_per_hour": -1.62018078478292e-05
+   },
+   "PF_CRVUSD": {
+    "n": 8772,
+    "a": 2.365416480923404e-06,
+    "k": 0.05564768559250413,
+    "corr": 0.7354585683472508,
+    "mae_per_hour": 1.3820182532007833e-05,
+    "mean_actual_per_hour": -1.577885208403708e-06,
+    "mean_est_per_hour": -1.5778852084037083e-06
+   },
+   "PF_DOGEUSD": {
+    "n": 8772,
+    "a": 1.1513574900481988e-06,
+    "k": 0.051761156639157424,
+    "corr": 0.7815234648694235,
+    "mae_per_hour": 6.200134641763556e-06,
+    "mean_actual_per_hour": 2.2785707089650243e-06,
+    "mean_est_per_hour": 2.2785707089650243e-06
+   },
+   "PF_DOTUSD": {
+    "n": 8772,
+    "a": 3.7558115936508835e-07,
+    "k": 0.0446792168068308,
+    "corr": 0.8951264088894471,
+    "mae_per_hour": 7.906655722387126e-06,
+    "mean_actual_per_hour": -8.749814756721878e-06,
+    "mean_est_per_hour": -8.74981475672188e-06
+   },
+   "PF_HYPEUSD": {
+    "n": 8772,
+    "a": 2.8528416125313503e-06,
+    "k": 0.054894119684275114,
+    "corr": 0.817908031370279,
+    "mae_per_hour": 1.2009479098528646e-05,
+    "mean_actual_per_hour": 7.70986567198453e-06,
+    "mean_est_per_hour": 7.70986567198453e-06
+   },
+   "PF_ETHUSD": {
+    "n": 8771,
+    "a": 1.4395357544405281e-06,
+    "k": 0.05171780205565268,
+    "corr": 0.7764118115482476,
+    "mae_per_hour": 4.258262300099256e-06,
+    "mean_actual_per_hour": 4.165677666004906e-06,
+    "mean_est_per_hour": 4.165677666004907e-06
+   },
+   "PF_FETUSD": {
+    "n": 8771,
+    "a": 1.8845564808271273e-06,
+    "k": 0.050056693770773465,
+    "corr": 0.6804850771796024,
+    "mae_per_hour": 3.102237384248554e-05,
+    "mean_actual_per_hour": 3.474826712070777e-06,
+    "mean_est_per_hour": 3.474826712070777e-06
+   },
+   "PF_ICPUSD": {
+    "n": 8771,
+    "a": 1.1005612700125526e-06,
+    "k": 0.056098888010160275,
+    "corr": 0.8160629660903241,
+    "mae_per_hour": 1.80205211812702e-05,
+    "mean_actual_per_hour": -1.4997544865841026e-05,
+    "mean_est_per_hour": -1.4997544865841026e-05
+   },
+   "PF_INJUSD": {
+    "n": 8772,
+    "a": 4.2395279447385284e-07,
+    "k": 0.05979444266177979,
+    "corr": 0.6811557935128927,
+    "mae_per_hour": 1.996247139826507e-05,
+    "mean_actual_per_hour": -3.2978465008296524e-06,
+    "mean_est_per_hour": -3.297846500829655e-06
+   },
+   "PF_PUMPUSD": {
+    "n": 8772,
+    "a": -2.8603868428099084e-06,
+    "k": 0.05777583991915668,
+    "corr": 0.73889440559081,
+    "mae_per_hour": 1.9531211515717403e-05,
+    "mean_actual_per_hour": 4.161751783842058e-06,
+    "mean_est_per_hour": 4.161751783842057e-06
+   },
+   "PF_POPCATUSD": {
+    "n": 8767,
+    "a": 6.783242331164598e-06,
+    "k": 0.09655717062793025,
+    "corr": 0.5546870861898213,
+    "mae_per_hour": 4.586076198489434e-05,
+    "mean_actual_per_hour": -2.5108405134428657e-05,
+    "mean_est_per_hour": -2.5108405134428664e-05
+   },
+   "PF_PEPEUSD": {
+    "n": 8772,
+    "a": 9.890761862523085e-07,
+    "k": 0.06331976728457772,
+    "corr": 0.804036066511567,
+    "mae_per_hour": 1.3713017115867452e-05,
+    "mean_actual_per_hour": -3.820954820569019e-06,
+    "mean_est_per_hour": -3.820954820569019e-06
+   },
+   "PF_LINKUSD": {
+    "n": 8772,
+    "a": 8.843994027509864e-07,
+    "k": 0.05717248584798377,
+    "corr": 0.7796755659568217,
+    "mae_per_hour": 6.748617861654507e-06,
+    "mean_actual_per_hour": 1.1211869320885043e-06,
+    "mean_est_per_hour": 1.121186932088504e-06
+   },
+   "PF_LTCUSD": {
+    "n": 8772,
+    "a": 4.2454399304811014e-07,
+    "k": 0.05575128329144271,
+    "corr": 0.797772156858217,
+    "mae_per_hour": 6.9809772700503795e-06,
+    "mean_actual_per_hour": -1.1616806039131319e-06,
+    "mean_est_per_hour": -1.161680603913132e-06
+   },
+   "PF_NEARUSD": {
+    "n": 8772,
+    "a": -8.263370573009246e-08,
+    "k": 0.036703396837509665,
+    "corr": 0.597173267944285,
+    "mae_per_hour": 1.587988371099022e-05,
+    "mean_actual_per_hour": -2.697472771184538e-06,
+    "mean_est_per_hour": -2.6974727711845384e-06
+   },
+   "PF_TRUMPUSD": {
+    "n": 8772,
+    "a": -3.3511300910361954e-06,
+    "k": 0.04779793347254932,
+    "corr": 0.8551788792828724,
+    "mae_per_hour": 1.9030663050206824e-05,
+    "mean_actual_per_hour": -2.7637867685858188e-05,
+    "mean_est_per_hour": -2.7637867685858188e-05
+   },
+   "PF_TAOUSD": {
+    "n": 8772,
+    "a": 2.9653072630387573e-06,
+    "k": 0.05185502239550898,
+    "corr": 0.8414626312833942,
+    "mae_per_hour": 1.2933728288295605e-05,
+    "mean_actual_per_hour": -3.4079968090645714e-06,
+    "mean_est_per_hour": -3.407996809064571e-06
+   },
+   "PF_TONUSD": {
+    "n": 5352,
+    "a": 3.786953296723157e-05,
+    "k": 0.20588945592366598,
+    "corr": 0.7302792255582379,
+    "mae_per_hour": 8.215660525837734e-05,
+    "mean_actual_per_hour": 1.7789577446487787e-05,
+    "mean_est_per_hour": 1.778957744648778e-05
+   },
+   "PF_SUIUSD": {
+    "n": 8772,
+    "a": 9.207025721260046e-07,
+    "k": 0.05630267902166399,
+    "corr": 0.792460744373165,
+    "mae_per_hour": 7.936049116594208e-06,
+    "mean_actual_per_hour": 1.2159258418845782e-06,
+    "mean_est_per_hour": 1.2159258418845784e-06
+   },
+   "PF_WIFUSD": {
+    "n": 8771,
+    "a": 9.276750755572807e-07,
+    "k": 0.05434794353465916,
+    "corr": 0.6875186039448433,
+    "mae_per_hour": 1.326463544640562e-05,
+    "mean_actual_per_hour": -7.4502662539157035e-06,
+    "mean_est_per_hour": -7.4502662539157035e-06
+   },
+   "PF_SOLUSD": {
+    "n": 8772,
+    "a": 8.896906402596796e-07,
+    "k": 0.06135067477297696,
+    "corr": 0.8194165627315574,
+    "mae_per_hour": 8.103497692584578e-06,
+    "mean_actual_per_hour": 5.227555517911611e-07,
+    "mean_est_per_hour": 5.227555517911612e-07
+   },
+   "PF_WLDUSD": {
+    "n": 8772,
+    "a": 2.0405653392825314e-06,
+    "k": 0.051953869424498124,
+    "corr": 0.8270624031079082,
+    "mae_per_hour": 1.3050594903468854e-05,
+    "mean_actual_per_hour": -4.547279169024603e-06,
+    "mean_est_per_hour": -4.547279169024603e-06
+   },
+   "PF_UNIUSD": {
+    "n": 8772,
+    "a": 2.0535182710450382e-06,
+    "k": 0.061531610503136255,
+    "corr": 0.7905948942728872,
+    "mae_per_hour": 1.0209656144662122e-05,
+    "mean_actual_per_hour": -1.6080076520501362e-06,
+    "mean_est_per_hour": -1.6080076520501354e-06
+   },
+   "PF_XBTUSD": {
+    "n": 8771,
+    "a": 1.4895582800656128e-06,
+    "k": 0.05302037548539148,
+    "corr": 0.8108552905971408,
+    "mae_per_hour": 3.762010024804602e-06,
+    "mean_actual_per_hour": 4.166060657033568e-06,
+    "mean_est_per_hour": 4.166060657033567e-06
+   },
+   "PF_XMRUSD": {
+    "n": 8772,
+    "a": 1.2966834451198804e-06,
+    "k": 0.06908497421885423,
+    "corr": 0.8064560867331635,
+    "mae_per_hour": 2.2048666360891074e-05,
+    "mean_actual_per_hour": 2.019988279752591e-05,
+    "mean_est_per_hour": 2.019988279752591e-05
+   },
+   "PF_XRPUSD": {
+    "n": 8772,
+    "a": 1.6696636198372935e-06,
+    "k": 0.056627551917492136,
+    "corr": 0.8065122712279654,
+    "mae_per_hour": 6.122581921801915e-06,
+    "mean_actual_per_hour": 1.0128297256218058e-06,
+    "mean_est_per_hour": 1.012829725621806e-06
+   },
+   "PF_ZECUSD": {
+    "n": 8772,
+    "a": -9.257512317146259e-08,
+    "k": 0.05421395215246961,
+    "corr": 0.7975785641448124,
+    "mae_per_hour": 1.517651011848731e-05,
+    "mean_actual_per_hour": -2.7048179482750623e-06,
+    "mean_est_per_hour": -2.7048179482750623e-06
+   }
+  },
+  "note": "funding = actual where the venue serves it (about the last year); earlier hours are an ESTIMATE a + k*premium(previous hour), clipped to the +/-0.5%/h cap. Symbols with no actual history (delisted before the served window) use the pooled fit."
+ },
+ "files": {
+  "PF_BONKUSD": {
+   "symbol": "PF_BONKUSD",
+   "rows": 25496,
+   "first": "2023-12-21T18:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "28f8cffc530fb918607a97cd565eeab97781323f756133310358024cb8256c29",
+   "coverage": {
+    "oi": {
+     "first": "2023-12-21T18:00:00+00:00",
+     "pct": 100.0
+    },
+    "liq_vol": {
+     "first": "2023-12-21T18:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-12-21T18:00:00+00:00",
+     "pct": 100.0
+    },
+    "buy_vol": {
+     "first": "2023-12-21T18:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-12-21T18:00:00+00:00",
+     "pct": 99.99
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 34.41
+    },
+    "mark_close": {
+     "first": "2023-12-21T18:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2023-12-21T18:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "Community",
+   "listed_now": true
+  },
+  "PF_BNBUSD": {
+   "symbol": "PF_BNBUSD",
+   "rows": 26197,
+   "first": "2023-11-22T13:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "ed372d0f6cee11bc713fa93c403d9c270454e145b23a7e24f941419869c45666",
+   "coverage": {
+    "oi": {
+     "first": "2023-11-22T13:00:00+00:00",
+     "pct": 100.0
+    },
+    "liq_vol": {
+     "first": "2023-11-22T13:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-11-22T13:00:00+00:00",
+     "pct": 100.0
+    },
+    "buy_vol": {
+     "first": "2023-11-22T13:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-11-22T13:00:00+00:00",
+     "pct": 100.0
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 33.48
+    },
+    "mark_close": {
+     "first": "2023-11-22T13:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2023-11-22T13:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "Layer 1",
+   "listed_now": true
+  },
+  "PF_ARBUSD": {
+   "symbol": "PF_ARBUSD",
+   "rows": 32052,
+   "first": "2023-03-23T14:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "792336ce69b3ca1fe7e7eab7c6ad34450d8abc34b220d2d9b4e09f570ad2655f",
+   "coverage": {
+    "oi": {
+     "first": "2023-03-23T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "liq_vol": {
+     "first": "2023-03-23T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 94.84
+    },
+    "buy_vol": {
+     "first": "2023-03-23T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 94.84
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 27.37
+    },
+    "mark_close": {
+     "first": "2023-03-23T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2023-03-23T14:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "Layer 2",
+   "listed_now": true
+  },
+  "PF_AAVEUSD": {
+   "symbol": "PF_AAVEUSD",
+   "rows": 38506,
+   "first": "2022-06-27T16:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "bafd930af660eeba99509d286155f7fd7363b32617385532fdc51c55b7775f06",
+   "coverage": {
+    "oi": {
+     "first": "2023-03-07T12:00:00+00:00",
+     "pct": 84.24
+    },
+    "liq_vol": {
+     "first": "2022-06-27T16:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T13:00:00+00:00",
+     "pct": 78.94
+    },
+    "buy_vol": {
+     "first": "2022-06-27T16:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 78.94
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 22.78
+    },
+    "mark_close": {
+     "first": "2022-06-27T16:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2022-06-27T16:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "DeFi",
+   "listed_now": true
+  },
+  "PF_ADAUSD": {
+   "symbol": "PF_ADAUSD",
+   "rows": 40815,
+   "first": "2022-03-23T11:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "c6555b061ca65d4a746d1314afdc44c955391e9f0846dd48df804f17893ecc16",
+   "coverage": {
+    "oi": {
+     "first": "2023-03-07T11:00:00+00:00",
+     "pct": 79.48
+    },
+    "liq_vol": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 74.48
+    },
+    "buy_vol": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 74.48
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 21.49
+    },
+    "mark_close": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "Layer 1",
+   "listed_now": true
+  },
+  "PF_AVAXUSD": {
+   "symbol": "PF_AVAXUSD",
+   "rows": 40815,
+   "first": "2022-03-23T11:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "ad763783d6f4f9b1c70e216fe1d9381688cd2263f3702e99bd96e72d9e55184e",
+   "coverage": {
+    "oi": {
+     "first": "2023-03-07T11:00:00+00:00",
+     "pct": 79.48
+    },
+    "liq_vol": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 74.48
+    },
+    "buy_vol": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 74.48
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 21.49
+    },
+    "mark_close": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "Layer 1",
+   "listed_now": true
+  },
+  "PF_ATOMUSD": {
+   "symbol": "PF_ATOMUSD",
+   "rows": 40815,
+   "first": "2022-03-23T11:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "c74f298b57d690eed05dfda54feb8efc465b25745b923f6d461ef857fc197fda",
+   "coverage": {
+    "oi": {
+     "first": "2023-03-07T11:00:00+00:00",
+     "pct": 79.48
+    },
+    "liq_vol": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 74.48
+    },
+    "buy_vol": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 74.48
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 21.49
+    },
+    "mark_close": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "DeFi",
+   "listed_now": true
+  },
+  "PF_BCHUSD": {
+   "symbol": "PF_BCHUSD",
+   "rows": 40815,
+   "first": "2022-03-23T11:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "a6372dbed5b2544b65caa9eafb832eef81b21f181bd6b39b8e3e707755954f80",
+   "coverage": {
+    "oi": {
+     "first": "2023-03-07T12:00:00+00:00",
+     "pct": 79.48
+    },
+    "liq_vol": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 74.48
+    },
+    "buy_vol": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 74.48
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 21.49
+    },
+    "mark_close": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "Layer 1",
+   "listed_now": true
+  },
+  "PF_FARTCOINUSD": {
+   "symbol": "PF_FARTCOINUSD",
+   "rows": 15990,
+   "first": "2025-01-20T20:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "ff9389b979e6981815c3d0bc97a46de1e643da1e5f87918f808c5c5ffcf0c946",
+   "coverage": {
+    "oi": {
+     "first": "2025-01-20T20:00:00+00:00",
+     "pct": 100.0
+    },
+    "liq_vol": {
+     "first": "2025-01-20T20:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2025-01-20T20:00:00+00:00",
+     "pct": 100.0
+    },
+    "buy_vol": {
+     "first": "2025-01-20T20:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2025-01-20T20:00:00+00:00",
+     "pct": 100.0
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 54.86
+    },
+    "mark_close": {
+     "first": "2025-01-20T20:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2025-01-20T20:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "Meme",
+   "listed_now": true
+  },
+  "PF_DASHUSD": {
+   "symbol": "PF_DASHUSD",
+   "rows": 37116,
+   "first": "2022-08-24T14:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "d13bbb181abcb134717fe2ec3235f89088a71c7879181103885cd663d48b8b08",
+   "coverage": {
+    "oi": {
+     "first": "2023-03-07T12:00:00+00:00",
+     "pct": 87.4
+    },
+    "liq_vol": {
+     "first": "2022-08-24T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T14:00:00+00:00",
+     "pct": 81.89
+    },
+    "buy_vol": {
+     "first": "2022-08-24T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 81.87
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 23.63
+    },
+    "mark_close": {
+     "first": "2022-08-24T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2022-08-24T14:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "Layer 1",
+   "listed_now": true
+  },
+  "PF_CRVUSD": {
+   "symbol": "PF_CRVUSD",
+   "rows": 38506,
+   "first": "2022-06-27T16:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "55a0076fda073a89b212489d77f72d4d28a3bb61b0f222b1a1265be29a35db95",
+   "coverage": {
+    "oi": {
+     "first": "2023-03-07T11:00:00+00:00",
+     "pct": 84.24
+    },
+    "liq_vol": {
+     "first": "2022-06-27T16:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 78.94
+    },
+    "buy_vol": {
+     "first": "2022-06-27T16:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 78.94
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 22.78
+    },
+    "mark_close": {
+     "first": "2022-06-27T16:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2022-06-27T16:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "DeFi",
+   "listed_now": true
+  },
+  "PF_DOGEUSD": {
+   "symbol": "PF_DOGEUSD",
+   "rows": 38675,
+   "first": "2022-06-20T15:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "149cb2149cb1f5ddfc07ed93d29ab7c8771ba77a8fd6176a0b29b76cb6a03898",
+   "coverage": {
+    "oi": {
+     "first": "2023-03-07T11:00:00+00:00",
+     "pct": 83.88
+    },
+    "liq_vol": {
+     "first": "2022-06-20T15:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 78.6
+    },
+    "buy_vol": {
+     "first": "2022-06-20T15:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 78.6
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 22.68
+    },
+    "mark_close": {
+     "first": "2022-06-20T15:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2022-06-20T15:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "Community",
+   "listed_now": true
+  },
+  "PF_EOSUSD": {
+   "symbol": "PF_EOSUSD",
+   "rows": 27940,
+   "first": "2022-03-23T11:00:00+00:00",
+   "last": "2025-05-30T14:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": true,
+   "sha256": "61c6f5fa699d5b15ef7c4cb088129331c987aab4ab2af3563b26dc851bd7b32b",
+   "coverage": {
+    "oi": {
+     "first": "2023-03-07T11:00:00+00:00",
+     "pct": 70.02
+    },
+    "liq_vol": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 62.72
+    },
+    "buy_vol": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 62.72
+    },
+    "funding_actual": {
+     "first": null,
+     "pct": 0.0
+    },
+    "mark_close": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "unknown (delisted)",
+   "listed_now": false
+  },
+  "PF_DOTUSD": {
+   "symbol": "PF_DOTUSD",
+   "rows": 40815,
+   "first": "2022-03-23T11:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "fb8f007fe92f824ee1cc4da3a2ca2f382da4f0e43ce364be72c096f17e387606",
+   "coverage": {
+    "oi": {
+     "first": "2023-03-07T11:00:00+00:00",
+     "pct": 79.48
+    },
+    "liq_vol": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 74.48
+    },
+    "buy_vol": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 74.48
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 21.49
+    },
+    "mark_close": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "Layer 1",
+   "listed_now": true
+  },
+  "PF_HYPEUSD": {
+   "symbol": "PF_HYPEUSD",
+   "rows": 15893,
+   "first": "2025-01-24T21:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "0f0f80eefed0412239c47c9f06490f7ac51554bf311ebbda4396b982ab5d303a",
+   "coverage": {
+    "oi": {
+     "first": "2025-01-24T21:00:00+00:00",
+     "pct": 100.0
+    },
+    "liq_vol": {
+     "first": "2025-01-24T21:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2025-01-24T21:00:00+00:00",
+     "pct": 100.0
+    },
+    "buy_vol": {
+     "first": "2025-01-24T21:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2025-01-24T21:00:00+00:00",
+     "pct": 99.94
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 55.19
+    },
+    "mark_close": {
+     "first": "2025-01-24T21:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2025-01-24T21:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "DEX",
+   "listed_now": true
+  },
+  "PF_ETHUSD": {
+   "symbol": "PF_ETHUSD",
+   "rows": 40816,
+   "first": "2022-03-23T10:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "0778a365f519294baa0e3ec7c0373715984f7e5363c147b9561157baf7580bee",
+   "coverage": {
+    "oi": {
+     "first": "2023-03-07T11:00:00+00:00",
+     "pct": 79.48
+    },
+    "liq_vol": {
+     "first": "2022-03-23T10:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 74.48
+    },
+    "buy_vol": {
+     "first": "2022-03-23T10:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 74.48
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 21.49
+    },
+    "mark_close": {
+     "first": "2022-03-23T10:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2022-03-23T10:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "Layer 1",
+   "listed_now": true
+  },
+  "PF_FETUSD": {
+   "symbol": "PF_FETUSD",
+   "rows": 32052,
+   "first": "2023-03-23T14:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 2801,
+   "delisted": false,
+   "sha256": "40951c90eef59f757f8173d8828add115da09541a477598d82817d2b342a2845",
+   "coverage": {
+    "oi": {
+     "first": "2023-03-23T14:00:00+00:00",
+     "pct": 91.3
+    },
+    "liq_vol": {
+     "first": "2023-03-23T14:00:00+00:00",
+     "pct": 91.3
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 86.14
+    },
+    "buy_vol": {
+     "first": "2023-03-23T14:00:00+00:00",
+     "pct": 91.3
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 81.79
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 27.37
+    },
+    "mark_close": {
+     "first": "2023-03-23T14:00:00+00:00",
+     "pct": 91.32
+    },
+    "spot_close": {
+     "first": "2023-03-23T14:00:00+00:00",
+     "pct": 91.32
+    }
+   },
+   "category": "AI",
+   "listed_now": true
+  },
+  "PF_FTMUSD": {
+   "symbol": "PF_FTMUSD",
+   "rows": 22434,
+   "first": "2022-06-20T15:00:00+00:00",
+   "last": "2025-01-10T08:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": true,
+   "sha256": "697981b1c50ad65127ceeb1d5e616e07a69a2399789ae2e9954180c86338e786",
+   "coverage": {
+    "oi": {
+     "first": "2023-03-07T11:00:00+00:00",
+     "pct": 72.2
+    },
+    "liq_vol": {
+     "first": "2022-06-20T15:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 63.11
+    },
+    "buy_vol": {
+     "first": "2022-06-20T15:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 63.1
+    },
+    "funding_actual": {
+     "first": "2025-01-10T08:00:00+00:00",
+     "pct": 0.0
+    },
+    "mark_close": {
+     "first": "2022-06-20T15:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2022-06-20T15:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "unknown (delisted)",
+   "listed_now": false
+  },
+  "PF_ICPUSD": {
+   "symbol": "PF_ICPUSD",
+   "rows": 36600,
+   "first": "2022-09-15T02:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "c99b193a3d0ea5652a9dd67c64680952788ae127df2f4ed76920970a32887538",
+   "coverage": {
+    "oi": {
+     "first": "2023-03-07T14:00:00+00:00",
+     "pct": 88.62
+    },
+    "liq_vol": {
+     "first": "2022-09-15T02:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T13:00:00+00:00",
+     "pct": 83.05
+    },
+    "buy_vol": {
+     "first": "2022-09-15T02:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 83.04
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 23.97
+    },
+    "mark_close": {
+     "first": "2022-09-15T02:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2022-09-15T02:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "Layer 1",
+   "listed_now": true
+  },
+  "PF_INJUSD": {
+   "symbol": "PF_INJUSD",
+   "rows": 31740,
+   "first": "2023-04-05T14:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "62e4e5ee5b8afc2fd56b08ffcb9bdaef16b269057d5715613cc277ced095c908",
+   "coverage": {
+    "oi": {
+     "first": "2023-04-05T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "liq_vol": {
+     "first": "2023-04-05T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 95.77
+    },
+    "buy_vol": {
+     "first": "2023-04-05T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 95.77
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 27.64
+    },
+    "mark_close": {
+     "first": "2023-04-05T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2023-04-05T14:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "Layer 2",
+   "listed_now": true
+  },
+  "PF_PUMPUSD": {
+   "symbol": "PF_PUMPUSD",
+   "rows": 11792,
+   "first": "2025-07-14T18:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "8a227fb660731673f96174ea5d46b896e0d107c4d79658f74bb08aea2e6579ca",
+   "coverage": {
+    "oi": {
+     "first": "2025-07-14T18:00:00+00:00",
+     "pct": 100.0
+    },
+    "liq_vol": {
+     "first": "2025-07-14T18:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2025-07-14T18:00:00+00:00",
+     "pct": 100.0
+    },
+    "buy_vol": {
+     "first": "2025-07-14T18:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2025-07-14T18:00:00+00:00",
+     "pct": 99.87
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 74.39
+    },
+    "mark_close": {
+     "first": "2025-07-14T18:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2025-07-14T18:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "DeFi",
+   "listed_now": true
+  },
+  "PF_POPCATUSD": {
+   "symbol": "PF_POPCATUSD",
+   "rows": 21176,
+   "first": "2024-06-18T17:00:00+00:00",
+   "last": "2026-11-18T00:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "bbf05b7b2bb859da591e89a6d491ce7664fe8304dd5cba9924a5dd2fc5f2e763",
+   "coverage": {
+    "oi": {
+     "first": "2024-06-18T17:00:00+00:00",
+     "pct": 100.0
+    },
+    "liq_vol": {
+     "first": "2024-06-18T17:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2024-06-18T17:00:00+00:00",
+     "pct": 100.0
+    },
+    "buy_vol": {
+     "first": "2024-06-18T17:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2024-06-21T01:00:00+00:00",
+     "pct": 98.59
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 41.42
+    },
+    "mark_close": {
+     "first": "2024-06-18T17:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2024-06-18T17:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "Meme",
+   "listed_now": true
+  },
+  "PF_MATICUSD": {
+   "symbol": "PF_MATICUSD",
+   "rows": 21389,
+   "first": "2022-03-23T11:00:00+00:00",
+   "last": "2024-08-30T15:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": true,
+   "sha256": "7a47c9523fec3a1c6df32a83dcad2622dceb8ffc76e55b0b994f2d86924ed4df",
+   "coverage": {
+    "oi": {
+     "first": "2023-03-07T11:00:00+00:00",
+     "pct": 60.84
+    },
+    "liq_vol": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 51.3
+    },
+    "buy_vol": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 51.29
+    },
+    "funding_actual": {
+     "first": null,
+     "pct": 0.0
+    },
+    "mark_close": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "unknown (delisted)",
+   "listed_now": false
+  },
+  "PF_PEPEUSD": {
+   "symbol": "PF_PEPEUSD",
+   "rows": 30542,
+   "first": "2023-05-25T12:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "d797a0f0f0ba1a437e42ca009efddae27e5f1c169318d3ec325b891064b000fe",
+   "coverage": {
+    "oi": {
+     "first": "2023-05-25T12:00:00+00:00",
+     "pct": 100.0
+    },
+    "liq_vol": {
+     "first": "2023-05-25T12:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 99.53
+    },
+    "buy_vol": {
+     "first": "2023-05-25T12:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 99.53
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 28.72
+    },
+    "mark_close": {
+     "first": "2023-05-25T12:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2023-05-25T12:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "Community",
+   "listed_now": true
+  },
+  "PF_LINKUSD": {
+   "symbol": "PF_LINKUSD",
+   "rows": 40815,
+   "first": "2022-03-23T11:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "7ae4c81123bd124563d380ec419772acfb8f62370d99af7a71a785263a1677f7",
+   "coverage": {
+    "oi": {
+     "first": "2023-03-07T11:00:00+00:00",
+     "pct": 79.48
+    },
+    "liq_vol": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 74.48
+    },
+    "buy_vol": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 74.48
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 21.49
+    },
+    "mark_close": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "DeFi",
+   "listed_now": true
+  },
+  "PF_LTCUSD": {
+   "symbol": "PF_LTCUSD",
+   "rows": 40815,
+   "first": "2022-03-23T11:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "df41eb0ab46d2dbc9b94381102f17fd1342cad68d7308f7bced222f9d55b9b9b",
+   "coverage": {
+    "oi": {
+     "first": "2023-03-07T11:00:00+00:00",
+     "pct": 79.48
+    },
+    "liq_vol": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 74.48
+    },
+    "buy_vol": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 74.48
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 21.49
+    },
+    "mark_close": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "Layer 1",
+   "listed_now": true
+  },
+  "PF_NEARUSD": {
+   "symbol": "PF_NEARUSD",
+   "rows": 38844,
+   "first": "2022-06-13T14:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "4692d4242d8d3c0f727fc6d558c6587017dd037429e21a98e0d91663514a6939",
+   "coverage": {
+    "oi": {
+     "first": "2023-03-07T11:00:00+00:00",
+     "pct": 83.51
+    },
+    "liq_vol": {
+     "first": "2022-06-13T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T14:00:00+00:00",
+     "pct": 78.25
+    },
+    "buy_vol": {
+     "first": "2022-06-13T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 78.26
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 22.58
+    },
+    "mark_close": {
+     "first": "2022-06-13T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2022-06-13T14:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "Layer 1",
+   "listed_now": true
+  },
+  "PF_RNDRUSD": {
+   "symbol": "PF_RNDRUSD",
+   "rows": 11613,
+   "first": "2023-03-30T18:00:00+00:00",
+   "last": "2024-07-26T14:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": true,
+   "sha256": "07166ceb7a37f56831520a37c23f86e4fcf2062b5a6b01d4a1f98f4878af12af",
+   "coverage": {
+    "oi": {
+     "first": "2023-03-30T18:00:00+00:00",
+     "pct": 100.0
+    },
+    "liq_vol": {
+     "first": "2023-03-30T18:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 87.24
+    },
+    "buy_vol": {
+     "first": "2023-03-30T18:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 87.24
+    },
+    "funding_actual": {
+     "first": null,
+     "pct": 0.0
+    },
+    "mark_close": {
+     "first": "2023-03-30T18:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2023-03-30T18:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "unknown (delisted)",
+   "listed_now": false
+  },
+  "PF_TRUMPUSD": {
+   "symbol": "PF_TRUMPUSD",
+   "rows": 16044,
+   "first": "2025-01-18T14:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "c30e29026dbd5354089233ddef5f9e5d8e1e1b46d913ed58d0e648c0513d1109",
+   "coverage": {
+    "oi": {
+     "first": "2025-01-18T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "liq_vol": {
+     "first": "2025-01-18T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2025-01-18T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "buy_vol": {
+     "first": "2025-01-18T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2025-01-18T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 54.67
+    },
+    "mark_close": {
+     "first": "2025-01-18T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2025-01-18T14:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "Meme",
+   "listed_now": true
+  },
+  "PF_TAOUSD": {
+   "symbol": "PF_TAOUSD",
+   "rows": 20939,
+   "first": "2024-06-28T15:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "315925e83749011971a9f1b39116fddcf682ada0cf2462c0e5098527f0413a0f",
+   "coverage": {
+    "oi": {
+     "first": "2024-06-28T15:00:00+00:00",
+     "pct": 100.0
+    },
+    "liq_vol": {
+     "first": "2024-06-28T15:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2024-06-28T15:00:00+00:00",
+     "pct": 100.0
+    },
+    "buy_vol": {
+     "first": "2024-06-28T15:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2024-06-28T15:00:00+00:00",
+     "pct": 99.99
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 41.89
+    },
+    "mark_close": {
+     "first": "2024-06-28T15:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2024-06-28T15:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "AI",
+   "listed_now": true
+  },
+  "PF_TONUSD": {
+   "symbol": "PF_TONUSD",
+   "rows": 18956,
+   "first": "2024-04-30T17:00:00+00:00",
+   "last": "2026-06-29T12:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": true,
+   "sha256": "f4c581c89e601dcc3719791fbb02f8f83d8cd3bb3cd05a948f3419587623fee8",
+   "coverage": {
+    "oi": {
+     "first": "2024-04-30T17:00:00+00:00",
+     "pct": 100.0
+    },
+    "liq_vol": {
+     "first": "2024-04-30T17:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2024-04-30T17:00:00+00:00",
+     "pct": 100.0
+    },
+    "buy_vol": {
+     "first": "2024-04-30T17:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2024-05-01T06:00:00+00:00",
+     "pct": 99.83
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 28.36
+    },
+    "mark_close": {
+     "first": "2024-04-30T17:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2024-04-30T17:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "unknown (delisted)",
+   "listed_now": false
+  },
+  "PF_SUIUSD": {
+   "symbol": "PF_SUIUSD",
+   "rows": 31069,
+   "first": "2023-05-03T13:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "7fca567baf5b7357265ed16c9ca5d3d8c19ad43045708c92b79e2e6e67d48b8c",
+   "coverage": {
+    "oi": {
+     "first": "2023-05-03T13:00:00+00:00",
+     "pct": 100.0
+    },
+    "liq_vol": {
+     "first": "2023-05-03T13:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 97.84
+    },
+    "buy_vol": {
+     "first": "2023-05-03T13:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 97.84
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 28.23
+    },
+    "mark_close": {
+     "first": "2023-05-03T13:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2023-05-03T13:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "Layer 1",
+   "listed_now": true
+  },
+  "PF_WIFUSD": {
+   "symbol": "PF_WIFUSD",
+   "rows": 24732,
+   "first": "2024-01-22T14:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "670fbf84d4eed84f9d6594ae49b79b198548c4a27b72b9b87de42e5440813a2a",
+   "coverage": {
+    "oi": {
+     "first": "2024-01-22T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "liq_vol": {
+     "first": "2024-01-22T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2024-01-22T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "buy_vol": {
+     "first": "2024-01-22T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2024-01-22T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 35.47
+    },
+    "mark_close": {
+     "first": "2024-01-22T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2024-01-22T14:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "Community",
+   "listed_now": true
+  },
+  "PF_SOLUSD": {
+   "symbol": "PF_SOLUSD",
+   "rows": 40815,
+   "first": "2022-03-23T11:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "ad00fff9c3a5d629a6fe4de25d2fe2f938b1e05054017c575fdb77dfb362687e",
+   "coverage": {
+    "oi": {
+     "first": "2023-03-07T11:00:00+00:00",
+     "pct": 79.48
+    },
+    "liq_vol": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 74.48
+    },
+    "buy_vol": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 74.48
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 21.49
+    },
+    "mark_close": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "Layer 1",
+   "listed_now": true
+  },
+  "PF_WLDUSD": {
+   "symbol": "PF_WLDUSD",
+   "rows": 28884,
+   "first": "2023-08-02T14:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "d374912c7a63f2523809bf7b879077197c51a547839355187edf3c4080a27f49",
+   "coverage": {
+    "oi": {
+     "first": "2023-08-02T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "liq_vol": {
+     "first": "2023-08-02T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-08-02T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "buy_vol": {
+     "first": "2023-08-02T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-08-02T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 30.37
+    },
+    "mark_close": {
+     "first": "2023-08-02T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2023-08-02T14:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "Web3",
+   "listed_now": true
+  },
+  "PF_UNIUSD": {
+   "symbol": "PF_UNIUSD",
+   "rows": 40815,
+   "first": "2022-03-23T11:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "1c883af437c32702581ee6345364d6d7445efc7a2954f47b40a6f9466a3726a0",
+   "coverage": {
+    "oi": {
+     "first": "2023-03-07T11:00:00+00:00",
+     "pct": 79.48
+    },
+    "liq_vol": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 74.48
+    },
+    "buy_vol": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 74.48
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 21.49
+    },
+    "mark_close": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "DeFi",
+   "listed_now": true
+  },
+  "PF_XBTUSD": {
+   "symbol": "PF_XBTUSD",
+   "rows": 40816,
+   "first": "2022-03-23T10:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "eec7f5a7c340e32e4567aff195baace7515490339a2c9df488634c8204df5a15",
+   "coverage": {
+    "oi": {
+     "first": "2023-03-07T11:00:00+00:00",
+     "pct": 79.48
+    },
+    "liq_vol": {
+     "first": "2022-03-23T10:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 74.48
+    },
+    "buy_vol": {
+     "first": "2022-03-23T10:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 74.48
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 21.49
+    },
+    "mark_close": {
+     "first": "2022-03-23T10:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2022-03-23T10:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "Layer 1",
+   "listed_now": true
+  },
+  "PF_XMRUSD": {
+   "symbol": "PF_XMRUSD",
+   "rows": 40815,
+   "first": "2022-03-23T11:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "5da16e99c3e918515202bb181ed7ac23b059d918855f5f55ca84e3e8affea62d",
+   "coverage": {
+    "oi": {
+     "first": "2023-03-07T12:00:00+00:00",
+     "pct": 79.48
+    },
+    "liq_vol": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 74.48
+    },
+    "buy_vol": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 74.48
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 21.49
+    },
+    "mark_close": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "Privacy",
+   "listed_now": true
+  },
+  "PF_XRPUSD": {
+   "symbol": "PF_XRPUSD",
+   "rows": 40815,
+   "first": "2022-03-23T11:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "f50e35e21769a7b2cf8500b7ce71b9ac68e9b43e5cc86accbf4d28bfb2b35b6c",
+   "coverage": {
+    "oi": {
+     "first": "2023-03-07T11:00:00+00:00",
+     "pct": 79.48
+    },
+    "liq_vol": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 74.48
+    },
+    "buy_vol": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 74.48
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 21.49
+    },
+    "mark_close": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2022-03-23T11:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "Layer 1",
+   "listed_now": true
+  },
+  "PF_ZECUSD": {
+   "symbol": "PF_ZECUSD",
+   "rows": 37116,
+   "first": "2022-08-24T14:00:00+00:00",
+   "last": "2026-11-18T01:00:00+00:00",
+   "missing_bars": 0,
+   "delisted": false,
+   "sha256": "a39ea9ecd57df5af50577ae71390a816fc541eaeb9de37be98532c56cf4a9c8c",
+   "coverage": {
+    "oi": {
+     "first": "2023-03-07T12:00:00+00:00",
+     "pct": 87.4
+    },
+    "liq_vol": {
+     "first": "2022-08-24T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "ls_ratio": {
+     "first": "2023-05-31T13:00:00+00:00",
+     "pct": 81.9
+    },
+    "buy_vol": {
+     "first": "2022-08-24T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "bid_10k": {
+     "first": "2023-05-31T12:00:00+00:00",
+     "pct": 81.9
+    },
+    "funding_actual": {
+     "first": "2025-11-17T09:00:00+00:00",
+     "pct": 23.63
+    },
+    "mark_close": {
+     "first": "2022-08-24T14:00:00+00:00",
+     "pct": 100.0
+    },
+    "spot_close": {
+     "first": "2022-08-24T14:00:00+00:00",
+     "pct": 100.0
+    }
+   },
+   "category": "Privacy",
+   "listed_now": true
+  }
+ }
+}
