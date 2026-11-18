@@ -7,7 +7,7 @@ import pandas as pd
 from ..data import store
 from . import ta
 from .base import Strategy
-from .common import BTC, ETH, entries, is_weekly_bar
+from .common import BTC, ETH, entries, is_weekly_bar, month_code, months_where
 
 
 class CrossWeekendFollowAlts(Strategy):
@@ -29,7 +29,7 @@ class CrossWeekendFollowAlts(Strategy):
         btc = data.get(BTC)
         w_btc = None if btc is None else btc["close"] / btc["close"].shift(look) - 1.0
         # point-in-time: each month's list was ranked on the 30 days BEFORE that month
-        cands = {m: set([s for s in syms if s not in (BTC, ETH)][:n_alt]) for m, syms in store.universe().items()}
+        cand_months = months_where(store.universe(), lambda syms: [s for s in syms if s not in (BTC, ETH)][:n_alt])
         for sym, df in data.items():
             atr = ta.atr(df, 24)
             if w_btc is None or sym in (BTC, ETH):
@@ -37,7 +37,7 @@ class CrossWeekendFollowAlts(Strategy):
                 continue
             w = w_btc.reindex(df.index)
             own = df["close"] / df["close"].shift(look) - 1.0
-            is_cand = pd.Series([sym in cands.get(m, ()) for m in df.index.strftime("%Y-%m")], index=df.index)
+            is_cand = pd.Series(np.isin(month_code(df.index), cand_months.get(sym, [])), index=df.index)
             on = pd.Series(is_weekly_bar(df.index, 6, 21), index=df.index)
             go = on & is_cand & (w.abs() >= p["thr"]) & (np.sign(own) == np.sign(w))
             out[sym] = entries(df, go & (w > 0), go & (w < 0), p["stop_atr"] * atr)

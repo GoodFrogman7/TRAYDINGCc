@@ -6,7 +6,7 @@ import pandas as pd
 
 from ..data import store
 from .base import Strategy, blank_intents
-from .common import daily_vol
+from .common import daily_vol, month_code, months_where
 
 
 class CrossRsLeaderLong(Strategy):
@@ -29,8 +29,9 @@ class CrossRsLeaderLong(Strategy):
         idx = pd.date_range(lo, hi, freq="h", name="time")
         close = pd.DataFrame({s: df["close"].reindex(idx) for s, df in data.items()})
         uni = store.universe()                       # ranked on the 30 days before each month
-        months = idx.strftime("%Y-%m")
-        member = pd.DataFrame({s: [s in uni.get(m, ()) for m in months] for s in close.columns}, index=idx)
+        in_months = months_where(uni, lambda syms: syms)
+        code = month_code(idx)
+        member = pd.DataFrame({s: np.isin(code, in_months.get(s, [])) for s in close.columns}, index=idx)
         mom = close / close.shift(L) - 1.0
         valid = member & mom.notna()
         rank = mom.where(valid).rank(axis=1, ascending=False)

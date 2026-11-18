@@ -45,3 +45,17 @@ def is_weekly_bar(index: pd.DatetimeIndex, dow: int, hour: int) -> np.ndarray:
 def daily_vol(close: pd.Series) -> pd.Series:
     """One-day volatility estimate from the trailing week of hourly log returns."""
     return ta.realized_vol(close, 168) * np.sqrt(24)
+
+
+def month_code(index: pd.DatetimeIndex) -> np.ndarray:
+    """YYYYMM as an integer per bar (fast alternative to strftime)."""
+    return (index.year * 100 + index.month).to_numpy()
+
+
+def months_where(universe: dict[str, list[str]], pick) -> dict[str, np.ndarray]:
+    """{symbol: array of YYYYMM codes in which pick(month_list) contains the symbol}."""
+    out: dict[str, list[int]] = {}
+    for m, syms in universe.items():
+        for s_ in pick(syms):
+            out.setdefault(s_, []).append(int(m.replace("-", "")))
+    return {k: np.array(v) for k, v in out.items()}
