@@ -29,9 +29,17 @@ Fill model (deliberately pessimistic where the bar hides the true path):
   * stop                  fills at the stop (or at the open if the bar gaps
                           through it), moved against us by slippage x
                           `stop_slip_mult`; taker fee
+  * take-profit         a resting limit: fills AT the target, never better, even
+                          when the bar opens beyond it; maker fee. In the bar a
+                          resting-limit entry itself filled, the target only
+                          fills if the bar CLOSES beyond it (the only case where
+                          the path certainly crossed it after the entry)
   * if a stop and a take-profit are both touched in one bar -> the stop wins
   * a limit entry that fills inside a bar whose range also touches its stop is
     treated as stopped in that same bar
+  * a pending entry is cancelled if its fill bar is outside the symbol's
+    tradable set (left the month's universe, or the venue printed no candle)
+  * a "target" that is not on the profit side of the fill price is dropped
 """
 from __future__ import annotations
 
@@ -50,7 +58,8 @@ class Costs:
     maker_fee: float = 0.0002        # tier-0 maker, 0.02%
     fee_mult: float = 1.0            # 2.0 = the "fees doubled" stress test
     slip_mult: float = 1.0
-    funding_mult: float = 1.0
+    funding_mult: float = 1.0        # scales all funding, paid and received
+    funding_paid_mult: float = 1.0   # extra multiplier on funding the position PAYS only (one-sided stress)
     stop_slip_mult: float = 2.0      # stops fill in fast markets
     limit_through_bps: float = 1.0   # required trade-through for a resting limit
 
@@ -250,7 +259,7 @@ def attach(base: FeedBase, intents: dict[str, pd.DataFrame]) -> Feed:
         it = it.reindex(base.index)
         sym[s] = SymbolFeed(
             **a,
-            side=np.nan_to_num(it["side"].to_numpy(dtype="float64"), nan=0.0).astype(np.int8),
+            side=np.sign(np.nan_to_num(it["side"].to_numpy(dtype="float64"), nan=0.0)).astype(np.int8),
             limit=it["limit"].to_numpy(dtype="float64"), stop=it["stop"].to_numpy(dtype="float64"),
             tp=it["tp"].to_numpy(dtype="float64"), trail=it["trail"].to_numpy(dtype="float64"),
             exit=np.nan_to_num(it["exit"].to_numpy(dtype="float64"), nan=0.0).astype(bool))
@@ -313,6 +322,7 @@ class Engine:
         """Human override: clear a Guardian halt."""
         st = self.state
         st.halted, st.halt_reason, st.halt_day, st.consec_losses = False, "", -1, 0
+        st.day_start_equity = st.equity      # otherwise the same day's loss re-triggers the halt at once
 
     def _close(self, pos: Position, price: float, t: str, reason: str, maker: bool) -> None:
         st, c = self.state, self.costs
@@ -344,6 +354,8 @@ class Engine:
         st = self.state
         events, day_id, times = feed.events, feed.day_id, feed.times
         for i in range(i0, i1):
+            if st.last_time and times[i] <= st.last_time:
+                continue        # already processed (a tick that ran twice must change nothing)
             day = int(day_id[i])
             if day != st.day:
                 st.day = day
@@ -383,9 +395,10 @@ class Engine:
         for sym in list(st.orders):
             od = st.orders[sym]
             f = feed.sym[sym]
-            if st.halted or not f.valid[i]:
+            if st.halted or not f.valid[i] or not f.tradable[i]:
                 del st.orders[sym]
-                self._ev(t, sym, "order_cancelled", reason="halted" if st.halted else "no bar")
+                self._ev(t, sym, "order_cancelled", reason="halted" if st.halted else
+                         "no bar" if not f.valid[i] else "fill bar outside the tradable set")
                 continue
             o, h, l = f.o[i], f.h[i], f.l[i]
             slip = f.slip_bps[i] * c.slip_mult
@@ -427,9 +440,13 @@ class Engine:
                 continue
             fee = qty * px * (c.maker_fee if maker else c.taker_fee) * c.fee_mult
             st.cash -= fee
+            tp = od.tp
+            if not math.isnan(tp) and not (tp - px) * od.side > 0:
+                self._ev(t, sym, "target_dropped", reason="target not beyond the fill price", tp=tp, price=px)
+                tp = NAN
             st.positions[sym] = Position(
                 symbol=sym, side=od.side, qty=qty, entry_price=px, entry_time=t, stop=od.stop,
-                stop0=od.stop, tp=od.tp, risk_usd=qty * dist, maker_entry=maker,
+                stop0=od.stop, tp=tp, risk_usd=qty * dist, maker_entry=maker,
                 limit_entry=not math.isnan(od.limit), fees=fee, last_price=px, new=True, tag=od.tag)
             self._ev(t, sym, "entry", side=od.side, price=px, qty=qty, stop=od.stop, maker=maker)
 
@@ -440,6 +457,8 @@ class Engine:
                 continue
             o, h, l, cl = f.o[i], f.h[i], f.l[i], f.c[i]
             fund = pos.side * pos.qty * o * f.funding[i] * c.funding_mult   # longs pay positive rates
+            if fund > 0:
+                fund *= c.funding_paid_mult
             st.cash -= fund
             pos.funding += fund
             long = pos.side > 0
@@ -451,11 +470,13 @@ class Engine:
                 continue
             if not math.isnan(pos.tp):
                 thr = c.limit_through_bps / 1e4
-                if not pos.new and ((o >= pos.tp) if long else (o <= pos.tp)):
-                    self._close(pos, o, t, "take_profit", maker=True)
-                    continue
-                touched = (h > pos.tp * (1 + thr)) if long else (l < pos.tp * (1 - thr))
-                if touched and not (pos.new and pos.maker_entry):
+                if pos.new and pos.maker_entry:
+                    # the entry filled somewhere inside this bar: only a CLOSE beyond the target proves
+                    # the target traded after the entry
+                    touched = (cl > pos.tp * (1 + thr)) if long else (cl < pos.tp * (1 - thr))
+                else:
+                    touched = (h > pos.tp * (1 + thr)) if long else (l < pos.tp * (1 - thr))
+                if touched:      # a resting limit fills at its price, never better, even on a gap
                     self._close(pos, pos.tp, t, "take_profit", maker=True)
                     continue
             pos.last_price = cl

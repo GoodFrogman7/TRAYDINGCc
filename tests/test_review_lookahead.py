@@ -550,7 +550,8 @@ def test_one_bar_late_exposes_a_one_bar_peek_but_no_gate_reads_it(data):
     res = {"leak_test": {"passed": True}, "wf_validation": {"n_trades": 99, "total_return": 1.0, "calmar": 9.0},
            "stress": {"fees_x2": {"total_return": 1.0}, "one_bar_late": {"total_return": -1.0}},
            "neighbourhood": {"share_profitable": 1.0}, "benchmark": {"basket": {"calmar": 0.1}}}
-    assert scoring.gates(res)["all_passed"]            # documents the gap: a collapsed one_bar_late does not fail anything
+    g = scoring.gates(res)                             # the gap this test documented is closed: the gate added after
+    assert g["holds_one_bar_late"] is False and g["all_passed"] is False     # the review (N-1) now fails it
 
 
 # =============================================================== universe / tradable

@@ -19,6 +19,8 @@ def score(v: dict, regimes: dict) -> dict:
         "trade_count": _band(v.get("n_trades", 0), [49.5, 99.5, 199.5, 399.5]),
         "losing_streak": _band(-v.get("longest_losing_streak", 99), [-11.5, -8.5, -6.5, -4.5]),
     }
+    if v.get("n_trades", 0) < MIN_TRADES:      # a strategy that barely trades must not score well for being idle
+        s["max_drawdown"] = s["losing_streak"] = 1
     bear = regimes.get("bear", {}).get("annualised", 0.0)
     chop = regimes.get("chop", {}).get("annualised", 0.0)
     total = regimes.get("bear", {}).get("pnl_pct", 0.0) + regimes.get("chop", {}).get("pnl_pct", 0.0)
@@ -44,6 +46,7 @@ def gates(res: dict) -> dict:
         "profit_after_costs": v.get("total_return", 0.0) > 0,
         "profit_fees_doubled": res["stress"]["fees_x2"].get("total_return", 0.0) > 0,
         "nearby_settings_hold": res["neighbourhood"]["share_profitable"] >= MIN_GRID_PROFITABLE,
+        "holds_one_bar_late": res["stress"]["one_bar_late"].get("total_return", 0.0) > 0,
         "beats_holding": v.get("calmar", 0.0) > res["benchmark"]["basket"].get("calmar", 0.0)
         and v.get("total_return", 0.0) > 0,
     }

@@ -137,7 +137,10 @@ def build_symbol(k: KrakenFutures, sym: str, asof: int, first_day: int = HISTORY
     return df, meta
 
 
-def fit_funding(frames: dict[str, pd.DataFrame]) -> dict:
+FUNDING_FIT_CUTOFF = pd.Timestamp("2026-05-18", tz="UTC")   # = store.VALIDATION_END: never fit on the holdout
+
+
+def fit_funding(frames: dict[str, pd.DataFrame], cutoff: pd.Timestamp | None = FUNDING_FIT_CUTOFF) -> dict:
     """Funding stamped T+1h is derived from the premium during bar T. Fit
     funding[t] = a + k * premium[t-1] (least squares) on the year where actual
     rates exist, then back-fill earlier history with that ESTIMATE (flagged in
@@ -152,6 +155,8 @@ def fit_funding(frames: dict[str, pd.DataFrame]) -> dict:
         x = df["premium"].shift(1)
         y = df["funding_actual"]
         ok = x.notna() & y.notna() & (y.abs() < MAX_REL_FUNDING * 0.999)
+        if cutoff is not None:
+            ok &= df.index < cutoff          # rows inside the sealed holdout must not shape earlier bars
         if ok.sum() < 500:
             continue
         xv, yv = x[ok].to_numpy(), y[ok].to_numpy()
@@ -175,11 +180,33 @@ def fit_funding(frames: dict[str, pd.DataFrame]) -> dict:
         df["funding_is_est"] = df["funding_actual"].isna()
         df["funding"] = df["funding_actual"].fillna(est).fillna(0.0)
         for c in ("oi", "liq_vol", "ls_ratio", "buy_vol", "sell_vol", "premium"):
-            df[c] = df[c].astype("float32")
+            if c in df:
+                df[c] = df[c].astype("float32")
     return {"pooled_a": pooled_a, "pooled_k": pooled_k, "per_symbol": fits,
+            "fit_rows_before": None if cutoff is None else cutoff.isoformat(),
             "note": "funding = actual where the venue serves it (about the last year); earlier hours are an "
                     "ESTIMATE a + k*premium(previous hour), clipped to the +/-0.5%/h cap. Symbols with no "
                     "actual history (delisted before the served window) use the pooled fit."}
+
+
+def refit_funding() -> int:
+    """Rewrite `funding` / `funding_is_est` in the existing parquet files from the
+    stored premium and funding_actual columns, fitting only on rows before the
+    sealed holdout. Updates the manifest (fit and file hashes)."""
+    frames = {p.stem: pd.read_parquet(p) for p in sorted(H1.glob("*.parquet"))}
+    fit = fit_funding(frames)
+    manifest = json.loads((DATA / "manifest.json").read_text())
+    manifest["funding_model_previous"] = {k: manifest["funding_model"].get(k) for k in ("pooled_a", "pooled_k", "note")}
+    manifest["funding_model"] = fit
+    manifest["funding_refit_at_utc"] = pd.Timestamp.now(tz="UTC").isoformat(timespec="seconds")
+    for s, df in frames.items():
+        p = H1 / f"{s}.parquet"
+        df.to_parquet(p, compression="zstd")
+        if s in manifest["files"]:
+            manifest["files"][s]["sha256"] = _sha(p)
+    (DATA / "manifest.json").write_text(json.dumps(manifest, indent=1))
+    print(f"refit funding on {len(frames)} symbols; pooled a={fit['pooled_a']:.3e} k={fit['pooled_k']:.4f}")
+    return 0
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -187,7 +214,11 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--workers", type=int, default=8)
     ap.add_argument("--only", nargs="*", help="restrict the hourly download to these symbols (debug)")
     ap.add_argument("--update", action="store_true", help="(reserved) currently identical to a full rebuild")
+    ap.add_argument("--refit-funding", action="store_true",
+                    help="re-fit the funding estimate on the files already on disk (no download)")
     args = ap.parse_args(argv)
+    if args.refit_funding:
+        return refit_funding()
     t0 = time.time()
     k = KrakenFutures()
     asof = int(time.time()) // 3600 * 3600  # only bars that are already closed

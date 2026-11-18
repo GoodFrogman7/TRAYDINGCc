@@ -18,6 +18,7 @@ GATE_QUESTIONS = [
     ("profit_fees_doubled", "With fees doubled?"),
     ("nearby_settings_hold", "Does it hold across nearby settings?"),
     ("no_lookahead", "Free of look-ahead?"),
+    ("holds_one_bar_late", "Still profitable if every order goes in one bar late?"),
     ("beats_holding", "Does it beat simply holding, after costs?"),
 ]
 

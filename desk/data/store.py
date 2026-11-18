@@ -11,6 +11,7 @@ The three windows are fixed BEFORE any strategy is looked at:
 from __future__ import annotations
 
 import json
+from contextlib import contextmanager
 from functools import lru_cache
 from pathlib import Path
 
@@ -45,9 +46,29 @@ def _read(symbol: str) -> pd.DataFrame:
     return pd.read_parquet(H1 / f"{symbol}.parquet")
 
 
+_CEILING: pd.Timestamp | None = None
+
+
+@contextmanager
+def ceiling(ts: pd.Timestamp | None):
+    """While active, no loader returns bars at or after `ts`. The audit sets this
+    to the end of VALIDATION (so the sealed holdout cannot be read by any
+    strategy, even one that loads data itself) and the look-ahead test sets it to
+    each truncation point."""
+    global _CEILING
+    prev = _CEILING
+    _CEILING = prev if ts is None else (ts if prev is None else min(ts, prev))   # can only tighten
+    try:
+        yield
+    finally:
+        _CEILING = prev
+
+
 def load(symbol: str, start: pd.Timestamp | None = None, end: pd.Timestamp | None = None) -> pd.DataFrame:
     """One symbol's hourly bars. `end` is exclusive. Returns a copy."""
     df = _read(symbol)
+    if _CEILING is not None:
+        end = _CEILING if end is None else min(end, _CEILING)
     if start is not None:
         df = df[df.index >= start]
     if end is not None:

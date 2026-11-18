@@ -27,7 +27,7 @@ def summarize(equity: pd.Series, trades: list[dict], equity0: float,
         return {**out, "n_trades": 0, "total_return": 0.0, "sharpe": 0.0, "max_dd": 0.0, "annual_return": 0.0,
                 "calmar": 0.0, "win_rate": 0.0, "avg_r": 0.0, "profit_factor": 0.0,
                 "longest_losing_streak": 0, "worst_month": 0.0}
-    start = float(eq.iloc[0])
+    start = float(equity0)        # the account's opening balance, not the first mark
     years = (eq.index[-1] - eq.index[0]).total_seconds() / (365.25 * 86400)
     pnl = float(eq.iloc[-1] - start)
     out["start"] = eq.index[0].isoformat()
@@ -37,19 +37,21 @@ def summarize(equity: pd.Series, trades: list[dict], equity0: float,
     out["total_return"] = pnl / equity0
     out["annual_return"] = out["total_return"] / years if years > 0 else 0.0
     daily = eq.resample("1D").last().ffill()
-    dret = daily.diff().dropna() / equity0
+    dchg = daily.diff()
+    dchg.iloc[0] = daily.iloc[0] - start          # the first day counts too
+    dret = dchg / equity0
     sd = float(dret.std())
     out["sharpe"] = float(dret.mean() / sd * np.sqrt(365)) if sd > 0 else 0.0
-    down = dret[dret < 0]
-    dsd = float(np.sqrt((down ** 2).mean())) if len(down) else 0.0
+    dsd = float(np.sqrt((dret.clip(upper=0.0) ** 2).mean())) if len(dret) else 0.0
     out["sortino"] = float(dret.mean() / dsd * np.sqrt(365)) if dsd > 0 else 0.0
-    dd = (eq - eq.cummax()) / equity0
+    dd = (eq - eq.cummax().clip(lower=start)) / equity0
     out["max_dd"] = float(dd.min())
     out["calmar"] = out["annual_return"] / abs(out["max_dd"]) if out["max_dd"] < 0 else 0.0
     out["worst_day"] = float(dret.min()) if len(dret) else 0.0
-    monthly = eq.resample("MS").last().ffill().diff().dropna() / equity0
-    first_month = (eq.resample("MS").last().iloc[0] - start) / equity0
-    monthly = pd.concat([pd.Series([first_month], index=[eq.resample("MS").last().index[0]]), monthly])
+    mlast = eq.resample("MS").last().ffill()
+    monthly = mlast.diff()
+    monthly.iloc[0] = mlast.iloc[0] - start
+    monthly = monthly / equity0
     out["worst_month"] = float(monthly.min())
     out["best_month"] = float(monthly.max())
     out["pct_months_up"] = float((monthly > 0).mean())

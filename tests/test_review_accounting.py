@@ -792,7 +792,8 @@ def test_buy_and_hold_matches_an_independent_recomputation_from_raw_bars(basket_
 # =====================================================================================================
 def _res(**over):
     v = {"n_trades": 50, "total_return": 0.01, "calmar": 0.5}
-    res = {"wf_validation": v, "leak_test": {"passed": True}, "stress": {"fees_x2": {"total_return": 0.001}},
+    res = {"wf_validation": v, "leak_test": {"passed": True},
+           "stress": {"fees_x2": {"total_return": 0.001}, "one_bar_late": {"total_return": 0.001}},
            "neighbourhood": {"share_profitable": 0.60}, "benchmark": {"basket": {"calmar": 0.4}}}
     for k, val in over.items():
         node, keys = res, k.split(".")
@@ -810,13 +811,14 @@ def test_gates_sit_exactly_on_the_protocol_thresholds():
         "wf_validation.total_return": (0.0, "profit_after_costs"),
         "stress.fees_x2.total_return": (0.0, "profit_fees_doubled"),
         "neighbourhood.share_profitable": (0.59, "nearby_settings_hold"),
+        "stress.one_bar_late.total_return": (0.0, "holds_one_bar_late"),     # gate added after the review (N-1)
         "benchmark.basket.calmar": (0.5, "beats_holding"),                   # must BEAT the basket, a tie fails
     }
     for path, (value, gate) in fails.items():
         g = scoring.gates(_res(**{path: value}))
         assert g[gate] is False and g["all_passed"] is False, path
     assert set(scoring.gates(_res())) == {"no_lookahead", "trades_50_plus", "profit_after_costs", "profit_fees_doubled",
-                                          "nearby_settings_hold", "beats_holding", "all_passed"}
+                                          "nearby_settings_hold", "holds_one_bar_late", "beats_holding", "all_passed"}
 
 
 def test_score_bands_are_monotone_and_total_is_out_of_25():

@@ -59,7 +59,7 @@ def check(name: str, market) -> bool:
         if wrong.any():
             print(f"  FAIL {s}: {int(wrong.sum())} signals with the stop on the wrong side of the entry")
             ok = False
-    lt = leak_test(st, market.data)
+    lt = leak_test(st, market.data, n_targeted=80, n_other=4)     # the full-strength test runs in the audit
     if not lt["passed"]:
         print(f"  FAIL look-ahead test: {lt['mismatches']} mismatches, e.g. {lt['examples'][:2]}")
         ok = False
