@@ -46,3 +46,10 @@ symbol during months it is in the set (`store.tradable_mask`); the engine enforc
   tested on the shorter window and say so.
 - Kraken's symbol-list endpoint is inconsistent between calls (it sometimes omits delisted contracts); the
   downloader polls it repeatedly and keeps a grow-only list.
+
+## Spot-check against the live API (2026-11-18)
+`research/verify/data_spotcheck.py` re-fetched 32 random symbol-days across 8 symbols (two delisted) and
+2022-2026: open, high, low, close, volume, mark and index closes and published funding matched exactly; open
+interest and liquidation volume matched to storage precision. No inconsistent candles, duplicate hours or gaps
+in any file. Six symbols each contain one bar that moves more than 50% from the previous close (FARTCOIN, FET,
+TRUMP, UNI, WIF, WLD); they are the venue's own prints and are left in.

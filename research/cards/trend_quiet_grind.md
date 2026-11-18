@@ -1,6 +1,6 @@
 # trend_quiet_grind
 
-**Verdict:** PASSED every gate. Score 16/25. Regime it needs: **trending**.
+**Verdict:** PASSED every gate, then REFUTED by the independent skeptic. Score 16/25. Regime it needs: **trending**.
 
 ## The idea
 Buy a coin whose 14-day rise has been unusually smooth (efficiency ratio in the top 20% of its own last 180 days) and hold up to a week; long only.
@@ -85,6 +85,44 @@ Parameters re-chosen every quarter on the prior 18 months, then traded unseen. A
 **The market that breaks it:** ranging state (-17.8% annualised over 209 days).
 
 **Earliest warning sign it is fading:** Win rate over the last 30 trades under 35% (design 44%), or three or more coins triggering in the same week and then stopping out together.
+
+## Coinbase-listed coins only
+Same audit, entries allowed only in coins Coinbase lists today as perpetual-style futures: +12.0%, max drawdown -10.9%, 136 trades, fees doubled +10.9%, one bar late +7.1%, p = 0.260. Gates failed on that set: none. (Today's list applied to history; Coinbase fees, funding and contract sizes are not modelled.)
+
+## Independent skeptic
+**Refuted** (confidence medium). No bug, no look-ahead and realistic costs, but the +10.4% cannot be told apart from luck (p = 0.27): it comes from two rallies (Apr-May and Jul 2025), vanishes if 3 of the 135 trades are removed, and the strategy has lost money since August 2025, so it should not be relied on as champion.
+
+- Code matches the Hunter's rules: yes. Look-ahead found: no.
+- Real order-book costs: Costs are not the weakness.
+
+Strongest evidence against:
+- Luck cannot be excluded: p = 0.271 (0.31 when resampling the 12 episodes), no Holm survival, and 4 of 15 audited strategies reach p <= 0.271 where chance alone predicts 4.1.
+- Two rallies carry everything: Apr-May 2025 and Jul 2025 made +$2,398; the other ten episodes lost -$1,359. Without the best quarter the return is -0.5%, without the best 3 trades of 135 it is -$25, and without the best 5 exit days it is -19.6%.
+- It has been losing going into the sealed period: trades exiting from 1 Aug 2025 onward total -$700 (43 trades, 21% winners), and the last three quarters are -0.4%, -4.5% and +0.2%.
+- The Hunter's own 'fading' alarm is already on at the end of validation: the last 30 trades won 20% (alarm level 35%, design 44%) for -$440, and the Dec 2025-Jan 2026 episode was 17 trades in 10 coins that lost -$488 together.
+- The strategy as the Hunter specified it (q 0.8, stop 5 ATR) did not replicate: +22.6% in design, -0.03% in validation with a -21.8% drawdown and a 13-trade losing streak. The pass rests on the 7-ATR cells the walk-forward picked.
+- Random entry hours in the same coin-months do as well or better 53% of the time, and against plain 14-day momentum exposure the smoothness filter is not significant (p about 0.10).
+- The result swings by more than its own size on arbitrary changes: shifting signals 3-48 hours gives +5.0% to +23.8%, and the Coinbase re-fit drops from +12.0% to +7.1% when one bar late.
+- Single-coin dependence: without ETH the return is +3.4% (p = 0.43); without ETH and SUI it is -0.2%.
+
+Evidence for:
+- Implementation is faithful: independent re-implementation matches on 6.6 million rows, and all 135 trades reconcile against raw bars.
+- No look-ahead: 3 extra leak-test seeds (357 probes) plus the audit's 349 probes and 191-probe trade replay all clean; universe ranking confirmed to use the prior 30 days.
+- Costs are realistic and the result is insensitive to them: +10.25% with actual order-book costs, +10.18% when also one bar late, +8.33% with actual slippage, doubled fees, doubled funding and one bar late.
+- It beats blind long exposure: real result is above 99.3% of 300 random coin-month long draws (mean -6.3%), while always-long lost -35.8%.
+- Coinbase-listed coins only still pass every gate (+12.0% re-fitted, 136 trades), and BTC and ETH alone made +9.1% (27 trades, p = 0.08).
+- 5 of 6 grid cells were profitable in validation (median +7.6%), and the walk-forward over all 11 quarters since Oct 2023 made +44.0%, though 5 of those quarters are inside the Hunter's design window.
+
+What the owner must know:
+- My refutation is statistical, not a bug: the code does what the rules say and the costs are fair. The problem is that +10.4% over 17 months is the kind of number chance produces about one time in four, and this desk tested 15 strategies.
+- This is a long-only momentum rule that makes money only in a few broad rallies. Expect long stretches of small losses (63% of trades lose; 10 of 12 trade clusters lost or barely broke even) while waiting for a rally that may not come.
+- It was losing at the end of the test window (-$700 since August 2025) and its own designer's warning sign (win rate under 35% over the last 30 trades) is already triggered at 20%.
+- If it is paper traded anyway, do not treat a profitable six months as proof: one rally decides the outcome. Judge it on whether it loses small outside rallies, and stop if a cluster of 3 or more coins stops out together again.
+- The backtest's safety halt resets itself at midnight UTC; the live bot stays halted until you resume it. There were about 9 halts in 17 months, and the halt behaviour changes the result (Guardian off: +7.4%).
+- On Coinbase, whole-contract sizing matters for BTC: a $50-risk position wanted 0.65-2.59 contracts, so real risk per BTC trade would be $34-$77, or the trade is skipped. Contract sizes for other coins were not checked, and the Coinbase coin list is today's list applied to the past.
+- 81% of position-hours used estimated rather than published funding. The amount is small ($49) and 5x that still leaves +8.45%, but Coinbase's funding and fees differ from Kraken's and were not modelled.
+- The account in the backtest does not compound and cannot go broke; drawdown reached -12.2% in the walk-forward and -17% to -22% in neighbouring fixed settings.
+- Stray scratch files from my runs (trades.pkl, s3_trade_costs.csv, null_A.npy) briefly landed in the repo root; I moved them into my verify folder and fixed the scripts' paths. Nothing under desk/, data/, docs/, tests/, config/ or research/results was touched, and no bar from 2026-05-18 onward was loaded.
 
 ## Final check
 | Question | Answer |

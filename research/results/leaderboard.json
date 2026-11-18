@@ -33,7 +33,9 @@
   "hold_btc_return": -0.23457397368769106,
   "p_value": 0.1195760847830434,
   "survives_holm": false,
-  "mc_prob_loss": 0.1194
+  "mc_prob_loss": 0.1194,
+  "skeptic": "refuted",
+  "skeptic_one_line": "No bug, no look-ahead and no cost problem was found, but the +24.8% is not evidence of an edge: random entries with the same exposure score the same (real result at the 51st percentile), half of it comes from the Guardian halt rather than the specified rules, it is negative without its best five days, and the Coinbase-only walk-forward makes +3.7% with a -25% drawdown and fails the fees-doubled gate."
  },
  {
   "name": "cross_weekend_follow_alts",
@@ -69,7 +71,9 @@
   "hold_btc_return": -0.23457397368769106,
   "p_value": 0.1305738852229554,
   "survives_holm": false,
-  "mc_prob_loss": 0.129
+  "mc_prob_loss": 0.129,
+  "skeptic": "refuted",
+  "skeptic_one_line": "The code is faithful, causal and its costs are realistic, but the +8.6% is not distinguishable from luck: it is one coin (XRP = 86%), three weekends and two quarters, it loses money exactly where its own thesis says it should win, and it should not be relied on as champion."
  },
  {
   "name": "trend_quiet_grind",
@@ -105,7 +109,9 @@
   "hold_btc_return": -0.23457397368769106,
   "p_value": 0.27134573085382924,
   "survives_holm": false,
-  "mc_prob_loss": 0.268
+  "mc_prob_loss": 0.268,
+  "skeptic": "refuted",
+  "skeptic_one_line": "No bug, no look-ahead and realistic costs, but the +10.4% cannot be told apart from luck (p = 0.27): it comes from two rallies (Apr-May and Jul 2025), vanishes if 3 of the 135 trades are removed, and the strategy has lost money since August 2025, so it should not be relied on as champion."
  },
  {
   "name": "cross_ratio_break",
@@ -141,7 +147,9 @@
   "hold_btc_return": -0.23457397368769106,
   "p_value": 0.33473305338932213,
   "survives_holm": false,
-  "mc_prob_loss": 0.3126
+  "mc_prob_loss": 0.3126,
+  "skeptic": "",
+  "skeptic_one_line": ""
  },
  {
   "name": "revert_premium_fade",
@@ -182,7 +190,9 @@
   "hold_btc_return": -0.23457397368769106,
   "p_value": 0.6918616276744651,
   "survives_holm": false,
-  "mc_prob_loss": 0.6704
+  "mc_prob_loss": 0.6704,
+  "skeptic": "",
+  "skeptic_one_line": ""
  },
  {
   "name": "cross_weekend_follow_majors",
@@ -223,7 +233,9 @@
   "hold_btc_return": -0.23457397368769106,
   "p_value": 0.6284743051389722,
   "survives_holm": false,
-  "mc_prob_loss": 0.6284
+  "mc_prob_loss": 0.6284,
+  "skeptic": "",
+  "skeptic_one_line": ""
  },
  {
   "name": "revert_cascade",
@@ -264,7 +276,9 @@
   "hold_btc_return": -0.23457397368769106,
   "p_value": 0.7708458308338332,
   "survives_holm": false,
-  "mc_prob_loss": 0.7708
+  "mc_prob_loss": 0.7708,
+  "skeptic": "",
+  "skeptic_one_line": ""
  },
  {
   "name": "flow_liquidity_vacuum_fade",
@@ -305,7 +319,9 @@
   "hold_btc_return": -0.23457397368769106,
   "p_value": 0.8748250349930013,
   "survives_holm": false,
-  "mc_prob_loss": 0.8748
+  "mc_prob_loss": 0.8748,
+  "skeptic": "",
+  "skeptic_one_line": ""
  },
  {
   "name": "revert_oi_wipe",
@@ -344,7 +360,9 @@
   "hold_btc_return": -0.23457397368769106,
   "p_value": 0.23415316936612676,
   "survives_holm": false,
-  "mc_prob_loss": 0.2272
+  "mc_prob_loss": 0.2272,
+  "skeptic": "",
+  "skeptic_one_line": ""
  },
  {
   "name": "flow_hot_breakdown_limit_fade",
@@ -386,7 +404,9 @@
   "hold_btc_return": -0.23457397368769106,
   "p_value": 0.8804239152169566,
   "survives_holm": false,
-  "mc_prob_loss": 0.8804
+  "mc_prob_loss": 0.8804,
+  "skeptic": "",
+  "skeptic_one_line": ""
  },
  {
   "name": "revert_liq_flush",
@@ -428,7 +448,9 @@
   "hold_btc_return": -0.23457397368769106,
   "p_value": 0.977004599080184,
   "survives_holm": false,
-  "mc_prob_loss": 0.972
+  "mc_prob_loss": 0.972,
+  "skeptic": "",
+  "skeptic_one_line": ""
  },
  {
   "name": "cross_rs_leader_long",
@@ -469,7 +491,9 @@
   "hold_btc_return": -0.23457397368769106,
   "p_value": 0.7146570685862828,
   "survives_holm": false,
-  "mc_prob_loss": 0.7146
+  "mc_prob_loss": 0.7146,
+  "skeptic": "",
+  "skeptic_one_line": ""
  },
  {
   "name": "trend_day_follow",
@@ -511,7 +535,9 @@
   "hold_btc_return": -0.23457397368769106,
   "p_value": 0.6744651069786043,
   "survives_holm": false,
-  "mc_prob_loss": 0.6744
+  "mc_prob_loss": 0.6744,
+  "skeptic": "",
+  "skeptic_one_line": ""
  },
  {
   "name": "flow_weekend_dump_short",
@@ -553,7 +579,9 @@
   "hold_btc_return": -0.23457397368769106,
   "p_value": 0.97000599880024,
   "survives_holm": false,
-  "mc_prob_loss": 0.97
+  "mc_prob_loss": 0.97,
+  "skeptic": "",
+  "skeptic_one_line": ""
  },
  {
   "name": "flow_stress_bid",
@@ -596,6 +624,8 @@
   "hold_btc_return": -0.23457397368769106,
   "p_value": 0.7468506298740252,
   "survives_holm": false,
-  "mc_prob_loss": 0.7388
+  "mc_prob_loss": 0.7388,
+  "skeptic": "",
+  "skeptic_one_line": ""
  }
 ]

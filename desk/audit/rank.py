@@ -48,6 +48,8 @@ def rank(results: list[dict]) -> list[dict]:
     for k in range(family_size(len(results)) - len(results)):
         padded[f"__rejected_before_audit_{k}"] = 1.0
     sig = holm(padded)
+    vp = ROOT / "research" / "verify" / "verdicts.json"
+    verdicts = json.loads(vp.read_text()) if vp.exists() else {}
     rows = []
     for r in results:
         v, g = r["wf_validation"], r["gates"]
@@ -67,6 +69,8 @@ def rank(results: list[dict]) -> list[dict]:
             "hold_btc_return": r["benchmark"]["btc"]["total_return"],
             "p_value": pvals[r["name"]], "survives_holm": sig[r["name"]],
             "mc_prob_loss": r["monte_carlo"].get("prob_loss", 1.0),
+            "skeptic": (verdicts.get(r["name"]) or {}).get("verdict", ""),
+            "skeptic_one_line": (verdicts.get(r["name"]) or {}).get("one_line", ""),
         })
     rows.sort(key=lambda x: (not x["passed"], -x["score"], -x["val_calmar"]))
     return rows
@@ -79,20 +83,24 @@ def to_markdown(rows: list[dict]) -> str:
         f"{family_size(len(rows))} ideas drafted, {len(rows)} audited, {n_pass} passed every gate. "
         "Validation window 2025-01-01 to 2026-05-17, "
         "walk-forward, after fees, funding and slippage, $10,000 account risking 0.5% per trade.", "",
-        "| # | Strategy | Gates | Score | Return | Max DD | Trades | Fees x2 | Grid + | p | Holm |",
-        "|---|---|---|---|---|---|---|---|---|---|---|",
+        "| # | Strategy | Gates | Score | Return | Max DD | Trades | Fees x2 | Grid + | p | Holm | Skeptic |",
+        "|---|---|---|---|---|---|---|---|---|---|---|---|",
     ]
     for i, r in enumerate(rows, 1):
         gate = "pass" if r["passed"] else "FAIL " + ", ".join(r["failed_gates"])
         lines.append(
             f"| {i} | `{r['name']}` | {gate} | {r['score']}/25 | {r['val_return']:+.1%} | {r['val_max_dd']:.1%} | "
             f"{r['val_trades']} | {r['fees_x2_return']:+.1%} | {r['grid_share_profitable']:.0%} | "
-            f"{r['p_value']:.3f} | {'yes' if r['survives_holm'] else 'no'} |")
+            f"{r['p_value']:.3f} | {'yes' if r['survives_holm'] else 'no'} | {r['skeptic'].replace('_', ' ') or '-'} |")
     if rows:
         lines += ["", f"Buy and hold over the same window, after costs: top-10 basket "
                       f"{rows[0]['hold_basket_return']:+.1%}, BTC only {rows[0]['hold_btc_return']:+.1%}.",
                   "", "`p` = bootstrap probability that the average trade is not positive. `Holm` = still "
-                      "significant after correcting for every idea tested tonight."]
+                      "significant after correcting for every idea drafted. `Skeptic` = verdict of an independent "
+                      "attempt to refute each strategy that passed the gates (research/verify/verdicts.json)."]
+        ref = [r for r in rows if r["skeptic"]]
+        if ref:
+            lines += ["", "## Skeptic verdicts"] + [f"- `{r['name']}`: {r['skeptic_one_line']}" for r in ref]
     return "\n".join(lines) + "\n"
 
 

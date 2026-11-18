@@ -1,0 +1,21 @@
+A3 causal: each real signal delayed by a random 1..72 h    draws 300 | trades median 110 | mean +4.38% median +4.16% p05 -1.77% p95 +11.03% | share >= real: 0.077
+A4 causal: delayed by a random 1..168 h                    draws 300 | trades median 104 | mean +0.07% median -0.22% p05 -7.53% p95 +8.61% | share >= real: 0.013
+
+bootstrap P(total <= 0): by exit day 0.267 | by exit week 0.272 | by exit month (14 with trades) 0.297 | by calendar month (17) 0.302 | by episode (12) 0.306
+episodes: n 12 mean $87 sd $547 t 0.55 ; positive 4
+per-trade R: mean 0.154 sd 1.66 naive t 1.07 (ignores clustering); median R -0.37
+leaderboard p-values: [0.1195760847830434, 0.1305738852229554, 0.23415316936612676, 0.27134573085382924, 0.33473305338932213, 0.6284743051389722, 0.6744651069786043, 0.6918616276744651, 0.7146570685862828, 0.7468506298740252, 0.7708458308338332, 0.8748250349930013, 0.8804239152169566, 0.97000599880024, 0.977004599080184] | count <= 0.271: 4 expected under pure chance: 4.1 of 15
+
+trade 104: ['PF_ZECUSD', Timestamp('2025-12-29 04:00:00+0000', tz='UTC'), Timestamp('2025-12-31 23:00:00+0000', tz='UTC'), 'end_of_data']
+guardian exits 42 on 9 distinct halt hours / 9 distinct UTC days; pnl of guardian exits $-651
+SUI bars with rank within 1e-9 of 0.7 (float tie at the threshold): [('2024-02-04 10:00:00+00:00', '0.7'), ('2024-02-14 10:00:00+00:00', '0.7'), ('2024-03-27 13:00:00+00:00', '0.7'), ('2024-08-14 09:00:00+00:00', '0.7'), ('2025-01-29 16:00:00+00:00', '0.7')] | any validation trade entered the bar after: False
+Hunter's default cell (q0.8, stop 5): design ret +22.6% avg_r +0.129 dd -14.6% | validation ret -0.03% avg_r -0.0003 dd -21.8% streak 13
+funding: paid $49 on 135 trades; if actual funding were 5x the estimate: return +8.45%
+share of validation hours with ESTIMATED funding (traded symbols): min 0.64 max 0.64
+position-hours on estimated funding: 81%
+2025-04 listed == top-10 of the prior 30 days: True (overlap 10) | overlap with an in-month ranking: 8
+2025-05 listed == top-10 of the prior 30 days: True (overlap 10) | overlap with an in-month ranking: 8
+2025-07 listed == top-10 of the prior 30 days: True (overlap 10) | overlap with an in-month ranking: 8
+2026-01 listed == top-10 of the prior 30 days: True (overlap 10) | overlap with an in-month ranking: 9
+2026-05 listed == top-10 of the prior 30 days: True (overlap 10) | overlap with an in-month ranking: 8
+time 56.8

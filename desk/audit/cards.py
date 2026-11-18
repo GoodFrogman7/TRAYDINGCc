@@ -27,13 +27,17 @@ def pct(x: float, d: int = 1) -> str:
     return f"{x:+.{d}%}"
 
 
-def card(r: dict, idea: dict | None, holdout: dict | None, rank_row: dict | None) -> str:
+def card(r: dict, idea: dict | None, holdout: dict | None, rank_row: dict | None, skeptic: dict | None = None,
+         coinbase: dict | None = None) -> str:
     idea = idea or {}
     v, a, g, s = r["wf_validation"], r["wf_all"], r["gates"], r["scores"]
     b = r["benchmark"]
     L: list[str] = []
     verdict = "PASSED every gate" if g["all_passed"] else "FAILED: " + ", ".join(
         k for k, ok in g.items() if not ok and k != "all_passed")
+    if skeptic:
+        verdict += (", then REFUTED by the independent skeptic" if skeptic["verdict"] == "refuted"
+                    else ", and survived the independent skeptic with caveats")
     L += [f"# {r['name']}", "", f"**Verdict:** {verdict}. Score {s['total']}/25. Regime it needs: **{r['regime']}**.", ""]
     L += ["## The idea", r["idea"], "", "## Why the edge exists", r["cause"], "",
           "**Who is on the losing side:** " + r["loser"], ""]
@@ -106,6 +110,26 @@ def card(r: dict, idea: dict | None, holdout: dict | None, rank_row: dict | None
               f"{h.get('max_dd', 0):.1%}, {h.get('n_trades', 0)} trades; fees doubled {pct(holdout['fees_x2']['total_return'])}. "
               f"Holding the basket: {pct(holdout['benchmark']['basket']['total_return'])}; BTC: "
               f"{pct(holdout['benchmark']['btc']['total_return'])}. **{'Passed' if holdout['passed'] else 'Failed'}.**", ""]
+    if coinbase:
+        L += ["## Coinbase-listed coins only",
+              f"Same audit, entries allowed only in coins Coinbase lists today as perpetual-style futures: "
+              f"{pct(coinbase['total_return'])}, max drawdown {coinbase['max_dd']:.1%}, {coinbase['n_trades']} trades, "
+              f"fees doubled {pct(coinbase['fees_x2'])}, one bar late {pct(coinbase['one_bar_late'])}, "
+              f"p = {coinbase['p_value']:.3f}. Gates failed on that set: "
+              f"{', '.join(k for k, ok in coinbase['gates_excluding_lookahead'].items() if not ok) or 'none'}. "
+              "(Today's list applied to history; Coinbase fees, funding and contract sizes are not modelled.)", ""]
+    if skeptic:
+        L += ["## Independent skeptic",
+              f"**{skeptic['verdict'].replace('_', ' ').capitalize()}** (confidence {skeptic['confidence']}). "
+              + skeptic["one_line"], "",
+              f"- Code matches the Hunter's rules: {'yes' if skeptic['implementation_matches_spec'] else 'NO'}. "
+              f"Look-ahead found: {'YES' if skeptic['lookahead_found'] else 'no'}.",
+              "- Real order-book costs: " + skeptic["real_cost_check"].split(". ")[0] + ".", "",
+              "Strongest evidence against:"]
+        L += [f"- {x}" for x in skeptic["strongest_evidence_against"]]
+        if skeptic.get("strongest_evidence_for"):
+            L += ["", "Evidence for:"] + [f"- {x}" for x in skeptic["strongest_evidence_for"]]
+        L += ["", "What the owner must know:"] + [f"- {x}" for x in skeptic["caveats_for_owner"]] + [""]
     L += ["## Final check", "| Question | Answer |", "|---|---|"]
     L += [f"| {q} | {'yes' if g[k] else '**no**'} |" for k, q in GATE_QUESTIONS]
     L += ["", "## Scores (1-5)", "| Out-of-sample profit | Max drawdown | Trade count | Losing streak | Bear and chop | Total |",
@@ -130,6 +154,10 @@ def main() -> int:
     lb = {}
     if (RES / "leaderboard.json").exists():
         lb = {x["name"]: x for x in json.loads((RES / "leaderboard.json").read_text())}
+    vp = ROOT / "research" / "verify" / "verdicts.json"
+    verdicts = json.loads(vp.read_text()) if vp.exists() else {}
+    cp = RES / "coinbase_subset.json"
+    cb = json.loads(cp.read_text()) if cp.exists() else {}
     n = 0
     for p in sorted(RES.glob("*.json")):
         if p.name.startswith(("leaderboard", "holdout", "ref_", "coinbase_subset", "verify")):
@@ -138,7 +166,8 @@ def main() -> int:
         hp = RES / f"holdout_{r['name']}.json"
         hold = json.loads(hp.read_text()) if hp.exists() else None
         key = r["name"].removeprefix("s_")
-        (CARDS / f"{r['name']}.md").write_text(card(r, ideas.get(key) or ideas.get(r["name"]), hold, lb.get(r["name"])))
+        (CARDS / f"{r['name']}.md").write_text(card(r, ideas.get(key) or ideas.get(r["name"]), hold, lb.get(r["name"]),
+                                                    verdicts.get(r["name"]), cb.get(r["name"])))
         n += 1
     print(f"wrote {n} cards to {CARDS}")
     return 0

@@ -1,6 +1,6 @@
 # cross_weekend_follow_alts
 
-**Verdict:** PASSED every gate. Score 16/25. Regime it needs: **trending**.
+**Verdict:** PASSED every gate, then REFUTED by the independent skeptic. Score 16/25. Regime it needs: **trending**.
 
 ## The idea
 After the same weekend signal, trade the three highest-volume alts of the month for 24 hours in BTC's weekend direction, but only those whose own weekend move agrees with BTC's.
@@ -85,6 +85,42 @@ Parameters re-chosen every quarter on the prior 18 months, then traded unseen. A
 **The market that breaks it:** ranging state (-0.4% annualised over 209 days).
 
 **Earliest warning sign it is fading:** Same as the majors version, plus: the alt sleeve's trailing 20-trade average falls below +30 bps gross while the BTC leg is still positive (alts stopped following BTC on Mondays).
+
+## Coinbase-listed coins only
+Same audit, entries allowed only in coins Coinbase lists today as perpetual-style futures: +12.4%, max drawdown -5.1%, 145 trades, fees doubled +10.5%, one bar late +13.0%, p = 0.095. Gates failed on that set: none. (Today's list applied to history; Coinbase fees, funding and contract sizes are not modelled.)
+
+## Independent skeptic
+**Refuted** (confidence medium). The code is faithful, causal and its costs are realistic, but the +8.6% is not distinguishable from luck: it is one coin (XRP = 86%), three weekends and two quarters, it loses money exactly where its own thesis says it should win, and it should not be relied on as champion.
+
+- Code matches the Hunter's rules: yes. Look-ahead found: no.
+- Real order-book costs: Costs are not the problem.
+
+Strongest evidence against:
+- The profit runs opposite to the stated cause. By size of BTC's weekend move: under 0.5%: 20 trades +$594 (avg +0.59R); 0.5-1%: 19 trades +$172; 1-2%: 50 trades +$565; over 2%: 40 trades on 14 weekends -$469 (avg -0.23R, 11 stopped out, shorts -$518). 69% of the profit comes from 10 weekends where BTC had barely moved, and on 3 of those the BTC sign differs one hour earlier or later. The second-best weekend (+$277) was triggered by a BTC move of -0.09%.
+- One coin: XRP is $743 of $862. Without it +1.2%, bootstrap p = 0.42.
+- A handful of weekends: the best 3 of 52 exceed the whole profit (-$18 without them); without the best 5, -$330. Two quarters carry 98%.
+- Not statistically distinguishable from luck: p = 0.131, fails Holm across 15 audited ideas; 10.3% of random-hour same-exposure draws do as well; 20.8% of other hour-of-week slots do as well.
+- Fragile to the signal hour: moving the Sunday 21:00 signal by one to five hours gives $492, $81, $196, $392 before and $69, $1, -$689, -$82, $20 after, against $862. The spec hour is the best of ten adjacent hours.
+- The BTC direction signal added nothing over being long: always long in the same top-3 alts on the same Sundays made $872 against the strategy's $766 (simulator figures); the strategy's shorts lost $123 at a 41% win rate.
+- The spec's own default parameters made +2.3% in validation, with shorts at -$438. Across the grid, the nine thr=0 cells made +5.4% to +15.8%, the nine thr=0.5% cells +0.2% to +3.0%, and the nine thr=1% cells -1.8% to +0.4%. Performance worsens as the signal is required to be stronger.
+- The same signal on BTC and ETH (cross_weekend_follow_majors) lost 2.0% in the same window and failed four gates.
+
+Evidence for:
+- Implementation is exact: 0 signal differences against an independent re-implementation in all 27 cells; the audited trades reproduce to the cent.
+- No look-ahead: 918 truncation probes over three seeds with 0 mismatches, and the universe lists verified as ranked on the prior 30 days for 38 months.
+- Execution is realistic: +8.53% with actual order-book costs, +8.57% one bar late with actual costs, +6.95% with fees doubled on top; positions are small against $10k depth and peak gross is 0.73x equity.
+- Positive in both the design window (+17.3%, 193 trades) and the unseen window, with a contained drawdown (-4.9%) while the top-10 basket fell 62%.
+- Weekend-signal slots as a group did better than weekday slots in validation (mean $462 against -$88), and the real direction beats a coin-flip direction in 94% of draws.
+
+What the owner must know:
+- My refutation is of the evidence, not the code. Nothing is broken; the result is simply too thin and too concentrated to trust with money. If the sealed test goes ahead anyway, a positive six months would still be mostly an XRP and long-side result unless the breakdown there looks different.
+- If it is paper traded regardless, do it as a watch-list item, not as champion. Things to watch: profit excluding XRP, profit on shorts, and profit on weekends where BTC moved more than 2% (the case the idea is supposed to be about). All three were flat or negative in validation.
+- It is one bet per week, up to three coins at once, all entered in the same hour and highly correlated: a wrong weekend costs up to about 1.5% of the account from this strategy alone (the worst weekend was -$158).
+- On Coinbase the contracts are whole units: 500 XRP, 5 SOL, 5,000 DOGE. A $50-risk position is often about one contract, so real risk per trade would range from $34 to $94 when rounding to nearest, with 13 of 127 trades skipped; or up to $293 on one trade if at least one contract is always taken. The backtest's fractional sizing cannot be replicated on a $10,000 account.
+- Costs and funding were modelled on Kraken; Coinbase's fees, funding and order books differ and were not tested. The Coinbase-subset audit uses today's listing applied to history, which is a forward-looking filter.
+- Disclosure: to get Coinbase contract sizes I fetched Coinbase's public product list once. The response also showed today's prices for these coins, which is information from after the validation window. I used only the contract sizes; no dataset bar from 2026-05-18 onward was loaded, and none of the findings above depend on it. The scratch copy was deleted.
+- The fourth leak-test seed (2026) had not finished when I reported; its output will be in /home/user/TRAYDINGCc/research/verify/cross_weekend_follow_alts/v2_leak.out.
+- My random-exposure nulls use a simplified simulator with no Guardian and no fold-boundary closes; it matches the engine exactly on 127 of 129 trades ($766 against the engine's $788 for those trades), so percentile figures are quoted against $766, not $862.
 
 ## Final check
 | Question | Answer |

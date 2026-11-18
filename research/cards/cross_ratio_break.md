@@ -86,6 +86,9 @@ Parameters re-chosen every quarter on the prior 18 months, then traded unseen. A
 
 **Earliest warning sign it is fading:** Alt minus BTC forward 72h return after ratio breakouts and breakdowns, averaged over the trailing 60 events, at or below zero (design: +94 and +69 bps), or the short side losing for two consecutive quarters while BTC is below its 480h average.
 
+## Coinbase-listed coins only
+Same audit, entries allowed only in coins Coinbase lists today as perpetual-style futures: +2.9%, max drawdown -11.2%, 220 trades, fees doubled +1.5%, one bar late +5.6%, p = 0.448. Gates failed on that set: none. (Today's list applied to history; Coinbase fees, funding and contract sizes are not modelled.)
+
 ## Final check
 | Question | Answer |
 |---|---|

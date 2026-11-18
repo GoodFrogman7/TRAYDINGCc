@@ -1,0 +1,14 @@
+seed 1 {'passed': True, 'mismatches': 0, 'probes': 243, 'cells': 18, 'forbidden_code': []} 82.9
+seed 7 {'passed': True, 'mismatches': 0, 'probes': 243, 'cells': 18, 'forbidden_code': []} 156.0
+seed 42 {'passed': True, 'mismatches': 0, 'probes': 243, 'cells': 18, 'forbidden_code': []} 223.8
+seed 2026 {'passed': True, 'mismatches': 0, 'probes': 243, 'cells': 18, 'forbidden_code': []} 295.6
+symbol: large_string
+time: timestamp[ms, tz=UTC]
+open: double
+high: double
+low: double
+close: double
+volume: double
+dollar_vol: double
+-- schema metadata --
+pandas: '{"index_columns": [], "column_indexes": [], "columns": [{"name":' + 1005
