@@ -19,6 +19,7 @@ from .feed import BTC, HOUR, Fetched, utc
 
 LEVELS = ("info", "warn", "critical")
 LATE_GRACE_BARS = 1        # ticks a held symbol's newest bar may lag BTC's before it counts as missing
+CONFIRM_AFTER_MINUTES = 20   # an unusable feed is frozen only if a run at least this much earlier was unusable too
 
 
 @dataclass
@@ -97,8 +98,10 @@ def preflight(fetched: Fetched, required: list[str], now: pd.Timestamp, asof: pd
       * usable feed: minutes from the close of BTC's newest real bar to now;
       * unusable feed: minutes from the newest data the bot could have had if it had been ticking every
         hour, i.e. the later of (close of the last usable feed bar) and (close of the bar before the one
-        the first unusable tick should have processed). One failed tick after a pause of the scheduler is
-        therefore 60-odd minutes old, not frozen; a second failed tick an hour later is;
+        the first unusable tick should have processed). The first tick of a run of unusable ticks is never
+        frozen, whatever that age (a run that starts at hh:42 is 102 minutes from that close, and one
+        failed download proves nothing): a tick at least CONFIRM_AFTER_MINUTES later that is unusable too
+        confirms it;
       * a clock that disagrees with the venue's: never frozen (this machine's time cannot be trusted)."""
     now, asof = utc(now), utc(asof)
     clock, alerts = check_clock(fetched.server_time, fetched.server_time_delay, now, cfg)
@@ -136,19 +139,22 @@ def preflight(fetched: Fetched, required: list[str], now: pd.Timestamp, asof: pd
                                 f"{s} is held and its bar {(newest + HOUR).isoformat()} is not published yet (BTC's "
                                 f"is): waiting one tick before treating that bar as missing", symbol=s,
                                 detail={"newest_bar": newest.isoformat(), "btc_newest_bar": t_feed.isoformat()}))
-        since, unusable_since = t_feed + HOUR, None
+        since, unusable_since, confirmed = t_feed + HOUR, None, True
     elif clock == "skew":
         return Verdict(False, False, None, None, alerts, clock=clock, unusable_since=unusable_since)
     else:
         if unusable_since is None or not utc(unusable_since) <= now:
             unusable_since = now
         unusable_since = utc(unusable_since)
+        # one failed download proves nothing about the feed, and neither does a second run minutes later
+        # (GitHub starts delayed runs back to back): the freeze needs an earlier unusable run to confirm it
+        confirmed = now - unusable_since >= pd.Timedelta(minutes=CONFIRM_AFTER_MINUTES)
         # the close of the bar before the newest one that was closed at the first unusable tick
         since = (unusable_since - pd.Timedelta(seconds=cfg.settle_seconds)).floor("h") - HOUR
         if prev_feed_time is not None:
             since = max(since, utc(prev_feed_time) + HOUR)
     age = (now - since).total_seconds() / 60.0
-    frozen = age > cfg.stale_feed_minutes
+    frozen = age > cfg.stale_feed_minutes and confirmed
     if frozen:
         alerts.append(Alert("critical", "feed_frozen",
                             f"no usable market data for {age:.0f} minutes (limit {cfg.stale_feed_minutes}): every book "

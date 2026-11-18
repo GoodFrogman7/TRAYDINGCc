@@ -718,3 +718,37 @@ def test_a_new_book_whose_strategy_never_signals_in_the_window_is_reported_once(
     for k in (K0 + 1, K0 + 2):
         assert world.tick(world.bar(k))["ok"]
     assert len(world.alerts("strategy_silent")) == 1                                # said once, at the start
+
+
+# ------------------------------------------------------ one failed fetch on a late-starting tick
+def test_one_failed_fetch_never_freezes_the_feed_however_late_in_the_hour_the_tick_starts(world):
+    """GitHub often starts a scheduled run 20 to 50 minutes late. A single failed download on such a run
+    must not flatten every book: the freeze needs a second failed run to confirm it."""
+    k = tick_until(world, K0, has_position)
+    before = world.book()
+    world.source.fail = {ALTS[0]}
+    hb = world.tick(world.bar(k + 1), minutes=42)              # hourly so far; this run starts at hh:42 and fails once
+    assert not hb["feed"]["usable"] and not hb["feed"]["frozen"] and hb["ok"]
+    assert hb["feed"]["age_minutes"] == pytest.approx(102.0)   # the data IS that old, but one failure proves nothing
+    assert world.book() == before and not world.alerts("feed_frozen")
+    world.source.fail = set()
+    hb = world.tick(world.bar(k + 2))                          # the next run is fine: both hours are processed
+    st = world.book()["engine"]
+    assert hb["ok"] and hb["feed"]["unusable_since"] is None and not st["halted"]
+    assert st["last_time"] == world.bar(k + 2).isoformat()
+    # ... and when the next run fails too, the feed is frozen and every book is halted
+    world.source.fail = {ALTS[0]}
+    assert not world.tick(world.bar(k + 3), minutes=42)["feed"]["frozen"]
+    hb = world.tick(world.bar(k + 3), minutes=52)              # a delayed run GitHub starts right behind it: the
+    assert not hb["feed"]["frozen"] and hb["ok"]               # same hiccup seen twice is still one hiccup
+    assert hb["feed"]["unusable_since"] == (world.bar(k + 4) + pd.Timedelta(minutes=42)).isoformat()
+    hb = world.tick(world.bar(k + 4))
+    assert hb["feed"]["frozen"] and not hb["ok"] and world.book()["engine"]["halt_reason"] == "frozen data feed"
+
+
+def test_a_first_run_that_fails_late_in_the_hour_is_not_frozen_on_a_fresh_installation(world):
+    world.source.fail = {ALTS[0]}
+    hb = world.tick(world.bar(K0), minutes=42)
+    assert hb["ok"] and not hb["feed"]["frozen"] and [a["code"] for a in world.alerts()] == ["feed_incomplete"]
+    hb = world.tick(world.bar(K0 + 1), minutes=42)             # an hour later it still fails: now it is critical
+    assert not hb["ok"] and hb["feed"]["frozen"] and world.alerts("feed_frozen")

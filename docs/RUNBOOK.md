@@ -117,7 +117,9 @@ challengers:
   feed: {window_bars: 5000}
   ```
   (verified: same decisions as on the full history, and a live run then takes about 22 seconds instead of
-  12). A strategy added later must be checked the same way.
+  12). A strategy added later must be checked the same way. When a book starts and its strategy shows no
+  signal anywhere in its history, the bot warns with `strategy_silent`; in a falling market this strategy
+  can raise that warning even with the right window, because only its last two weeks can signal.
 - Commit the change. The next run starts the book flat with $10,000 of paper money. It never trades hours
   from before it existed.
 - **Changing a book's strategy, its params or `equity0` ends that book**: its positions are sold at the next
@@ -146,8 +148,10 @@ challengers:
 | An order without a valid stop, too large, or outside this month's ten coins | that order is refused | - |
 | A held coin stops trading or Kraken stops answering for it for 72 hours | that position is closed at its last price | - |
 
-"While the bot was running" matters: if GitHub did not start the bot for some hours, one failed download on
-the first run back is not a frozen feed. A second failed run an hour later is.
+"While the bot was running" matters: one failed download is never a frozen feed by itself, however late
+GitHub started that run and however long the bot had not been started before. A later run confirms it: if
+a run at least 20 minutes after the first failure fails too and the prices are by then more than 90 minutes
+old, the feed is frozen.
 
 ## Alerts and what to do
 A run is marked failed (red) when it raised a `critical` alert. `warn` and `info` never fail a run.
@@ -170,7 +174,7 @@ A run is marked failed (red) when it raised a `critical` alert. `warn` and `info
 | `inputs_missing` | warn | a data column a strategy needs went empty | watch; while it lasts that strategy cannot signal on that coin |
 | `log_rollback` | warn | an earlier run died midway; its half-written lines were removed and the hour redone | nothing |
 | `lock_stale` | warn | an earlier run died and left its lock | nothing |
-| `strategy_silent` | warn | a book was started and its strategy has not one entry signal in all the history the bot holds; it will probably never trade | the strategy needs more history than `feed.window_bars` (see `trend_quiet_grind` above) or is broken: run the window check before relying on that book |
+| `strategy_silent` | warn | raised once, when a book starts: its strategy has not one entry signal in all the history the bot holds. Either the market gave it no setup lately, or it needs more history than `feed.window_bars` and will never trade | make sure the window check (under "config/bot.yaml" above) passes for that strategy. If it passes, nothing: the book trades when a setup comes. If it fails, raise `feed.window_bars` |
 | `strategy_changed` | info | a book was closed and archived after a config change | nothing |
 | `book_error` | critical | a strategy crashed; that book skipped the hour (it is redone later), the others ran. With the kill switch on or a frozen feed the book is still flattened | send the alert's `detail` to whoever maintains the strategy; set that book to another strategy or `null` meanwhile |
 | `state_unreadable` | critical | a book's file was damaged; it was archived and the book restarted flat | look in `archive/`; ask a maintainer how the file got damaged |

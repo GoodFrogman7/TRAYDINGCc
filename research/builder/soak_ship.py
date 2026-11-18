@@ -1,5 +1,5 @@
 """Random soak of the shipped bot on the synthetic test market (no network): hourly ticks mixed with gaps,
-symbol outages longer than delist_after_bars, late bars of held symbols, bad prints, clock skew, a lost
+runs that start late in the hour, symbol outages longer than delist_after_bars, late bars of held symbols, bad prints, clock skew, a lost
 heartbeat, kill on/off and challenger reshuffles. Looks for anything the bot did not expect of itself:
 tick_error / book_error alerts, duplicate or missing equity rows, a ledger that does not add up.
 
@@ -70,9 +70,9 @@ def main(scratch, seed=1, steps=250):
             w.write_config(feed=feed, **cfg)
         if op != "late" and rng.random() < 0.5:
             w.source.last_bar.clear()
-        hb = w.tick(w.bar(k))
+        hb = w.tick(w.bar(k), minutes=rng.choice([7.0, 7.0, 7.0, 3.0, 25.0, 42.0, 57.0]))   # GitHub starts runs late
         if op == "double":
-            hb = w.tick(w.bar(k), minutes=9.0)
+            hb = w.tick(w.bar(k), minutes=58.5)
         log.append((step, k, op, hb.get("ok"), hb.get("error")))
         for a in w.alerts():
             if a["tick_utc"] == hb["tick_utc"] and a["code"] in ("tick_error", "book_error", "state_unreadable",

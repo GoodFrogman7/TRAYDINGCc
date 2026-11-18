@@ -22,8 +22,9 @@ Where this file goes beyond docs/BOT_SPEC.md (changes made after the review):
     and applies the kill switch, its release, a frozen-feed halt or a strategy
     swap only before the newest bar: the same result as hourly ticks;
   * an unusable feed is aged from what the bot saw while awake (heartbeat
-    `feed.unusable_since`), so one failed fetch after a scheduler pause is not a
-    frozen feed, and a feed that never worked becomes one;
+    `feed.unusable_since`) and is frozen only from the second unusable tick in a
+    row, so one failed fetch (after a scheduler pause, or on a run that starts
+    late in the hour) is not a frozen feed, and a feed that never worked becomes one;
   * a required symbol that cannot be fetched for `delist_after_bars` hours while
     BTC can (heartbeat `feed.failing_since`) is treated as delisted;
   * a held symbol's newest bar may lag BTC's by one tick before it is accepted
@@ -668,12 +669,13 @@ def _advance(t: _Tick, cfg: BotConfig, b: _Book, market: _Market | None, frozen:
                     detail={"traceback": trace})
         if new and not any(f.side.any() for f in bars.sym.values()):
             # e.g. a strategy that ranks against more history than feed.window_bars: it would never trade,
-            # and nothing else would ever say so
+            # and nothing else would ever say so. The bot cannot tell that from a market without setups.
             t.alert("warn", "strategy_silent",
                     f"{b.name}: {b.fp['name']} gives no entry signal anywhere in the {len(market.base.index)} hours "
-                    f"of history the bot holds ({len(bars.sym)} symbols). A strategy that needs more history than "
-                    f"feed.window_bars ({cfg.window_bars}) never trades: run the window check in docs/RUNBOOK.md "
-                    f"before relying on this book.", book=b.name,
+                    f"of history the bot holds ({len(bars.sym)} symbols). That is harmless if the market simply gave "
+                    f"it no setup, but a strategy that needs more history than feed.window_bars ({cfg.window_bars}) "
+                    f"looks exactly like this and never trades: make sure the window check in docs/RUNBOOK.md "
+                    f"passes for it.", book=b.name,
                     detail={"window_bars": cfg.window_bars, "bars": len(market.base.index), "symbols": len(bars.sym)})
     _play(t, cfg, b, eng, bars, bars, i0, i1, frozen)
     if not new and i1 - i0 > 1:
