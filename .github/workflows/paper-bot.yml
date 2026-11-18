@@ -1,0 +1,72 @@
+# Hourly PAPER-trading tick. Public market data only: this workflow uses no credentials of any kind
+# beyond the repository's own built-in write access, which it needs to save the bot's files.
+# The bot's files live on the branch `bot-state`, checked out into state/. See docs/RUNBOOK.md.
+name: paper-bot
+
+on:
+  schedule:
+    - cron: "7 * * * *"          # every hour at minute 7 (UTC); GitHub may start it a few minutes late
+  workflow_dispatch: {}          # "Run workflow" button
+
+concurrency:
+  group: paper-bot               # never two ticks at once; a queued run waits, it is not cancelled
+  cancel-in-progress: false
+
+permissions:
+  contents: write                # to push state/ to the bot-state branch
+
+jobs:
+  tick:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Create the bot-state branch if it does not exist yet
+        run: |
+          if ! git ls-remote --exit-code --heads origin bot-state > /dev/null; then
+            tree=$(git mktree < /dev/null)
+            commit=$(git -c user.name=paper-bot -c user.email=paper-bot@users.noreply.github.com \
+                     commit-tree "$tree" -m "Start bot-state")
+            git push origin "$commit:refs/heads/bot-state"
+          fi
+
+      - name: Check out the bot's files (branch bot-state) into state/
+        uses: actions/checkout@v4
+        with:
+          ref: bot-state
+          path: state
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install requirements
+        run: pip install -r requirements.txt
+
+      - name: Tick (paper)
+        run: python -m desk.bot.paper tick --config config/bot.yaml --state state
+
+      - name: Write the report
+        if: always()
+        run: |
+          python -m desk.bot.report --state state --hours 24 > "$RUNNER_TEMP/report.md" \
+            && mv "$RUNNER_TEMP/report.md" state/report.md \
+            || echo "the report could not be written; the bot's files are still saved"
+
+      - name: Save the bot's files to the bot-state branch
+        if: always()
+        working-directory: state
+        run: |
+          git config user.name "paper-bot"
+          git config user.email "paper-bot@users.noreply.github.com"
+          git add -A -- . ':(exclude)*.lock' ':(exclude)*.tmp'
+          if git diff --cached --quiet; then
+            echo "nothing changed"
+          else
+            git commit -q -m "tick $(date -u +%Y-%m-%dT%H:%MZ)"
+            git push origin HEAD:bot-state || { git pull --rebase origin bot-state && git push origin HEAD:bot-state; }
+          fi

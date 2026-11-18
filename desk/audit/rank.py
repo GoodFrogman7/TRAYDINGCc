@@ -35,9 +35,19 @@ def holm(pvals: dict[str, float], alpha: float = 0.05) -> dict[str, bool]:
     return keep
 
 
+def family_size(n_audited: int) -> int:
+    """Every idea the Hunter drafted counts as a test, including the ones it rejected
+    on design-window evidence and that were therefore never audited."""
+    p = ROOT / "research" / "ideas" / "ideas.json"
+    return max(n_audited, len(json.loads(p.read_text()))) if p.exists() else n_audited
+
+
 def rank(results: list[dict]) -> list[dict]:
     pvals = {r["name"]: r["monte_carlo"].get("p_value_mean_le_0", 1.0) for r in results}
-    sig = holm(pvals)
+    padded = dict(pvals)
+    for k in range(family_size(len(results)) - len(results)):
+        padded[f"__rejected_before_audit_{k}"] = 1.0
+    sig = holm(padded)
     rows = []
     for r in results:
         v, g = r["wf_validation"], r["gates"]
@@ -66,7 +76,8 @@ def to_markdown(rows: list[dict]) -> str:
     n_pass = sum(r["passed"] for r in rows)
     lines = [
         "# Leaderboard", "",
-        f"{len(rows)} strategies audited, {n_pass} passed every gate. Validation window 2025-01-01 to 2026-05-17, "
+        f"{family_size(len(rows))} ideas drafted, {len(rows)} audited, {n_pass} passed every gate. "
+        "Validation window 2025-01-01 to 2026-05-17, "
         "walk-forward, after fees, funding and slippage, $10,000 account risking 0.5% per trade.", "",
         "| # | Strategy | Gates | Score | Return | Max DD | Trades | Fees x2 | Grid + | p | Holm |",
         "|---|---|---|---|---|---|---|---|---|---|---|",
