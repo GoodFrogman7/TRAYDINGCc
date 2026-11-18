@@ -19,7 +19,7 @@ OUT = ROOT / "research" / "results"
 def load_results() -> list[dict]:
     out = []
     for p in sorted(OUT.glob("*.json")):
-        if p.name.startswith(("leaderboard", "holdout", "ref_")):
+        if p.name.startswith(("leaderboard", "holdout", "ref_", "coinbase_subset", "verify")):
             continue
         out.append(json.loads(p.read_text()))
     return out

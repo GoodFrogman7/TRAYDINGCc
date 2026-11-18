@@ -132,7 +132,7 @@ def main() -> int:
         lb = {x["name"]: x for x in json.loads((RES / "leaderboard.json").read_text())}
     n = 0
     for p in sorted(RES.glob("*.json")):
-        if p.name.startswith(("leaderboard", "holdout", "ref_")):
+        if p.name.startswith(("leaderboard", "holdout", "ref_", "coinbase_subset", "verify")):
             continue
         r = json.loads(p.read_text())
         hp = RES / f"holdout_{r['name']}.json"
