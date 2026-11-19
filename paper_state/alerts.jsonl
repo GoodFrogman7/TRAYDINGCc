@@ -1,0 +1,2 @@
+{"tick_utc": "2026-11-19T12:14:50+00:00", "level": "warn", "code": "missed_bars", "book": "challenger_1", "symbol": "", "message": "challenger_1: 17 bars were processed in one tick (ticks were missed or the feed was late); the result equals hourly ticks", "detail": {"bars": 17}}
+{"tick_utc": "2026-11-19T12:14:50+00:00", "level": "warn", "code": "missed_bars", "book": "challenger_2", "symbol": "", "message": "challenger_2: 17 bars were processed in one tick (ticks were missed or the feed was late); the result equals hourly ticks", "detail": {"bars": 17}}
