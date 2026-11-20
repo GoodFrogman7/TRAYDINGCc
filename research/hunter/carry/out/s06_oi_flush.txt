@@ -1,0 +1,75 @@
+OI 24h chg quantiles: {0.005: -0.411, 0.01: -0.352, 0.02: -0.283, 0.05: -0.193, 0.5: 0.002, 0.95: 0.227, 0.98: 0.372, 0.99: 0.512}
+### hold 24h
+OI 24h chg rank<=0.02 price None -> long 24h
+    n=493 mean=108.3 med=28.3 hit=0.54 t=4.03 | byday t=2.93 days=293 | 2023:14(217) 2024:183(276) | L:108(493) | maj=51(100) alts=123(393) | delay1=96.5 | fund=2.7
+OI 24h chg rank<=0.02 price down -> long 24h
+    n=377 mean=129.1 med=49.2 hit=0.55 t=3.78 | byday t=3.38 days=229 | 2023:12(155) 2024:211(222) | L:129(377) | maj=61(75) alts=146(302) | delay1=118.2 | fund=2.4
+OI 24h chg rank<=0.02 price up -> long 24h
+    n=236 mean=51.5 med=-0.1 hit=0.50 t=1.43 | byday t=0.81 days=181 | 2023:-3(130) 2024:118(106) | L:51(236) | maj=29(45) alts=57(191) | delay1=44.0 | fund=3.1
+OI 24h chg abs<=-0.1 price None -> long 24h
+    n=2013 mean=39.7 med=5.4 hit=0.51 t=3.26 | byday t=2.20 days=625 | 2023:20(918) 2024:56(1096) | L:40(2014) | maj=39(174) alts=40(1839) | delay1=34.8 | fund=2.3
+OI 24h chg abs<=-0.1 price down -> long 24h
+    n=1497 mean=50.6 med=18.2 hit=0.52 t=3.68 | byday t=3.41 days=540 | 2023:29(660) 2024:68(838) | L:51(1498) | maj=36(131) alts=52(1366) | delay1=43.2 | fund=1.9
+OI 24h chg abs<=-0.1 price up -> long 24h
+    n=1180 mean=20.9 med=-16.2 hit=0.48 t=1.33 | byday t=-0.66 days=523 | 2023:-3(582) 2024:44(599) | L:21(1181) | maj=31(81) alts=20(1099) | delay1=20.5 | fund=2.7
+OI 24h chg abs<=-0.15 price None -> long 24h
+    n=1261 mean=45.3 med=6.3 hit=0.51 t=2.88 | byday t=2.93 days=535 | 2023:23(597) 2024:66(664) | L:45(1261) | maj=42(70) alts=46(1191) | delay1=43.7 | fund=2.1
+OI 24h chg abs<=-0.15 price down -> long 24h
+    n=942 mean=57.7 med=11.5 hit=0.52 t=3.04 | byday t=3.08 days=442 | 2023:33(430) 2024:79(512) | L:58(942) | maj=32(49) alts=59(893) | delay1=53.9 | fund=1.8
+OI 24h chg abs<=-0.15 price up -> long 24h
+    n=696 mean=31.4 med=-22.0 hit=0.48 t=1.45 | byday t=0.86 days=403 | 2023:-8(368) 2024:76(328) | L:31(696) | maj=57(32) alts=30(664) | delay1=36.3 | fund=2.5
+OI 24h chg abs<=-0.2 price None -> long 24h
+    n=776 mean=68.6 med=12.0 hit=0.51 t=3.15 | byday t=2.91 days=414 | 2023:10(364) 2024:121(412) | L:69(776) | maj=135(24) alts=67(752) | delay1=59.2 | fund=1.7
+OI 24h chg abs<=-0.2 price down -> long 24h
+    n=567 mean=86.8 med=16.8 hit=0.52 t=3.31 | byday t=3.22 days=322 | 2023:18(254) 2024:143(313) | L:87(567) | maj=154(20) alts=84(547) | delay1=74.4 | fund=1.6
+OI 24h chg abs<=-0.2 price up -> long 24h
+    n=423 mean=54.8 med=0.8 hit=0.50 t=1.79 | byday t=1.50 days=284 | 2023:-5(234) 2024:129(189) | L:55(423) | maj=125(12) alts=53(411) | delay1=52.2 | fund=2.1
+OI 8h chg abs<=-0.1 price None -> long 24h
+    n=1861 mean=46.4 med=18.3 hit=0.52 t=3.78 | byday t=3.55 days=602 | 2023:25(823) 2024:63(1041) | L:46(1864) | maj=26(123) alts=48(1738) | delay1=40.0 | fund=2.5
+OI 8h chg abs<=-0.1 price down -> long 24h
+    n=1491 mean=60.2 med=30.8 hit=0.53 t=4.18 | byday t=4.56 days=554 | 2023:44(635) 2024:72(859) | L:60(1494) | maj=27(100) alts=63(1391) | delay1=52.3 | fund=2.2
+OI 8h chg abs<=-0.1 price up -> long 24h
+    n=1131 mean=24.0 med=-8.9 hit=0.49 t=1.46 | byday t=0.35 days=512 | 2023:-2(547) 2024:49(584) | L:24(1131) | maj=38(54) alts=23(1077) | delay1=26.0 | fund=2.7
+OI 72h chg abs<=-0.2 price None -> long 24h
+    n=1224 mean=62.0 med=6.0 hit=0.51 t=3.72 | byday t=2.36 days=516 | 2023:20(568) 2024:98(656) | L:62(1224) | maj=72(54) alts=62(1170) | delay1=59.7 | fund=1.6
+OI 72h chg abs<=-0.2 price down -> long 24h
+    n=842 mean=65.5 med=22.4 hit=0.53 t=3.47 | byday t=2.39 days=393 | 2023:22(348) 2024:96(494) | L:65(842) | maj=88(39) alts=64(803) | delay1=62.9 | fund=1.0
+OI 72h chg abs<=-0.2 price up -> long 24h
+    n=624 mean=34.1 med=-11.2 hit=0.48 t=1.41 | byday t=0.62 days=348 | 2023:7(340) 2024:66(284) | L:34(624) | maj=107(26) alts=31(598) | delay1=37.1 | fund=2.3
+### hold 48h
+OI 24h chg rank<=0.02 price None -> long 48h
+    n=444 mean=177.3 med=60.1 hit=0.56 t=4.55 | byday t=3.46 days=279 | 2023:103(194) 2024:235(250) | L:177(444) | maj=78(90) alts=203(354) | delay1=171.4 | fund=6.0
+OI 24h chg rank<=0.02 price down -> long 48h
+    n=352 mean=185.8 med=94.2 hit=0.58 t=3.99 | byday t=3.50 days=225 | 2023:99(145) 2024:247(207) | L:186(352) | maj=112(70) alts=204(282) | delay1=178.6 | fund=5.7
+OI 24h chg rank<=0.02 price up -> long 48h
+    n=224 mean=152.8 med=2.6 hit=0.50 t=2.70 | byday t=2.05 days=174 | 2023:95(121) 2024:221(103) | L:153(224) | maj=0(43) alts=189(181) | delay1=145.4 | fund=6.9
+OI 24h chg abs<=-0.1 price None -> long 48h
+    n=1472 mean=68.3 med=13.0 hit=0.51 t=3.54 | byday t=2.96 days=591 | 2023:37(661) 2024:94(814) | L:68(1475) | maj=48(150) alts=71(1322) | delay1=63.6 | fund=5.5
+OI 24h chg abs<=-0.1 price down -> long 48h
+    n=1187 mean=70.3 med=13.8 hit=0.52 t=3.19 | byday t=3.06 days=501 | 2023:61(520) 2024:77(670) | L:70(1190) | maj=54(121) alts=72(1066) | delay1=55.1 | fund=4.8
+OI 24h chg abs<=-0.1 price up -> long 48h
+    n=965 mean=67.5 med=-11.4 hit=0.49 t=2.81 | byday t=1.86 days=474 | 2023:20(471) 2024:113(496) | L:67(967) | maj=35(74) alts=70(891) | delay1=68.6 | fund=5.9
+OI 24h chg abs<=-0.15 price None -> long 48h
+    n=995 mean=87.0 med=18.5 hit=0.52 t=3.48 | byday t=2.83 days=490 | 2023:60(465) 2024:111(530) | L:87(995) | maj=130(62) alts=84(933) | delay1=93.6 | fund=5.3
+OI 24h chg abs<=-0.15 price down -> long 48h
+    n=791 mean=75.1 med=28.6 hit=0.52 t=2.70 | byday t=2.36 days=407 | 2023:54(363) 2024:93(428) | L:75(791) | maj=188(47) alts=68(744) | delay1=66.7 | fund=4.7
+OI 24h chg abs<=-0.15 price up -> long 48h
+    n=591 mean=108.0 med=1.7 hit=0.50 t=3.21 | byday t=2.37 days=357 | 2023:37(304) 2024:183(288) | L:108(592) | maj=38(30) alts=112(561) | delay1=125.9 | fund=5.7
+OI 24h chg abs<=-0.2 price None -> long 48h
+    n=650 mean=134.5 med=13.7 hit=0.52 t=4.01 | byday t=3.49 days=377 | 2023:66(300) 2024:193(350) | L:135(650) | maj=214(24) alts=131(626) | delay1=119.3 | fund=4.9
+OI 24h chg abs<=-0.2 price down -> long 48h
+    n=503 mean=118.7 med=31.5 hit=0.52 t=3.04 | byday t=2.71 days=297 | 2023:27(227) 2024:194(276) | L:119(503) | maj=251(20) alts=113(483) | delay1=99.8 | fund=4.4
+OI 24h chg abs<=-0.2 price up -> long 48h
+    n=381 mean=170.6 med=7.5 hit=0.51 t=3.78 | byday t=3.07 days=267 | 2023:76(206) 2024:282(175) | L:171(381) | maj=234(12) alts=169(369) | delay1=170.9 | fund=5.4
+OI 8h chg abs<=-0.1 price None -> long 48h
+    n=1342 mean=72.1 med=7.1 hit=0.51 t=3.53 | byday t=2.85 days=553 | 2023:56(598) 2024:85(747) | L:72(1345) | maj=82(112) alts=71(1230) | delay1=59.6 | fund=5.8
+OI 8h chg abs<=-0.1 price down -> long 48h
+    n=1132 mean=93.4 med=29.9 hit=0.53 t=4.14 | byday t=3.13 days=490 | 2023:92(488) 2024:94(647) | L:93(1135) | maj=106(93) alts=92(1039) | delay1=85.9 | fund=5.4
+OI 8h chg abs<=-0.1 price up -> long 48h
+    n=894 mean=71.1 med=-10.8 hit=0.49 t=2.70 | byday t=1.67 days=469 | 2023:37(426) 2024:102(468) | L:71(894) | maj=72(50) alts=71(844) | delay1=63.9 | fund=6.1
+OI 72h chg abs<=-0.2 price None -> long 48h
+    n=829 mean=101.4 med=9.7 hit=0.51 t=3.77 | byday t=2.94 days=434 | 2023:36(376) 2024:156(453) | L:101(829) | maj=116(39) alts=101(790) | delay1=97.7 | fund=4.1
+OI 72h chg abs<=-0.2 price down -> long 48h
+    n=595 mean=81.4 med=8.0 hit=0.50 t=2.86 | byday t=1.85 days=329 | 2023:31(247) 2024:117(348) | L:81(595) | maj=143(29) alts=78(566) | delay1=79.3 | fund=3.1
+OI 72h chg abs<=-0.2 price up -> long 48h
+    n=450 mean=106.3 med=8.8 hit=0.51 t=2.80 | byday t=2.40 days=300 | 2023:43(241) 2024:179(209) | L:106(450) | maj=124(19) alts=105(431) | delay1=103.9 | fund=5.1

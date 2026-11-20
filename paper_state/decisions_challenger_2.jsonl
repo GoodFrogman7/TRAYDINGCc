@@ -1,0 +1,1 @@
+{"time": "2026-11-18T18:00:00+00:00", "book": "challenger_2", "strategy": "trend_quiet_grind", "event": "book_started", "symbol": "*", "reason": "new book: starts flat on this bar and never trades bars from before it existed", "tick_utc": "2026-11-18T19:17:00+00:00"}

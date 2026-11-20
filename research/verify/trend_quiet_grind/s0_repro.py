@@ -1,0 +1,15 @@
+from vcommon import *
+t0=time.time()
+market, cells, intents = setup()
+print("cells", cells)
+print("last bar", max(df.index[-1] for df in market.data.values()), "symbols", len(market.data))
+s,tr,e,g = wf_val(market,intents)
+print("repro wf validation: ret %+.4f%% dd %.2f%% n %d avg_r %.4f" % (s["total_return"]*100, s["max_dd"]*100, s["n_trades"], s["avg_r"]))
+print("reported:", RES["wf_validation"]["total_return"], RES["wf_validation"]["n_trades"])
+T=pd.DataFrame(tr); T.to_pickle(str(Path(__file__).parent/"trades.pkl"))
+csv=pd.read_csv(ROOT/"research/results/trades/trend_quiet_grind.csv")
+cv=csv[pd.to_datetime(csv.entry_time)>=DESIGN_END]
+print("csv validation rows", len(cv), "pnl", cv.pnl.sum(), " mine", T.pnl.sum())
+print("chosen cells in validation:", [(c["test_start"], c["cell"], c["params"]["q"], c["params"]["stop_atr"], c["train_objective"]) for c in CHOSEN if c["test_start"]>="2025"])
+print(T.groupby("reason").agg(n=("pnl","size"), pnl=("pnl","sum"), avg_r=("r","mean")))
+print("time", round(time.time()-t0,1))

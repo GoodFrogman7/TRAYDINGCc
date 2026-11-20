@@ -1,0 +1,8 @@
+seed 1 {'passed': True, 'mismatches': 0, 'probes': 306, 'cells': 27, 'forbidden_code': []} 119.3 s
+seed 7 {'passed': True, 'mismatches': 0, 'probes': 306, 'cells': 27, 'forbidden_code': []} 122.3 s
+seed 42 {'passed': True, 'mismatches': 0, 'probes': 306, 'cells': 27, 'forbidden_code': []} 118.2 s
+seed 2026 {'passed': True, 'mismatches': 0, 'probes': 306, 'cells': 27, 'forbidden_code': []} 117.6 s
+
+real	8m5.457s
+user	7m57.573s
+sys	0m3.435s

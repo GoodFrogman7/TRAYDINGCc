@@ -1,0 +1,9 @@
+COINBASE-ONLY full audit: ret +3.68% dd -25.01% n 280 avg_r 0.026 sharpe 0.13
+long $1804 short $-1436
+stress: {'fees_x2': -0.87, 'slippage_x2': 0.79, 'funding_x2': 2.38, 'all_costs_x2': -4.74, 'no_costs': 11.31, 'one_bar_late': 9.48, 'guardian_off': 6.01}
+grid share profitable 0.89 median 0.165 worst -0.022
+p 0.4611077784443111 gates {'no_lookahead': True, 'trades_50_plus': True, 'profit_after_costs': True, 'profit_fees_doubled': False, 'nearby_settings_hold': True, 'holds_one_bar_late': True, 'beats_holding': True, 'all_passed': False}
+by quarter [{'quarter': '2025-01-01', 'ret': 0.03143, 'trades': 24}, {'quarter': '2025-04-01', 'ret': 0.15122, 'trades': 63}, {'quarter': '2025-07-01', 'ret': 0.05308, 'trades': 32}, {'quarter': '2025-10-01', 'ret': -0.08919, 'trades': 63}, {'quarter': '2026-01-01', 'ret': -0.02811, 'trades': 61}, {'quarter': '2026-04-01', 'ret': -0.08164, 'trades': 37}]
+chosen [('2025-01-01', 14), ('2025-04-01', 3), ('2025-07-01', 5), ('2025-10-01', 5), ('2026-01-01', 0), ('2026-04-01', 7)]
+pnl by symbol {'PF_ETHUSD': np.float64(1097.91), 'PF_SUIUSD': np.float64(474.03), 'PF_BNBUSD': np.float64(154.5), 'PF_AAVEUSD': np.float64(139.03), 'PF_SOLUSD': np.float64(61.8), 'PF_DOGEUSD': np.float64(24.27), 'PF_PEPEUSD': np.float64(-44.86), 'PF_LINKUSD': np.float64(-55.1), 'PF_XBTUSD': np.float64(-77.3), 'PF_AVAXUSD': np.float64(-78.09), 'PF_LTCUSD': np.float64(-79.2), 'PF_ZECUSD': np.float64(-215.63), 'PF_XRPUSD': np.float64(-446.06), 'PF_ADAUSD': np.float64(-587.36)}
+time 36.4

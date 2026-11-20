@@ -1,0 +1,9 @@
+trend_day_follow values checked 13374 mismatches 0
+trend_impulse values checked 11559 mismatches 0
+trend_quiet_grind values checked 21810 mismatches 0
+trend_xs_relstrength values checked 11508 mismatches 0
+
+== QUIET TREND long/short delay+1  H=168 delay=1
+ side   n  mean   med   hit     t  t_day  n22    m22  med22  n23   m23  med23  n24    m24  med24
+ long 262 385.8  88.0 0.557  3.92   3.79   28 -650.4 -560.7  116 381.5   94.6  118  636.0  310.3
+short 262 -70.1 -38.4 0.477 -1.06  -0.69   52   85.8  100.1  112 -28.4  -38.4   98 -200.5 -175.2

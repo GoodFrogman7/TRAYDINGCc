@@ -1,0 +1,1614 @@
+[
+ {
+  "id": "trend_day_follow",
+  "idea": "After a 24-hour move larger than 2 trailing standard deviations on more than twice normal 24-hour volume, in the direction of the prior 14-day trend, enter with the move and hold for up to a week.",
+  "cause": "A high-volume day that extends an existing trend marks new information that slower holders take days to act on, so the move keeps going over the following week.",
+  "loser": "Traders who fade the big day expecting a snap-back, and holders positioned against the trend who cover or sell over the following days.",
+  "regime": "trending",
+  "direction": "both",
+  "entry": "At the close of bar t, per symbol: r24 = close/close.shift(24)-1; sd = r24.rolling(720, min_periods=360).std().shift(24); v24 = volume.rolling(24, min_periods=24).sum(); vr = v24 / v24.shift(24).rolling(720, min_periods=360).mean(); tr = sign(ta.ret(close, L).shift(24)) (trend measured before the impulse day); atr = ta.atr(df, 24). LONG if r24 > k*sd and vr > v and tr > 0. SHORT if r24 < -k*sd and vr > v and tr < 0. No signal while any input is NaN. Market order at the next bar's open. Evaluated every bar; the engine's one-position-per-symbol rule de-duplicates, and re-entry after an exit is allowed if the condition still holds.",
+  "stop": "Long: close[t] - stop_atr*atr[t]. Short: close[t] + stop_atr*atr[t]. Fixed, never trailed.",
+  "exit": "Time stop after 168 bars (max_hold=168) or the protective stop. No take-profit, no signal exit.",
+  "params": {
+   "L": 336,
+   "k": 2,
+   "v": 2,
+   "stop_atr": 5
+  },
+  "grid": {
+   "k": [
+    2,
+    2.5
+   ],
+   "stop_atr": [
+    5,
+    7
+   ],
+   "L": [
+    168,
+    336
+   ]
+  },
+  "needs": [],
+  "valid_bars": 1,
+  "max_hold": 168,
+  "events_in_design": 335,
+  "est_gross_edge_bps": 200,
+  "evidence": "Design window, tradable bars only, entry next open, events 72 bars apart. 168h forward: n=335, mean +347 bps, median +160, hit 57%, t 3.66 (3.31 with one observation per calendar day). By year: 2022 +249 (n=97), 2023 +230 (n=135), 2024 +592 (n=103). Long n=187: +512 bps, t 3.82, by year -534 / +380 / +1182. Short n=148: +138 bps, t 1.06, by year +599 / -90 / -417. 72h: +133 bps (t 2.08). 24h: long +87, short -181 (shorts bounce first). Entry delayed one more bar: long +515, short +116. Nearby (168h, long/short): k=1.5 +436/+30, k=2.5 +575/+120, v=1.5 +424/+46. Control, same day AGAINST the trend: long +117 (t 0.95), short -260. Top 5% of events are 74% of the total; 191 distinct days. Desk engine on the design window (fees, slippage, funding, Guardian): 313 trades, win 45%, avg R +0.207, +32.4% in 2.67 years, max drawdown -16.4%, worst streak 12; by year -$95 / +$1593 / +$1741; long +$2048, short +$1191; fees doubled +30.1%. One-at-a-time neighbours all positive: k2.5 +28.1%, k1.5 +14.9%, v1.5 +9.8%, v3 +11.4%, stop3.5 +24.7%, stop7 +26.8% (drawdown -8.0%, streak 7), L168 +31.6%, L720 +27.4%, hold 96 +13.4%, hold 240 +22.8%. Corner k1.5/stop3.5 loses 7.2%. About 117 trades a year, so roughly 160 in a 16-month window. Process notes: (1) while reading research/results/ref_donchian.json for the result format I saw its default_validation block (the reference Donchian's validation summary); no validation bars were loaded and nothing here was chosen from it. (2) FINDINGS.md was not saved: the harness refused the write of a report file. Raw tables from every script are in /home/user/TRAYDINGCc/research/hunter/trend/out/ and the scripts are beside it. (3) About 20 hypotheses were examined in this lens.",
+  "why_it_could_fail": "Two quarters (2022 Q2 and 2024 Q4) made 29 of the 32 points; the other nine netted about zero and 2022 Q4 lost 10%. Each leg has a losing regime: longs lost in 2022, shorts lost in 2023 and 2024, so a choppy year can lose on both. Shorts give back 181 bps on average in the first 24 hours. Net-of-cost avg R is about 2.4 standard errors from zero before any allowance for the roughly 20 ideas tested. Tight stops with loose thresholds lose money. The Guardian's three-losses halt removed a third of the no-Guardian profit.",
+  "fading_sign": "Win rate over the last 40 trades under 35% (design 45%) with the average winner under 1.2 R (design 1.5 R), or the median 72-hour move in the trade direction over the last 30 signals turning negative.",
+  "would_trade": true,
+  "lens": "trend"
+ },
+ {
+  "id": "trend_impulse_follow",
+  "idea": "After one hourly bar that moves more than 2.5 ATR on more than 3 times normal volume in the direction of the 14-day trend, enter with it and hold up to three days.",
+  "cause": "A violent high-volume hour in the direction of the trend is a forced or informed repricing that the rest of the market finishes over the next few days.",
+  "loser": "Traders who fade the spike at market, and stops and liquidations of those leaning against the trend.",
+  "regime": "trending",
+  "direction": "both",
+  "entry": "At the close of bar t: a1 = ta.atr(df, 24).shift(1); mv = (close - open) / a1; volr = volume / ta.sma(volume, 168).shift(1); tr = sign(ta.ret(close, L).shift(1)). LONG if mv > k and volr > v and tr > 0. SHORT if mv < -k and volr > v and tr < 0. No signal while any input is NaN. Market order at the next bar's open.",
+  "stop": "Long: close[t] - stop_atr*ta.atr(df,24)[t]. Short: close[t] + stop_atr*ta.atr(df,24)[t]. Fixed, never trailed.",
+  "exit": "Time stop after 72 bars (max_hold=72) or the protective stop. No take-profit, no signal exit.",
+  "params": {
+   "L": 336,
+   "k": 2.5,
+   "v": 3,
+   "stop_atr": 3
+  },
+  "grid": {
+   "k": [
+    2,
+    2.5,
+    3
+   ],
+   "v": [
+    2,
+    3,
+    4
+   ],
+   "stop_atr": [
+    3,
+    4
+   ]
+  },
+  "needs": [],
+  "valid_bars": 1,
+  "max_hold": 72,
+  "events_in_design": 835,
+  "est_gross_edge_bps": 74,
+  "evidence": "Design window, events 24 bars apart. 72h forward: n=835, mean +102 bps, median +24, hit 52.5%, t 3.15 but only 1.24 with one observation per calendar day. By year +187 / +62 / +71. Long n=371 +141 (by year +67 / +200 / +112), short n=464 +70 (+263 / -63 / +36). Other horizons: 24h +39, 48h +41, 120h +40, 168h +75, so the profile is not monotone. Entry delayed one more bar: long +146, short +79. Control, impulse AGAINST the trend followed: -46 bps at 24h, -93 at 72h (n=682). Without the volume filter: +57 bps (n=1365). Top 5% of events are 123% of the total. Desk engine, design window: 725 trades, win 39%, avg R +0.213, +77.3% in 2.67 years, max drawdown -30.0%, worst streak 16; by year +$2339 / +$2684 / +$2712; long +$3495, short +$4239; fees doubled +64.7%. Neighbours all positive: k2 +100.9%, k3 +70.1%, v2 +79.4%, v4 +77.5%, stop2 +57.9% (streak 28), stop4 +62.9%, L168 +74.7%, L720 +29.7%, hold 48 +39.2%, hold 120 +84.8%. About 270 trades a year.",
+  "why_it_could_fail": "The drawdown is the problem: -30% of starting equity (about 60 R, trough May 2023) at 0.5% risk, because impulse bars are market-wide and up to ten correlated positions open in the same hour (gross exposure peaked at 2.3x equity). Capping new entries per bar did not fix it reliably (cap 1 -18%, cap 2 -33%, cap 3 -27%). The clustered t-stat is weak and the 72-hour peak sits between two horizons with less than half the edge, so part of the 72-hour number is luck. Coin-specific impulses (BTC quiet in the same hour) did not continue at all (-33 bps, n=223). Win rate is 39% with streaks of 16, which the three-losses Guardian halt punishes (profit is +119% without it). It overlaps with trend_day_follow; do not count them as two independent edges.",
+  "fading_sign": "Mean 24-hour follow-through over the last 50 signals below zero (design +39 bps), or more than 60% of trades ending at the stop (design 48%).",
+  "would_trade": true,
+  "lens": "trend"
+ },
+ {
+  "id": "trend_quiet_grind",
+  "idea": "Buy a coin whose 14-day rise has been unusually smooth (efficiency ratio in the top 20% of its own last 180 days) and hold up to a week; long only.",
+  "cause": "A two-week rise with very little back-and-forth is a patient buyer working a large order, and that buying is usually not finished when the pattern becomes visible.",
+  "loser": "Short sellers and early profit-takers who fade a slow grind because it has gone far without a blow-off.",
+  "regime": "trending",
+  "direction": "long",
+  "entry": "At the close of bar t: er = ta.efficiency_ratio(close, L); rk = ta.rolling_rank(er, 4320); r = ta.ret(close, L); atr = ta.atr(df, 24). LONG if rk >= q and r > 0 and atr is not NaN. Market order at the next bar's open. Evaluated every bar; re-entry after an exit is allowed if the condition still holds. Never short.",
+  "stop": "close[t] - stop_atr*atr[t]. Fixed, never trailed.",
+  "exit": "Time stop after 168 bars (max_hold=168) or the protective stop. No take-profit, no signal exit.",
+  "params": {
+   "L": 336,
+   "q": 0.8,
+   "stop_atr": 5
+  },
+  "grid": {
+   "q": [
+    0.7,
+    0.8,
+    0.9
+   ],
+   "stop_atr": [
+    5,
+    7
+   ]
+  },
+  "needs": [],
+  "valid_bars": 1,
+  "max_hold": 168,
+  "events_in_design": 262,
+  "est_gross_edge_bps": 169,
+  "evidence": "Design window, events 168 bars apart. Long, 168h forward: n=262, mean +402 bps, median +106, hit 56%, t 4.07 (3.85 per calendar day). By year -600 (n=28) / +427 (n=116) / +616 (n=118). 72h: +236 bps, t 4.06, by year -15 / +193 / +337. Entry delayed one more bar: +386 bps. Short side of the same signal: -71 bps at 168h (t -1.06), by year +80 / -24 / -204, which is why it is long only. Desk engine, design window, long only: 351 trades, win 44%, avg R +0.114, +20.0% in 2.67 years, max drawdown -14.7%, worst streak 10; by year -$728 / +$1400 / +$1325; fees doubled +17.5%. Neighbours: q0.7 +34.9%, q0.9 +22.7%, stop3.5 +13.0% (drawdown -32%), stop7 +33.7%, L168 +19.6%, L720 +18.5%. Both sides: -8.3%. About 130 trades a year.",
+  "why_it_could_fail": "It is long only and has only been right in bull years: 2022 lost money in every variant tested, and I have no evidence it does anything but bleed in a bear or sideways market. Net-of-cost avg R is about 1.6 standard errors from zero. The Guardian halt costs more than half the no-Guardian profit (+43% without it). It needs 4656 bars (194 days) of history per coin, so newly listed coins in the top 10 produce no signals for their first six months. Funding is paid on longs for a week at a time ($738 of funding against $325 of fees in design).",
+  "fading_sign": "Win rate over the last 30 trades under 35% (design 44%), or three or more coins triggering in the same week and then stopping out together.",
+  "would_trade": true,
+  "lens": "trend"
+ },
+ {
+  "id": "trend_xs_relstrength",
+  "idea": "Once a week, go long the two strongest and short the two weakest of the month's top-10 coins by 14-day return and hold for the week.",
+  "cause": "Capital rotates slowly between coins, so last fortnight's leaders keep attracting flow relative to the laggards for another week.",
+  "loser": "Rotation traders who sell the leaders to buy the laggards expecting catch-up.",
+  "regime": "trending",
+  "direction": "both",
+  "entry": "Only at the close of the bar whose open time is Sunday 23:00 UTC (index.dayofweek == 6 and index.hour == 23): take the symbols that are in that month's point-in-time top-10 (store.tradable_mask at that bar) and have a non-NaN r = ta.ret(close, L); if fewer than 8 qualify, do nothing. Rank r across them. LONG the `top` highest, SHORT the `top` lowest. Market order at the next bar's open (Monday 00:00).",
+  "stop": "Long: close[t] - stop_atr*ta.atr(df,24)[t]. Short: close[t] + stop_atr*ta.atr(df,24)[t]. Fixed.",
+  "exit": "Time stop after 167 bars (max_hold=167), which closes at the Sunday 23:00 open before the next ranking, or the protective stop.",
+  "params": {
+   "L": 336,
+   "top": 2,
+   "stop_atr": 6
+  },
+  "grid": {
+   "L": [
+    168,
+    336
+   ],
+   "stop_atr": [
+    6,
+    8
+   ]
+  },
+  "needs": [],
+  "valid_bars": 1,
+  "max_hold": 167,
+  "events_in_design": 546,
+  "est_gross_edge_bps": 44,
+  "evidence": "Design window, 138 weekly rebalances, L=336: long-short per leg +96 bps a week, t 2.28, by year +57 / +94 / +125. Long leg minus basket +146 (t 2.67); short leg plus basket +47 (t 1.01). L=168: +67 (t 1.57). L=720: +51 (t 1.16). Holding only 72h: +21 (t 1.11). Desk engine, design window: 546 trades, win 41%, avg R +0.047, +12.7% in 2.67 years, max drawdown -9.1%, worst streak 12; by year +$212 / +$687 / +$377; long +$305, short +$970; fees doubled +8.4%; no costs +35.9%. Neighbours: L168 +19.1%, L720 -12.1%, top1 +7.4%, top3 -6.6%, stop4 -13.4%, stop8 +15.9%, L168/stop8 +12.3%, Wednesday rebalance +13.8%.",
+  "why_it_could_fail": "Costs take two thirds of the gross and the net avg R of +0.05 is one standard error from zero. Three of ten nearby settings lose. The short leg's edge is statistically nothing on its own (t 1.0). I put the chance of a profitable 16 months at about a coin flip, so I would not trade it as written. It is listed because it is the only roughly market-neutral idea in this lens and the gross spread was positive in all three years.",
+  "fading_sign": "Top-2 minus basket weekly spread negative over a trailing 12 weeks (design +146 bps a week).",
+  "would_trade": false,
+  "lens": "trend"
+ },
+ {
+  "id": "trend_pullback_fade",
+  "idea": "When price closes through its prior 48-hour extreme against a 14-day trend shared by the coin and BTC, enter with the trend for 24 hours.",
+  "cause": "Counter-trend pushes to a 48-hour extreme are mostly stop runs and liquidations that revert within a day when the larger trend is intact.",
+  "loser": "Breakout traders who chase the counter-trend extreme and stopped-out trend holders who exit at it.",
+  "regime": "trending",
+  "direction": "both",
+  "entry": "At the close of bar t: tr = sign(ta.ret(close, L)); bt = sign(ta.ret(BTC close, L)) reindexed to the symbol's index with ffill. LONG if close < ta.donchian_low(df, N) and tr > 0 and bt > 0. SHORT if close > ta.donchian_high(df, N) and tr < 0 and bt < 0. Market order at the next bar's open.",
+  "stop": "Long: close[t] - stop_atr*ta.atr(df,24)[t]. Short: close[t] + stop_atr*ta.atr(df,24)[t].",
+  "exit": "Time stop after 24 bars (max_hold=24) or the protective stop.",
+  "params": {
+   "L": 336,
+   "N": 48,
+   "stop_atr": 2.5
+  },
+  "grid": {
+   "N": [
+    24,
+    48,
+    72
+   ],
+   "stop_atr": [
+    2,
+    2.5,
+    3
+   ]
+  },
+  "needs": [],
+  "valid_bars": 1,
+  "max_hold": 24,
+  "events_in_design": 1328,
+  "est_gross_edge_bps": 27,
+  "evidence": "Design window, events 24 bars apart. 24h forward: n=1328, mean +41 bps, median +42, hit 54%, t 3.09 (3.93 per calendar day). By year -8 / +74 / +49. Long +31 (by year -126 / +103 / +64), short +51 (+87 / +36 / +32). 12h: long +35, short +23. 48h: -8 bps. Entry delayed one more bar: long +26, short +54. Without the BTC condition: +32 bps (n=1791). Desk engine, design window: 1345 trades, win 39%, avg R -0.044, -29.1%, max drawdown -64%; with no costs +42.0%. Variants: N24 +1.3%, N72 -40.1%, stop2 -46.6%, stop3 -34.3%, short only -15.2%, long only -14.9%, take-profit at 2 ATR -68.2%. Resting-limit version (limit 1 ATR beyond the extreme, maker entry): -17.6%.",
+  "why_it_could_fail": "It already failed here: the gross edge is real but about 40 bps, round-trip costs are 20 to 27 bps, and the stop is hit at exactly the extremes that later revert. The edge is gone by 48 hours and the average hides a fat left tail. The long leg lost 126 bps a trade in 2022.",
+  "fading_sign": "Not applicable; it does not clear costs in the design window.",
+  "would_trade": false,
+  "lens": "trend"
+ },
+ {
+  "id": "trend_squeeze_break",
+  "idea": "After Bollinger-band width falls into the bottom 20% of its trailing 30 days, follow a close through the prior 48-hour high or low.",
+  "cause": "The textbook claim is that compressed volatility releases into a directional move as resting orders on both sides get triggered.",
+  "loser": "Supposedly range traders caught on the wrong side; in this data the breakout buyer is the loser.",
+  "regime": "trending",
+  "direction": "both",
+  "entry": "At the close of bar t: w = ta.bb_width(close, 48, 2.0); pct = ta.rolling_rank(w, 720); squeeze = pct.shift(1).rolling(6).min() <= q. LONG if squeeze and close > ta.donchian_high(df, N). SHORT if squeeze and close < ta.donchian_low(df, N). Market order at the next bar's open.",
+  "stop": "Long: close[t] - stop_atr*ta.atr(df,24)[t]. Short: close[t] + stop_atr*ta.atr(df,24)[t].",
+  "exit": "Time stop after 24 bars (max_hold=24) or the protective stop.",
+  "params": {
+   "q": 0.2,
+   "N": 48,
+   "stop_atr": 2.5
+  },
+  "grid": {
+   "q": [
+    0.1,
+    0.2
+   ],
+   "N": [
+    24,
+    48,
+    96
+   ]
+  },
+  "needs": [],
+  "valid_bars": 1,
+  "max_hold": 24,
+  "events_in_design": 2056,
+  "est_gross_edge_bps": -15,
+  "evidence": "Design window, events 24 bars apart. 24h forward: n=2056, mean -15.5 bps, median -29, hit 47%, t -1.56 (-1.83 per calendar day). By year -12 / -14 / -19. Long -12, short -19. 72h: +2 bps (t 0.11), by year +71 / +6 / -47. Entry delayed one more bar: -18. Variants at 24h: q=0.1 -11 (n=1358); BB24/N24 -2 (n=3511); BB96/N96 +2 at 24h and +32 at 72h (t 1.30, 0.26 per day); with BTC trend agreeing -10; only breaks in the direction of the 14-day trend +1. Control with no squeeze: n=4665, -13.5 bps, median -43, per-day t -3.55; shorting breakdowns -36 bps. Not run in the engine because the gross edge is negative before costs.",
+  "why_it_could_fail": "It has no edge to lose. On 1-hour bars in this universe, closes through a 48-hour extreme are faded over the next day whether or not a squeeze came first, and breakdowns bounce hardest.",
+  "fading_sign": "Not applicable; negative in the design window.",
+  "would_trade": false,
+  "lens": "trend"
+ },
+ {
+  "id": "trend_break_retest",
+  "idea": "After a close above the prior 7-day high in a 14-day uptrend shared with BTC, rest a buy limit at the broken high and ride the retest.",
+  "cause": "Breakouts in an established uptrend continue on average, and most retrace to the breakout level first, which should give a cheaper maker entry.",
+  "loser": "Supposedly late shorts and sellers at the old high; in practice the limit buyer is filled mostly when the breakout is failing.",
+  "regime": "trending",
+  "direction": "long",
+  "entry": "At the close of bar t: dh = ta.donchian_high(df, N). Setup if close > dh and ta.ret(close, L) > 0 and BTC ta.ret(close, L) > 0 (reindexed, ffill). Place a buy limit at dh[t], working for 24 bars (valid_bars=24).",
+  "stop": "dh[t] - stop_atr*ta.atr(df,24)[t].",
+  "exit": "Time stop after 72 bars (max_hold=72) or the protective stop.",
+  "params": {
+   "L": 336,
+   "N": 168,
+   "stop_atr": 2.5
+  },
+  "grid": {
+   "N": [
+    48,
+    96,
+    168
+   ],
+   "stop_atr": [
+    2.5,
+    3.5
+   ]
+  },
+  "needs": [],
+  "valid_bars": 24,
+  "max_hold": 72,
+  "events_in_design": 915,
+  "est_gross_edge_bps": -40,
+  "evidence": "Underlying breakout, design window, market entry: close above the prior 168h high with 14-day return positive, n=915: 72h +106 bps, median -5, hit 49%, t 3.46 but 0.97 per calendar day; by year -127 / +213 / +119; 168h +169, by year -472 / +351 / +299. N=48 version n=1539: 72h +113, t 4.75, 0.73 per day, by year +9 / +166 / +114. Mirror short (close below the prior 48h low in a downtrend): -33 bps at 24h, per-day t -5.6, by year +51 / -56 / -80. A BTC-above-90-day-SMA gate did not rescue 2022 (39 events, -526 bps at 72h). Open-interest confirmation (2023-03 on) made no usable difference: +144 vs +90 bps at 72h. Desk engine, design window: retest limit long only 602 trades, win 25%, avg R -0.232, -69.7%, and -20.7% with no costs; N96 -76.0%, N48 -44.7%, stop3.5 +7.2%. Market-entry breakout with a 4-ATR trail from the 24h high: 603 trades, -22.7%, +0.1% with no costs. Disclosure: I saw the reference Donchian's validation summary in research/results/ref_donchian.json before running this; the rejection rests on the design numbers above.",
+  "why_it_could_fail": "It already failed here. The positive average comes from a few rally days (per-day t under 1) and from bull-market drift; 2022 is negative. Any stop tight enough to size a position gets hit before the tail arrives, and the retest limit is adversely selected.",
+  "fading_sign": "Not applicable; negative in the design window.",
+  "would_trade": false,
+  "lens": "trend"
+ },
+ {
+  "id": "trend_tsmom_strong",
+  "idea": "Hold in the direction of the 14-day return when its size is in the top 30% of the coin's last 180 days and BTC's 14-day return agrees, for up to a week.",
+  "cause": "Large multi-week moves reflect slow position building that should persist for further days.",
+  "loser": "Mean-reversion traders fading extended two-week moves.",
+  "regime": "trending",
+  "direction": "both",
+  "entry": "At the close of bar t: r = ta.ret(close, L); rk = ta.rolling_rank(r.abs(), 4320); bt = sign(ta.ret(BTC close, L)) reindexed with ffill. LONG if rk >= rank and r > 0 and bt > 0. SHORT if rk >= rank and r < 0 and bt < 0. Market order at the next bar's open. Evaluated every bar.",
+  "stop": "Long: close[t] - stop_atr*ta.atr(df,24)[t]. Short: close[t] + stop_atr*ta.atr(df,24)[t].",
+  "exit": "Time stop after 168 bars (max_hold=168) or the protective stop.",
+  "params": {
+   "L": 336,
+   "rank": 0.7,
+   "stop_atr": 5
+  },
+  "grid": {
+   "rank": [
+    0.5,
+    0.7,
+    0.85
+   ],
+   "stop_atr": [
+    3.5,
+    5
+   ]
+  },
+  "needs": [],
+  "valid_bars": 1,
+  "max_hold": 168,
+  "events_in_design": 879,
+  "est_gross_edge_bps": 64,
+  "evidence": "Plain time-series momentum, design window, non-overlapping, all tradable coins: L=336/H=168 n=1992, +45 bps a week, t 1.57 (0.75 per calendar day), by year +55 / +65 / +19, long +73, short +17. L=336/H=72 +23 (t 1.73). L=720/H=168 +41 (t 1.37). L=168/H=168 +20 (t 0.71). L=24/H=24 -5 (short-term reversal). Desk engine, design window, strong-return version: 879 trades, win 38%, avg R +0.011, +4.8%, max drawdown -26.0%; fees doubled -1.2%; by year -$892 / +$2042 / -$669; long +$2470, short -$1988. Variants: rank 0.5 +27.4%, rank 0.85 +21.6% (421 trades, drawdown -12.5%), stop3.5 +25.5%, L720 -1.0%, no BTC filter +4.3%. Trend plus uncrowded premium was also tried: +38 bps at 72h (t 1.9) against +25 for the crowded control.",
+  "why_it_could_fail": "The edge is about 45 bps a week before a stop, which is two round trips of cost. The default goes negative with fees doubled, the short leg loses in every variant, 2022 loses in every variant, and the Guardian halt takes most of what is left (+43% without it). Which threshold works best is not stable.",
+  "fading_sign": "Not applicable as written; watch only whether the long leg's weekly return after strong 14-day gains stays positive.",
+  "would_trade": false,
+  "lens": "trend"
+ },
+ {
+  "id": "revert_premium_fade",
+  "idea": "Fade the perp when its hour-average premium to the spot index is extreme: short above +0.3%, long below -0.3%, and get out when the premium is back inside 0.1% or after 8 hours.",
+  "cause": "An extreme perp premium is one-sided leveraged positioning on this venue rather than new information, so arbitrage and funding pull the perp back toward the index within hours.",
+  "loser": "Short leg: leveraged longs who chase the perp above the index and pay funding to stay in. Long leg: liquidated or panicking sellers who dump the perp below the index.",
+  "regime": "wild",
+  "direction": "both",
+  "entry": "At the close of bar t: prem = premium[t]; ATR = ta.atr(df, 24)[t]; print_ok = abs(close[t]/mark_close[t] - 1) <= 0.003 (the engine's next open is always this last print, so it must agree with the mark). If prem > +0.003 and print_ok: side = -1. If prem < -0.003 and print_ok: side = +1. No signal while premium, mark_close or ATR is NaN. Market order at the open of bar t+1 (limit = NaN).",
+  "stop": "Long: close[t] - stop_atr * ATR[t]. Short: close[t] + stop_atr * ATR[t]. stop_atr = 3.0. Fixed at entry, no trailing.",
+  "exit": "exit = True on every bar where abs(premium) < 0.001 (the dislocation is gone; closes at the next open). Otherwise time stop after 8 bars (max_hold = 8). No take-profit.",
+  "params": {
+   "prem": 0.003,
+   "stop_atr": 3,
+   "exit_prem": 0.001,
+   "atr_n": 24,
+   "print_tol": 0.003
+  },
+  "grid": {
+   "prem": [
+    0.0025,
+    0.003,
+    0.004
+   ],
+   "stop_atr": [
+    2,
+    3,
+    4
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 8,
+  "needs": [
+   "premium",
+   "mark_close"
+  ],
+  "events_in_design": 457,
+  "est_gross_edge_bps": 79,
+  "evidence": "Event study, tradable bars, entry at next open, 8h hold: 1,578 signal bars = 457 non-overlapping events on 177 days. Mean +104 bps, median +91, hit 61%, t 4.4 (3.2 clustered by day). By year: 2022 +62 bps (n 113, t_cl 0.9), 2023 +69 (n 95, t_cl 1.3), 2024 +137 (n 249, t_cl 3.0). Long +117 bps (n 152, t_cl 2.0); short +98 (n 305, t_cl 2.3). Majors +101, alts +104. One bar late: +60 bps; the first bar alone is +42. Mark-to-mark instead of last print: +105. Tails over the hold: 5% of events go more than -9.2% against, 1% more than -17.8%, worst 8h result -38.6%. Desk engine on design, all costs, Guardian on: 412 trades, +22.6% (8.1%/yr), max drawdown -6.4%, win 58%, avg +0.11R (t 3.6; 2.7 clustered on 174 entry days), PF 1.60, longest losing streak 8, gross 79 bps/trade. Summed R by year +9.5 / +11.4 / +24.3; all six half-years positive. Fees x2 +19.0%; slippage x2 +15.5%; funding ignored +18.6%; one bar late +9.2%. Grid 9/9 cells profitable (+8.2% to +36.4%). Long leg alone +13.6% (155 trades, positive each year, PF 2.33); short leg alone +9.7% (279 trades: 2022 -0.2R, 2023 -0.4R, 2024 +20.0R). Outside the grid a 0.2% threshold is flat (859 trades, +0.3%). Entry prints were not flattering: mean print-vs-mark advantage -0.8 bps.",
+  "fading_sign": "Mean gross return of the last 40 trades under +25 bps, or the one-bar-late version of those same trades turning negative (someone faster is taking the first hour).",
+  "why_it_could_fail": "The short leg earned nothing in 2022 and 2023; its profit is 2024, when 206 of its 279 trades happened, and 69 trades are one coin (INJ). Extreme premiums occur in 0.2-1% of hours and bunch into a few episodes, so a calm 16 months can miss the 50-trade gate. About 40% of the edge is in the first hour and one bar late halves the profit, so real slippage on thin alts can eat it. In a genuine squeeze a rich premium gets richer: stops will be hit hard and can gap. Funding before 2025-11 is an estimate and supplied about a fifth of the profit. If arbitrage has compressed Kraken's basis since 2024 the signal just stops firing.",
+  "would_trade": true,
+  "lens": "revert"
+ },
+ {
+  "id": "revert_oi_wipe",
+  "idea": "Buy when open interest collapses during a 3-hour drop of more than 3 sigma, and hold 12 hours.",
+  "cause": "A sharp fall in open interest together with a sharp fall in price means leveraged longs were closed by force, and once that selling is finished the price has overshot.",
+  "loser": "Over-leveraged longs liquidated or stopped out at the low, and late shorts who sell after the forced flow has already ended.",
+  "regime": "wild",
+  "direction": "long",
+  "entry": "k = 3. mark = mark_close. sig168[t] = std of ln(mark[i]/mark[i-1]) over the 168 bars ending at t-1 (rolling(168).std().shift(1)). mz[t] = ln(mark[t]/mark[t-k]) / (sig168[t] * sqrt(k)). doi[t] = oi[t]/oi[t-k] - 1. thr[t] = doi.rolling(720, min_periods=240).quantile(0.01).shift(1). print_ok = abs(close[t]/mark_close[t] - 1) <= 0.003. Long if doi[t] < thr[t] and mz[t] < -3.0 and print_ok, with oi, mark_close and ATR all not NaN. Market order at the open of bar t+1.",
+  "stop": "close[t] - stop_atr * ta.atr(df, 24)[t], stop_atr = 4.0. Fixed, no trailing.",
+  "exit": "Time stop after 12 bars (max_hold = 12). No take-profit, no exit signal.",
+  "params": {
+   "k": 3,
+   "z": 3,
+   "q": 0.01,
+   "stop_atr": 4
+  },
+  "grid": {
+   "k": [
+    1,
+    3,
+    6
+   ],
+   "stop_atr": [
+    3,
+    4,
+    5
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 12,
+  "needs": [
+   "oi",
+   "mark_close"
+  ],
+  "events_in_design": 111,
+  "est_gross_edge_bps": 198,
+  "evidence": "Open interest starts ~2023-03, so this is 22 months and no 2022. Event study, entry next open, 12h hold: 176 signal bars = 111 non-overlapping events on 63 days. Mean +219 bps, median +92, hit 64%, t 4.3 (2.8 clustered). 2023 +56 bps (n 40, t_cl 0.9), 2024 +311 (n 71, t_cl 2.8). Majors +78 (n 31), alts +274 (n 80). One bar late +178; first bar alone +19, so it is not a first-bar effect. In ATR units +0.91 (t_cl 3.2). Tails: 5% of events go more than -7.4% against within 12h, 1% more than -11.6%, worst 12h result -9.5%. Desk engine on design, all costs: 110 trades, +8.6% (3.1%/yr over the full window, about 4.7%/yr over the 22 months it could trade), max drawdown -2.2%, win 62%, avg +0.16R (t 2.7; 1.96 clustered), PF 2.03, longest losing streak 6. R by year: 2023 +2.0, 2024 +15.1. Fees x2 +7.6%; slippage x2 +7.7%; one bar late +4.0%. Grid 8/9 profitable (k=1 with a 3-ATR stop is -0.3%). Outside the grid z = 2 is flat (190 trades, +0.3%). Exits: 99 time, 11 stop.",
+  "fading_sign": "Twelve-hour return after the last 20 signals averaging under +50 bps, or more than a third of trades stopped out (in design 10% were).",
+  "why_it_could_fail": "Short history and no bear market in it; 2023 gave +2R and 2024 gave +15R. 63 distinct days, so it is barely significant once same-day trades count as one bet. It fires on the same crash days as revert_liq_flush and revert_cascade: treat the three as one bet. An OI collapse can be the first leg of a multi-day deleveraging, where buying the first flush loses a full 1R against an average win of about 0.4R. The 4-ATR stop after a crash sits 8-15% away. OI is an analytics series that may arrive late or be revised live.",
+  "would_trade": true,
+  "lens": "revert"
+ },
+ {
+  "id": "revert_liq_flush",
+  "idea": "Buy after an hour that combines a liquidation-volume spike with a bar of -3 sigma or worse, and hold 12 hours.",
+  "cause": "Liquidations are price-insensitive market sells into a thin book, so the bar they print overshoots where voluntary sellers would have taken it.",
+  "loser": "The liquidated longs, whose positions the venue sells at any price, and traders who short the liquidation bar.",
+  "regime": "wild",
+  "direction": "long",
+  "entry": "mark = mark_close. sig168[t] = std of hourly mark log returns over the 168 bars ending at t-1. mz1[t] = ln(mark[t]/mark[t-1]) / sig168[t]. liq_usd[t] = liq_vol[t] * close[t]. q99[t] = liq_usd.rolling(720, min_periods=240).quantile(0.99).shift(1). print_ok = abs(close[t]/mark_close[t] - 1) <= 0.003. Long if liq_usd[t] > 2.0 * q99[t] and q99[t] > 0 and mz1[t] < -3.0 and print_ok, ATR not NaN. Market order at the open of bar t+1.",
+  "stop": "close[t] - stop_atr * ta.atr(df, 24)[t], stop_atr = 4.0. Fixed, no trailing.",
+  "exit": "Time stop after 12 bars (max_hold = 12). No take-profit, no exit signal.",
+  "params": {
+   "z": 3,
+   "liq_mult": 2,
+   "stop_atr": 4
+  },
+  "grid": {
+   "liq_mult": [
+    1.5,
+    2,
+    3
+   ],
+   "stop_atr": [
+    3,
+    4,
+    5
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 12,
+  "needs": [
+   "liq_vol",
+   "mark_close"
+  ],
+  "events_in_design": 266,
+  "est_gross_edge_bps": 73,
+  "evidence": "Event study, entry next open, 12h hold: 283 signal bars = 266 non-overlapping events on 130 days. Mean +84 bps, median +58, hit 61%, t 3.4 (2.5 clustered). By year: 2022 +82 bps (n 41, t_cl 1.0), 2023 +84 (n 112, t_cl 2.6), 2024 +84 (n 113, t_cl 1.3). Majors +38 (n 64, t 0.9), alts +98 (n 202, t_cl 2.7). One bar late +79; first bar alone +26. In ATR units +0.45 (t_cl 2.4). Control: -3 sigma bars without a liquidation spike give +54 bps and +0.11 ATR (t_cl 0.8, n 1,712), so the liquidation condition is what carries it. The mirror (short after a short-squeeze spike) loses: -84 bps, n 253. Tails: 5% of events go more than -11.2% against within 12h, 1% more than -18.4%, worst 12h result -14.3%. Desk engine on design, all costs: 257 trades, +7.5% (2.7%/yr), max drawdown -5.1%, win 57%, avg +0.06R (t 1.6; 1.2 clustered on 128 days), PF 1.29, streak 8, gross 73 bps/trade. R by year -1.1 / +9.7 / +6.3. Fees x2 +4.8%; slippage x2 +4.3%; one bar late +3.7%. Grid 8/9 profitable (1.5 x q99 with a 3-ATR stop is -1.9%). A 2-ATR stop loses.",
+  "fading_sign": "Twelve-hour return after the last 30 signals averaging under +30 bps, i.e. below round-trip cost on alts.",
+  "why_it_could_fail": "It is thin: +0.06R per trade, not significant once same-day trades are clustered, and negative in 2022. The bps edge is steady but the stop has to be 4 ATR wide to survive, which shrinks every win to a fraction of R while each stop costs a full R. Nothing on BTC or ETH. One bar late halves it. Same crash days as revert_oi_wipe and revert_cascade. Liquidation volume is a venue analytics feed that may lag live.",
+  "would_trade": true,
+  "lens": "revert"
+ },
+ {
+  "id": "revert_cascade",
+  "idea": "Buy a coin that is down more than 4.5 sigma over 6 hours when bitcoin is also down more than 3 sigma over the same 6 hours, and hold 12 hours.",
+  "cause": "When everything falls together the selling is forced deleveraging across the market rather than news about one coin, and forced selling overshoots.",
+  "loser": "Leveraged holders margin-called across the board, and momentum shorts who sell the sixth hour of a market-wide flush.",
+  "regime": "wild",
+  "direction": "long",
+  "entry": "mark = mark_close. sig168[t] = std of hourly mark log returns over the 168 bars ending at t-1. mz6[t] = ln(mark[t]/mark[t-6]) / (sig168[t] * sqrt(6)), computed per symbol. btc6[t] = the same quantity for PF_XBTUSD, reindexed to the symbol's bars. print_ok = abs(close[t]/mark_close[t] - 1) <= 0.003. Long if mz6[t] < -4.5 and btc6[t] < -3.0 and print_ok, ATR not NaN. Market order at the open of bar t+1.",
+  "stop": "close[t] - stop_atr * ta.atr(df, 24)[t], stop_atr = 4.0. Fixed, no trailing.",
+  "exit": "Time stop after 12 bars (max_hold = 12). No take-profit, no exit signal.",
+  "params": {
+   "k": 6,
+   "z": 4.5,
+   "zb": 3,
+   "stop_atr": 4
+  },
+  "grid": {
+   "z": [
+    4,
+    4.5,
+    5
+   ],
+   "zb": [
+    2,
+    3,
+    4
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 12,
+  "needs": [
+   "mark_close"
+  ],
+  "events_in_design": 134,
+  "est_gross_edge_bps": 177,
+  "evidence": "Event study, entry next open, 12h hold: 234 signal bars = 134 non-overlapping events on only 34 days. Mean +270 bps, median +173, hit 71%, t 5.0 naive but 2.4 clustered by day. By year: 2022 -32 bps (n 15), 2023 +141 (n 53, t_cl 2.2), 2024 +443 (n 66, t_cl 2.2). Majors +83 (n 37), alts +342 (n 97). One bar late +215. In ATR units +0.84 (t_cl 1.9). Why the bitcoin condition: coin-specific drops of the same size with bitcoin calm do not revert (-61 bps, n 45; alt residual below -4 sigma with BTC calm: -152 bps at 12h, t -2.0, n 148). Tails: 5% of events go more than -14.8% against within 12h, 1% more than -21.7%, worst 12h result -14.3%. Desk engine on design, all costs: 121 trades, +8.0% (2.9%/yr), max drawdown -4.0%, win 61%, avg +0.13R (t 2.1 naive, 1.0 clustered on 34 days), PF 1.60, streak 9. R by year -2.0 / +4.0 / +14.1. Fees x2 +7.0%; one bar late +7.5%. Grid 9/9 profitable (+4.4% to +13.0%). Outside the grid z = 3 loses (-1.9%, 370 trades), a 6-bar hold is flat and a 2-ATR stop loses. With the Guardian off the same rules make +12.7%.",
+  "fading_sign": "Two consecutive cascade days where the basket of signals closes below entry after 12 hours.",
+  "why_it_could_fail": "This is 34 bets, not 121: clustered t-stat 1.0, which is not distinguishable from luck. It lost in the one bear year (2022: 14 trades, 29% winners), because in a bear market the first flush is followed by another. Up to ten coins signal in the same hour, so one failed bounce trips the three-losses or -3% daily Guardian and closes everything at the low. Design pace is about 60 trades per 16 months, close to the 50-trade gate. It is the same crash days as the two ideas above; I rank it last of the tradeable ones and would not fund it on its own.",
+  "would_trade": true,
+  "lens": "revert"
+ },
+ {
+  "id": "revert_crash_bid",
+  "idea": "Keep a resting bid 3 ATR below the last close, re-quoted every hour, but only after a directional 48 hours, to buy the flush bar itself as maker.",
+  "cause": "After a persistent 48-hour move leverage is one-sided, so a sudden 3-ATR hourly drop is more likely a liquidation sweep of a thin book than new information.",
+  "loser": "Liquidated longs and market sellers who sweep the book down to the resting bid.",
+  "regime": "trending",
+  "direction": "long",
+  "entry": "Every bar t where ta.efficiency_ratio(close, 48)[t] > 0.35 and volume[t] > 0 and abs(close[t]/mark_close[t] - 1) <= 0.003: side = +1 with limit = close[t] - 3.0 * ta.atr(df, 24)[t], working for one bar (valid_bars = 1), re-issued on the next bar if the condition still holds.",
+  "stop": "limit - stop_atr * ATR[t], stop_atr = 4.0 (7 ATR below the signal close).",
+  "exit": "Time stop after 12 bars (max_hold = 12). No take-profit.",
+  "params": {
+   "er_min": 0.35,
+   "lim_atr": 3,
+   "stop_atr": 4
+  },
+  "grid": {
+   "lim_atr": [
+    2.5,
+    3,
+    4
+   ],
+   "stop_atr": [
+    4,
+    5,
+    6
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 12,
+  "needs": [
+   "mark_close"
+  ],
+  "events_in_design": 182,
+  "est_gross_edge_bps": 36,
+  "evidence": "Event study from the fill price (engine fill rule: low must trade 1 bp through the bid): 182 fills on 84 days out of 11,916 quotes. Close of the fill bar +0.15 ATR; 4h +0.88 ATR (t_cl 3.1); 12h +1.36 ATR (t_cl 2.6) = +284 bps mean, +167 median, hit 65%; 2022 / 2023 / 2024 = +1.46 / +0.81 / +1.84 ATR. Without the 48h condition the same bid has nothing: 2,046 fills, +0.22 ATR at 12h (t 1.1), 2022 -0.62; in ranges (ER48 < 0.25) +0.05 ATR. Then the desk engine on design: 162 trades, -1.7%, avg -0.02R, PF 0.95, win 50%, max drawdown -8.6%; R by year -6.5 / -2.5 / +5.7. 35 of the 53 stop-outs happened inside the fill bar. Neighbours: bid at 2 / 2.5 / 4 ATR gives -3.7% / -6.5% / -2.3%; ER threshold 0.25 / 0.30 gives -15.5% / -16.0%; stop 5 / 6 ATR gives +1.7% / +4.5%. Fill-bar lows run 5.7 ATR below the bid in the worst 10% of fills.",
+  "fading_sign": "Already absent after stops: more than one fill in five is stopped inside the bar it filled.",
+  "why_it_could_fail": "It already failed in the engine. The +284 bps average is a fat right tail; a bid that deep fills exactly when the cascade is still running, a fifth of fills blow through the stop in the same hour, and sizing by stop distance gives the big winners the smallest positions. The regime condition was found by slicing and its neighbours lose money.",
+  "would_trade": false,
+  "lens": "revert"
+ },
+ {
+  "id": "revert_last_print_basis",
+  "idea": "Fade the gap between the last traded price and the spot index: long when the close is more than 0.4% below the index, short when more than 0.4% above.",
+  "cause": "There is no real cause: the gap is a stale or off-book last print on a thin contract, not a price anyone can trade at.",
+  "loser": "Nobody in reality; in a backtest the loser is the fill model, which hands out the stale print as the entry price.",
+  "regime": "ranging",
+  "direction": "both",
+  "entry": "basis[t] = close[t]/spot_close[t] - 1. Long if basis[t] < -0.004, short if basis[t] > +0.004. Market order at the open of bar t+1.",
+  "stop": "Long: close[t] - 3.0 * ta.atr(df, 24)[t]. Short: close[t] + 3.0 * ATR[t].",
+  "exit": "Time stop after 2 bars (max_hold = 2).",
+  "params": {
+   "thr": 0.004,
+   "stop_atr": 3
+  },
+  "grid": {
+   "thr": [
+    0.004,
+    0.006,
+    0.01
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 2,
+  "needs": [
+   "spot_close",
+   "mark_close",
+   "ask_10k",
+   "bid_10k"
+  ],
+  "events_in_design": 9586,
+  "est_gross_edge_bps": 0,
+  "evidence": "On paper this is the strongest result in the lens: 4,733 long and 4,853 short signal bars; first bar +0.52 / +0.46 ATR with clustered t-stats of 25 and 22; 4h +71 / +65 bps; positive every year. It is an artifact. Kraken's candle open equals the previous close in 100.0% of bars, so 'next open' is the last print. On these bars the close sits a median 54 bps away from the mark while the mark is within 3 bps of the index; where the order book is recorded, the $10k ask is a median 54 bps above the close on the long signals; median bar volume is $5,253 and 16% of the bars have zero volume. One bar late the effect falls to +0.10 / +0.14 ATR. Requiring the close to be within 10 bps of the mark leaves 155 long and 274 short events with first-bar +0.19 / +0.13 ATR (t 2.4 / 1.9). Across all tradable bars abs(close/mark - 1) is 3.6 bps at the median, 20 bps at the 90th percentile and 75 bps at the 99th.",
+  "fading_sign": "Not applicable: the edge does not exist outside the fill model.",
+  "why_it_could_fail": "It is not real, and the desk engine would pay it out because it fills market orders at open = previous last print plus a median slippage figure. Any strategy from any lens that selects bars whose last print is away from the mark inherits the same fake fill; that is why every rule above requires the close to be within 0.3% of mark_close. A second quirk I left unused: a limit placed exactly at the signal close counts as marketable at the open and fills with zero slippage.",
+  "would_trade": false,
+  "lens": "revert"
+ },
+ {
+  "id": "revert_euphoria_short",
+  "idea": "Short the bar after a +4 sigma hourly spike on three times normal volume, expecting it to give the move back.",
+  "cause": "The assumed cause was buyer exhaustion after a blow-off bar; the data says the buying is not exhausted.",
+  "loser": "Intended: late breakout buyers. Actual: the fader.",
+  "regime": "wild",
+  "direction": "short",
+  "entry": "z1[t] = ln(close[t]/close[t-1]) / (std of hourly close log returns over the 168 bars ending at t-1). vrel[t] = close[t]*volume[t] / (median of close*volume over the 168 bars ending at t-1, min 100 bars). Short if z1[t] > 4.0 and vrel[t] > 3.0. Market order at the open of bar t+1.",
+  "stop": "close[t] + 3.0 * ta.atr(df, 24)[t].",
+  "exit": "Time stop after 12 bars (max_hold = 12).",
+  "params": {
+   "z": 4,
+   "vol_mult": 3,
+   "stop_atr": 3
+  },
+  "grid": {
+   "z": [
+    3,
+    4,
+    6
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 12,
+  "needs": [],
+  "events_in_design": 751,
+  "est_gross_edge_bps": -34,
+  "evidence": "751 signal bars on 314 days. Short return after 1h -3 bps, 4h -13, 12h -34 (t -1.8, -1.0 clustered), 24h -22; hit 52%. By year at 12h: 2022 +113 bps (n 183), 2023 -54 (n 312), 2024 -116 (n 255). Majors -21, alts -39. One bar late -34. On mark prices: n 839, -32 bps, -0.34 ATR (t_cl -1.6). Bigger spikes are worse: z > 6 gives -91 bps (n 216). Every other short fade of a price move fails the same way: upper wick > 2.5 ATR on volume -99 bps (n 210, t_cl -2.4); RSI14 > 85 -85 bps (n 365); seven up closes in a row -28 bps (n 788); liquidation squeeze spike -84 bps (n 253, t_cl -2.1); resting offer 2 ATR above the close -0.40 ATR at 12h (5,550 fills, t_cl -3.0). Worst 12h outcome for the short: -38%.",
+  "fading_sign": "Not applicable: no edge to fade.",
+  "why_it_could_fail": "It fails in the design window in the two most recent years. Up-spikes on this venue continue, and the only year the fade paid was the 2022 bear market. The honest reading is that this is a momentum signal pointing the other way, which belongs to another lens.",
+  "would_trade": false,
+  "lens": "revert"
+ },
+ {
+  "id": "revert_range_zscore",
+  "idea": "In a quiet range, fade a close that is more than 2.5 standard deviations from its 48-hour mean back toward the mean.",
+  "cause": "The assumed cause was that without a trend, stretches from the mean are noise that liquidity providers absorb.",
+  "loser": "Intended: breakout traders in a range. Actual: nobody loses enough to pay the costs.",
+  "regime": "ranging",
+  "direction": "both",
+  "entry": "z48[t] = (close[t] - SMA48[t]) / rolling 48-bar std of close. er48[t] = ta.efficiency_ratio(close, 48)[t]. Long if z48 < -2.5 and er48 < 0.15. Short if z48 > +2.5 and er48 < 0.15. Market order at the open of bar t+1.",
+  "stop": "Long: close[t] - 3.0 * ta.atr(df, 24)[t]. Short: close[t] + 3.0 * ATR[t].",
+  "exit": "exit = True when close crosses SMA48 (long: close >= SMA48; short: close <= SMA48); otherwise time stop after 24 bars. Measured at fixed 1 / 4 / 12 / 24 bar horizons, not with this exit.",
+  "params": {
+   "n": 48,
+   "z": 2.5,
+   "er_max": 0.15,
+   "stop_atr": 3
+  },
+  "grid": {
+   "z": [
+    2,
+    2.5,
+    3
+   ],
+   "er_max": [
+    0.15,
+    0.25
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 24,
+  "needs": [],
+  "events_in_design": 3265,
+  "est_gross_edge_bps": 0,
+  "evidence": "Long: 1,671 signal bars on 366 days; forward return 1h +4 bps, 4h -1, 12h -3 (t_cl -0.2), 24h +53 (t_cl 2.0, but 2022 -70 at 12h); in ATR units -0.12 at 12h; one bar late -7 bps. Short: 1,594 bars on 423 days; 4h -4 bps, 12h -0.3 (t 0.0), 24h +2; 2022 +49, 2023 -9, 2024 -22. The 24-bar window gives the same: +4 bps long, +10 bps short at 12h. Stretch only pays after a directional drop (z48 < -2.5 with ER48 > 0.35: +74 bps at 12h, t_cl 2.1), which is the panic effect, not range trading. Related dead ends: resting bids 3 ATR below the close in ranges (ER48 < 0.25) +0.05 ATR at 12h on 1,518 fills, 2022 -1.00; resting offers in ranges -0.48 ATR; seven down closes in a row +35 bps at 12h with the sign flipping by year (+22 / -48 / +96); 12h declines on thin volume keep falling (-48 bps at 12h, -0.99 ATR at 24h, t -2.2).",
+  "fading_sign": "Not applicable: no edge to fade.",
+  "why_it_could_fail": "There is nothing there before costs, and an alt round trip costs 25-40 bps. Hourly ranges on these contracts are not mean-reverting enough to pay a taker.",
+  "would_trade": false,
+  "lens": "revert"
+ },
+ {
+  "id": "flow_weekend_dump_short",
+  "idea": "If the thin-liquidity weekend (Fri 22:00 to Sun 22:00 UTC) closed sharply down, short at the Sunday 22:00 UTC open and hold 24 hours into the Monday session.",
+  "cause": "A weekend sell-off happens in thin books without institutional flow, so the de-risking, margin calls and liquidations it triggers only arrive when weekday liquidity returns on Monday.",
+  "loser": "Weekend dip-buyers and leveraged longs who get liquidated into the Monday open.",
+  "regime": "wild",
+  "direction": "short",
+  "entry": "All tradable symbols. Only on the bar whose OPEN time is Sunday `hour`:00 UTC (index.dayofweek == 6 and index.hour == hour). r = close/close.shift(1) - 1; sd = r.rolling(168, min_periods=100).std().shift(1); z48 = (close/close.shift(48) - 1) / (sd * sqrt(48)). If z48 <= -z and ta.atr(df, 24) is not NaN: side = -1, market at the next bar's open (limit = NaN).",
+  "stop": "signal-bar close + stop_atr * ta.atr(df, 24)",
+  "exit": "Time stop only: max_hold = 24 bars. No take-profit, no trail, no exit signal.",
+  "params": {
+   "z": 0.75,
+   "hour": 21,
+   "stop_atr": 3
+  },
+  "grid": {
+   "z": [
+    0.5,
+    0.75,
+    1
+   ],
+   "hour": [
+    19,
+    21,
+    23
+   ],
+   "stop_atr": [
+    2.5,
+    3,
+    3.5
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 24,
+  "needs": [],
+  "events_in_design": 128,
+  "est_gross_edge_bps": 130,
+  "evidence": "Event study (short, entry next open): z<=-0.75: 128 events on 37 weekends, 24h mean +299 bps, median +220, hit 69%, pooled t 5.0; by year +408 (n=51) / +318 (34) / +156 (43); one-bar delay +314; 12h +275. z<=-1.0: 62 events on 20 weekends, 24h +538 bps, hit 81%, t 6.8; years +737/+398/+439. HONEST clustered view, one observation per weekend: z<=-0.75 mean +90 bps, median -9, only 49% of weekends win, t 1.02 (2022 +186, 2023 +170, 2024 -40); z<=-1.0 mean +266, median +240, 65% win, t 1.99. Control, same 48h-drop z at 21:00 UTC on other weekdays, 24h continuation: Mon +13, Tue -9, Wed -9, Thu -12, Fri +122, Sat -123, Sun +538 bps. Desk engine on the design window, all costs and Guardian: 128 trades, win 62.5%, avg R +0.86, gross 269 bps/trade, +55.1% total (19.8%/yr), max DD -10.7%, years +27.2% / +22.2% / +5.6%; fees x2 +52.8%, slippage x2 +49.3%. Neighbours tested one parameter at a time, all positive: z 0.5 +48.0%, z 1.0 +42.7%, z 1.25 +19.6% (28 trades); hour 17 +20.3% (2024 -13.3%), 19 +55.0%, 20 +51.4%, 22 +44.6%, 23 +33.5%; stop 2.5 +69.6%, 3.5 +49.1%; hold 12 +42.0%, hold 48 +35.5%. About 64 trades expected in 16 months at z 0.75.",
+  "why_it_could_fail": "It is a crash-continuation payoff, not a steady edge. Five weekends (2022-05-08 LUNA, 2022-06-12 Celsius, 2023-05-07, 2024-08-04, 2023-09-10) made +59% of the +55%; without them the result is -4.2%. Half of the signal weekends lose. A 16-month test may hold two such Mondays or none, and with none it bleeds about -0.1% per weekend. At z 1.0 the evidence is cleaner but only ~31 trades in 16 months, below the 50-trade gate; z 0.75 passes the count by diluting the edge (weekend-level t 1.0). 2024 was already weak (+5.6%, all of it from 4 Aug). Signals arrive on up to 10 correlated symbols at once, so a Monday reversal costs up to the 3% daily halt. It is calendar-defined rather than built from the volume or liquidation columns, and the 21:00 hour was fixed before the hour profile was run but the 17:00 neighbour is much weaker.",
+  "fading_sign": "Four consecutive signal weekends that lose, or the weekend-level mean over the trailing 12 signal weekends turning negative; also weekend volume rising toward weekday levels.",
+  "would_trade": true,
+  "lens": "flow"
+ },
+ {
+  "id": "flow_stress_bid",
+  "idea": "When BTC dumps 3 sigma in one hour on a volume surge and an alt barely moves, buy that alt for 24 hours.",
+  "cause": "An alt that holds while BTC is being sold hard has a resting bid that just absorbed forced selling, so supply is exhausted and it leads once BTC stops falling.",
+  "loser": "Sellers who dumped the alt into that bid, and shorts positioned for it to catch down to BTC.",
+  "regime": "wild",
+  "direction": "long",
+  "entry": "rz(x) = (x/x.shift(1) - 1) / (x/x.shift(1) - 1).rolling(168, min_periods=100).std().shift(1). vol_rel = volume / volume.rolling(168, min_periods=100).median().shift(1). At the close of bar t, for every symbol EXCEPT PF_XBTUSD and PF_ETHUSD: if rz(PF_XBTUSD close) <= -z_btc AND PF_XBTUSD vol_rel >= 3.0 (BTC series reindexed to the symbol's index, missing = no signal) AND rz(symbol close) > z_alt AND ta.atr(df, 24) not NaN: side = +1, market at the next open.",
+  "stop": "signal-bar close - stop_atr * ta.atr(df, 24) of the symbol",
+  "exit": "Time stop only: max_hold = 24 bars.",
+  "params": {
+   "z_btc": 3,
+   "z_alt": -1,
+   "stop_atr": 3
+  },
+  "grid": {
+   "z_btc": [
+    2.5,
+    3,
+    3.5
+   ],
+   "z_alt": [
+    -1.5,
+    -1,
+    -0.5
+   ],
+   "stop_atr": [
+    2.5,
+    3,
+    4
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 24,
+  "needs": [],
+  "events_in_design": 216,
+  "est_gross_edge_bps": 90,
+  "evidence": "Event study (long): 216 events on 70 days. 4h +59 bps (t 2.2); 12h +125 bps, median +84, hit 62%, pooled t 3.4, day-clustered t 1.5; 24h +174 bps (t 3.3, clustered 1.4). By year 12h +135 (n=34) / +150 (80) / +102 (102); 24h +433 / +29 / +202; 4h +79 / +134 / -7. One-bar delay: 12h +115, 24h +171. Not a BTC bounce: BTC's own forward return after the dump bar is +0.5 bps at 12h, alt-minus-BTC is +87 bps. Contrast in the same hours: alts that fell 1-3 sigma +31 bps at 12h, alts that fell >3 sigma +88. Day level: 70 days, mean +89 bps, 63% positive. Desk engine, design window, all costs and Guardian: 193 trades, win 51.8%, avg R +0.20, gross 156 bps/trade, +19.1% total (6.9%/yr), max DD -8.8%, years +7.6% / +11.0% / +0.5%; fees x2 +16.7%, slippage x2 +14.4%. 11 neighbours all positive: z_btc 2.5 +23.4%, 3.5 +20.6%; z_alt -1.5 +16.0%, -0.5 +15.5%, 0 +10.5%; BTC volume 2x +15.4%, 4x +20.8%; stop 2.5 +17.9%, 4 +17.4%; hold 12 +9.8%. About 97 trades expected in 16 months.",
+  "why_it_could_fail": "Day-clustered t is only about 1.5 and the profit is concentrated: without the best five of 69 entry days the result is -6.8%, and only 46% of entry days make money. 2024, the most recent year, is flat (+0.5%) and negative in several neighbours (stop 2.5 ATR -5.7%, z_alt -1.5 -5.5%), because the first 4 hours turned from +134 bps in 2023 to -7 bps in 2024. It is long alts straight after a BTC dump, so in a sustained crash it buys the last thing to fall. Two symbols (MATIC +8.0%, AVAX +6.7%) supply most of the P&L. An alt that 'held' may simply not have traded that hour on a thin book.",
+  "fading_sign": "The 4h forward return after signals staying negative over the last 30 signals (already -7 bps in 2024), or stop-outs above 35% of trades.",
+  "would_trade": true,
+  "lens": "flow"
+ },
+ {
+  "id": "flow_liquidity_vacuum_fade",
+  "idea": "Buy a 4-hour drop of more than 2 ATR only when the $10k order-book spread has blown out to at least 3x its normal level, and hold 24 hours.",
+  "cause": "When market makers pull quotes the price falls through an empty book further than the selling justifies, and it retraces when quotes return.",
+  "loser": "Stop-market and liquidation sellers who paid for immediacy in an empty book.",
+  "regime": "wild",
+  "direction": "long",
+  "entry": "half = (ask_10k - bid_10k) / (ask_10k + bid_10k), set to NaN where <= 0. rel = half / half.rolling(168, min_periods=48).median().shift(1). At the close of bar t: if rel >= sp_mult AND (close.shift(4) - close) > drop_atr * ta.atr(df, 24): side = +1, market at the next open. No signal while bid_10k / ask_10k or ATR is NaN.",
+  "stop": "signal-bar close * (1 - stop_pct): a fixed-percentage disaster stop, NOT an ATR multiple",
+  "exit": "Time stop only: max_hold = 24 bars.",
+  "params": {
+   "sp_mult": 3,
+   "drop_atr": 2,
+   "stop_pct": 0.08
+  },
+  "grid": {
+   "sp_mult": [
+    2.5,
+    3,
+    4
+   ],
+   "drop_atr": [
+    1.5,
+    2,
+    2.5
+   ],
+   "stop_pct": [
+    0.06,
+    0.08,
+    0.1
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 24,
+  "needs": [
+   "bid_10k",
+   "ask_10k"
+  ],
+  "events_in_design": 262,
+  "est_gross_edge_bps": 110,
+  "evidence": "Spread data starts 2023-05-31, so the sample is 2023-06 to 2024-12 only. Event study (long), spread >= 3x: 262 events on 88 days; 4h +60 bps; 12h +208 bps, median +95, hit 64%, pooled t 5.8, day-clustered t 2.4; 24h +291 bps (t 7.4, clustered 2.35). By year 12h +134 (2023, n=66) / +232 (2024, n=196); 24h +182 / +327. One-bar delay: 12h +236, 24h +286. Control in the same months, same drop with normal spread (<1.5x): +10 bps at 12h, +14 at 24h (n=5,529); spread >= 2x: +131 at 12h (n=669). Mark-to-mark re-measurement matches the trade prices (131 vs 131 for the 2x set), so it is not a print artefact. Desk engine, all costs and Guardian: 149 trades, win 57.7%, avg R +0.255, gross 220 bps/trade, +19.0% over 19 months, max DD -3.4%, 2023 +6.1%, 2024 +12.9%; fees x2 +18.1%; slippage x3 +17.6%. Neighbours all positive but uneven: spread 2.5x +13.6%, 4x +3.5%; drop 1.5 +22.9%, 2.5 +4.3%; stop 6% +23.2%, 10% +11.0%; hold 12 +5.2%, hold 36 +23.2%. With a 6 ATR stop instead of 8% only +7.1%: ATR sizing shrinks the position in exactly the violent events that pay. About 125 trades expected in 16 months.",
+  "why_it_could_fail": "It has never seen a bear market: the only data is the 2023-24 uptrend, where buying dips worked generally. Without the best five of 79 entry days the result is -3.3%. The default sits on a ridge: spread 4x and drop 2.5 ATR are nearly flat, so the +19% is partly a lucky cell. The engine charges the trailing 7-day median spread while the signal fires when the spread is at least 3x that, so real entry cost is higher than modelled (the slippage x3 run is the honest one). BTC and ETH give 83 of 149 trades and almost no profit, because 3x of a 0.3 bps spread is not stress. The fixed 8% stop means a real crash takes the full 0.5% on every position at once. It is unknown whether bid_10k/ask_10k are hour averages or snapshots.",
+  "fading_sign": "Signals with spread >= 3x whose 12h forward return averages below +30 bps over the last 40 events, or the control group (normal spread, same drop) rising to match it.",
+  "would_trade": true,
+  "lens": "flow"
+ },
+ {
+  "id": "flow_hot_breakdown_limit_fade",
+  "idea": "After a close below the 48-hour low while volatility is already expanded, rest a buy limit 1.5 ATR lower for three bars and take profit 2 ATR above the fill.",
+  "cause": "A new low made after volatility has already expanded is mostly stops and late forced sellers, so a patient passive bid below it gets paid to supply liquidity.",
+  "loser": "Late breakdown shorts and stopped-out longs selling at market into the low.",
+  "regime": "wild",
+  "direction": "long",
+  "entry": "rank = ta.rolling_rank(ta.bb_width(close, 48, 2.0), 720).shift(1). At the close of bar t: if close < ta.donchian_low(df, n) AND rank > rank_min AND ta.atr(df, 24) not NaN: side = +1 with limit L = close - limit_atr * ta.atr(df, 24). The limit works for 3 bars (valid_bars = 3). All symbols.",
+  "stop": "L - 3.0 * ta.atr(df, 24), ATR taken at the signal bar",
+  "exit": "Take-profit at L + 2.0 * ta.atr(df, 24); otherwise time stop max_hold = 12 bars after the fill.",
+  "params": {
+   "n": 48,
+   "rank_min": 0.7,
+   "limit_atr": 1.5,
+   "stop_atr": 3,
+   "tp_atr": 2
+  },
+  "grid": {
+   "n": [
+    36,
+    48,
+    72
+   ],
+   "rank_min": [
+    0.5,
+    0.7,
+    0.85
+   ],
+   "limit_atr": [
+    1,
+    1.5,
+    2
+   ]
+  },
+  "valid_bars": 3,
+  "max_hold": 12,
+  "needs": [],
+  "events_in_design": 1306,
+  "est_gross_edge_bps": 50,
+  "evidence": "Event study of the trigger with market entry (long): 1,306 signal bars on 220 days; 4h +64 bps, median +60, hit 62%, pooled t 6.3, day-clustered t 8.3; 12h +122 bps (t 7.1, clustered 7.0). By year 4h +50 (n=582) / +41 (306) / +100 (418); 12h +78 / +36 / +247. One-bar delay: 4h +46, 12h +103. Volatility state is the discriminator: the same breakdown out of compression (rank <= 0.15) gives -2 bps at 4h (n=1,187); rank 0.3-0.5 +41; 0.7-0.9 +66. Mirror (breakout up, short) +6 bps at 4h: long only. Excluding BTC-liquidation-cascade bars the effect remains (+42 at 4h, n=2,068 at rank > 0.5). Mark-price re-measure 74 vs 82 at 12h. BUT market entry fails in the desk engine: rank > 0.5, stop 2.5 ATR, hold 24 gives 973 trades and -39.7%; stop 6 ATR -0.6%. The limit version as specified: 242 trades, win 63.6%, avg R +0.076, gross 89 bps per filled trade, +9.2% total (3.3%/yr), max DD -4.8%, years +0.7% / +2.8% / +5.7%; fees x2 +5.7%, slippage x2 +7.7%. Neighbours: n 36 +10.3%, n 72 +11.0%; rank 0.5 +9.2%, 0.85 +6.8%; limit 1.0 ATR +8.7%, limit 2.0 ATR -4.1%; no take-profit +4.4%; hold 24 -1.3%. About 120 trades expected in 16 months.",
+  "why_it_could_fail": "The statistics are the strongest of the set but the money is the smallest: 3.3% a year in-sample, and fees doubled halves it. It is a falling-knife catch whose average is 0.22 ATR against a typical 1.6 ATR adverse move, so it only works with maker fills and a quick take-profit; two of the structural neighbours lose (limit 2.0 ATR, hold 24) and a shallower limit of 0.5 ATR loses 16%. Limit fills in the backtest assume a fill whenever price trades 1 bp through the limit, which is optimistic in a collapsing book. 2022 contributed only +0.7%. The Guardian closed 16 trades after loss streaks, and in a multi-day liquidation it will be stopped on every symbol together.",
+  "fading_sign": "Win rate of filled trades dropping below 55% over the last 50 trades, or the 4h bounce after expanded-vol breakdowns falling below 30 bps.",
+  "would_trade": true,
+  "lens": "flow"
+ },
+ {
+  "id": "flow_weekend_pump_long",
+  "idea": "Mirror of the weekend short: if the weekend closed sharply up, buy at the Sunday 22:00 UTC open and hold 24 hours.",
+  "cause": "A weekend rally in thin books pulls in weekday buyers and short covering when full liquidity returns on Monday.",
+  "loser": "Shorts opened into the weekend rally who cover on Monday.",
+  "regime": "trending",
+  "direction": "long",
+  "entry": "Same as flow_weekend_dump_short with the sign flipped: on the bar opening Sunday `hour`:00 UTC, z48 = (close/close.shift(48) - 1) / (sd * sqrt(48)) with sd = (close/close.shift(1) - 1).rolling(168, min_periods=100).std().shift(1). If z48 >= z and ta.atr(df, 24) not NaN: side = +1, market at the next open.",
+  "stop": "signal-bar close - stop_atr * ta.atr(df, 24)",
+  "exit": "Time stop only: max_hold = 24 bars.",
+  "params": {
+   "z": 0.75,
+   "hour": 21,
+   "stop_atr": 3
+  },
+  "grid": {
+   "z": [
+    0.75,
+    1,
+    1.25
+   ],
+   "hour": [
+    19,
+    21,
+    23
+   ],
+   "stop_atr": [
+    2.5,
+    3,
+    3.5
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 24,
+  "needs": [],
+  "events_in_design": 164,
+  "est_gross_edge_bps": 60,
+  "evidence": "Event study (long): 164 events on 70 weekends; 24h +168 bps, median +131, hit 63%, pooled t 3.8, weekend-clustered t 1.19; by year +11 (n=24) / +76 (64) / +294 (76); 12h +77; one-bar delay 24h +148. One observation per weekend: mean +61 bps, median +38, 53% win; by year -40 (15 weekends) / +3 (24) / +154 (31). Not Sunday-specific on the up side: the same 48h up-move measured on Thursday gives +134 and on Friday +144 bps. Desk engine: 164 trades, win 53%, avg R +0.30, +24.4% total (8.8%/yr), max DD -7.0%, years -0.5% / +5.1% / +19.9%; fees x2 +21.6%. Neighbours positive: z 1.0 +13.7%, z 1.25 +6.4%, hour 17 +4.7%, hour 23 +18.7%, hold 12 +11.5%.",
+  "why_it_could_fail": "It is bull-market beta with a calendar label: 81% of the profit is 2024, and at the weekend level 2022 is -40 bps and 2023 +3 bps. Unlike the short side there is no weekday control separating it from ordinary momentum. In a flat or falling market expect roughly zero before costs. Listed as a near-miss: do not trade it alone; it is only interesting as the other half of the weekend short, where the pair made about +27% in each of the three design years.",
+  "fading_sign": "Any six-month stretch without a broad uptrend; the weekend-level mean is already zero outside 2024.",
+  "would_trade": false,
+  "lens": "flow"
+ },
+ {
+  "id": "flow_btc_liq_flush",
+  "idea": "Buy any symbol that fell 3 sigma in the same hour that BTC fell 3 sigma with a BTC liquidation spike, and hold 12 hours.",
+  "cause": "A market-wide liquidation cascade is price-insensitive forced selling that overshoots and snaps back once the liquidation engine is done.",
+  "loser": "Liquidated longs and the exchange liquidation engine selling at market.",
+  "regime": "wild",
+  "direction": "long",
+  "entry": "rz(x) = (x/x.shift(1) - 1) / (x/x.shift(1) - 1).rolling(168, min_periods=100).std().shift(1). BTC spike = PF_XBTUSD liq_vol.fillna(0) > its own rolling(720, min_periods=360).quantile(0.99).shift(1) and > 0. At the close of bar t, for every symbol: if BTC spike AND rz(BTC close) <= -z AND rz(symbol close) <= -z AND ATR not NaN: side = +1, market at the next open.",
+  "stop": "signal-bar close - stop_atr * ta.atr(df, 24)",
+  "exit": "Time stop only: max_hold = 12 bars.",
+  "params": {
+   "z": 3,
+   "stop_atr": 4
+  },
+  "grid": {
+   "z": [
+    2.5,
+    3,
+    3.5
+   ],
+   "stop_atr": [
+    3,
+    4,
+    6
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 12,
+  "needs": [
+   "liq_vol"
+  ],
+  "events_in_design": 413,
+  "est_gross_edge_bps": 35,
+  "evidence": "Event study (long): 413 events on 58 days; 4h +100 bps, hit 68.5%, pooled t 6.7, clustered 2.6; 12h +170 bps (t 6.2, clustered 2.1); by year 12h +161 (n=95) / +121 (144) / +214 (174); one-bar delay 4h +49, 12h +117; BTC+ETH only +44 at 12h. Liquidations are not a big-bar proxy: the same alt and BTC 3-sigma drop WITHOUT a BTC liq spike gives -12 bps at 4h and +2 at 12h (n=809). Breadth matters: symbol-level liq spike with <= 2 top-10 symbols spiking gives -35 at 4h and -117 at 24h. Why it dies: 31 later-hour signals on 4 days average +835 bps at 12h; the 382 first signals, which are all the engine can take with one position per symbol, average +78 at 4h and +115 at 12h (2024 first-signal 4h only +29). Median adverse move within 12 bars is 1.5 ATR, 33% hit a 2.5 ATR stop. Desk engine: stop 4 ATR hold 12: 371 trades, avg R +0.016, gross 34 bps/trade, +3.0% total, max DD -10.5%, years -4.3% / +11.5% / -4.2%, fees x2 -0.6%. Other structures: stop 2.5 ATR -6.9%; stop 6 ATR +3.3%; stop 4 ATR hold 6 -9.4%; limit 1 ATR below with TP -0.9%; fixed 6% stop +8.3% with -22% drawdown; z 2.5 -16.5%.",
+  "why_it_could_fail": "It already fails in-sample once stops, one-position-per-symbol and the Guardian are applied: two of three years lose and doubled fees take it negative. The headline +170 bps is carried by four days. Up to ten correlated longs open in the same hour, and three stop-outs flatten the book at the worst moment. Kraken liquidation volume is a small venue-specific sample of the market. Near-miss: instructive, not tradeable as specified.",
+  "fading_sign": "Already faded in the tradeable form: first-signal 4h bounce was +124 bps in 2023 and +29 bps in 2024.",
+  "would_trade": false,
+  "lens": "flow"
+ },
+ {
+  "id": "flow_air_pocket_fade",
+  "idea": "Buy a 3-sigma hourly drop that happened on ordinary volume and is confirmed by the mark price, and hold 12 hours.",
+  "cause": "A large drop without a volume surge is a gap through a thin book rather than real selling pressure, so price refills when resting liquidity returns.",
+  "loser": "Market sellers and stop orders that crossed a thin book.",
+  "regime": "ranging",
+  "direction": "long",
+  "entry": "rz(x) = (x/x.shift(1) - 1) / (x/x.shift(1) - 1).rolling(168, min_periods=100).std().shift(1). vol_rel = volume / volume.rolling(168, min_periods=100).median().shift(1). At the close of bar t: if rz(close) <= -z AND rz(mark_close) <= -z AND vol_rel <= vmax AND ATR not NaN: side = +1, market at the next open.",
+  "stop": "signal-bar close - stop_atr * ta.atr(df, 24)",
+  "exit": "Time stop only: max_hold = 12 bars.",
+  "params": {
+   "z": 3,
+   "vmax": 4,
+   "stop_atr": 2.5
+  },
+  "grid": {
+   "z": [
+    2.5,
+    3,
+    3.5
+   ],
+   "vmax": [
+    2.5,
+    4,
+    6
+   ],
+   "stop_atr": [
+    2,
+    2.5,
+    4
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 12,
+  "needs": [],
+  "events_in_design": 474,
+  "est_gross_edge_bps": 25,
+  "evidence": "Event study (long): 474 events on 234 days; 4h +58 bps, hit 59%, pooled t 4.0, clustered 4.2; 12h +110 bps (t 4.7, clustered 3.8); by year 4h +57 (n=102) / +53 (131) / +60 (241); 12h +86 / +78 / +137; one-bar delay 4h +76, 12h +108; BTC+ETH only +11 at 12h. By relative volume for 3-sigma down bars at 4h: <= 1.5x +121 (n=87), 2.5-4x +45, 4-8x +15, 8-16x +7. The mark-price filter is essential: without it the <= 1.5x bucket shows +213 bps at 12h on trade prices but +139 mark-to-mark, and the 16 bars where mark did not confirm show +326 on trades and -6 on mark (last trade printed 276 bps under mark). Desk engine: 411 trades, win 47%, avg R +0.004, gross 26 bps/trade, +0.9% total, max DD -12.0%, years -2.6% / +4.7% / -1.1%, fees x2 -6.9%. Other structures: stop 2.5 ATR hold 24 -2.0%; stop 4 ATR hold 24 +1.2%; vmax 2.5 +4.9% (183 trades); vmax 6 -11.2%; fixed 6% stop +2.6%. Without the Guardian +7.7%.",
+  "why_it_could_fail": "Zero after costs in the real engine: 26 bps gross per trade does not cover a 25 bps alt round trip. Part of the raw effect is a stale or bad last-trade print that nobody could have bought. Near-miss kept to show that a clean-looking event study (clustered t about 4, every year positive) can be worth nothing once it is sized off a stop.",
+  "fading_sign": "Not applicable; it never cleared costs.",
+  "would_trade": false,
+  "lens": "flow"
+ },
+ {
+  "id": "flow_compression_breakout",
+  "idea": "Trade in the direction of a close outside the 48-hour range that follows a volatility squeeze, with or without a volume surge.",
+  "cause": "Compressed volatility is supposed to store energy that releases as a directional expansion once the range breaks.",
+  "loser": "Range traders fading the break.",
+  "regime": "trending",
+  "direction": "both",
+  "entry": "rank = ta.rolling_rank(ta.bb_width(close, 48, 2.0), 720).shift(1). At the close of bar t: if rank <= rank_max AND close > ta.donchian_high(df, 48) (optionally volume / volume.rolling(168, min_periods=100).median().shift(1) >= vol_min): side = +1; if rank <= rank_max AND close < ta.donchian_low(df, 48) with the same volume test: side = -1. Market at the next open.",
+  "stop": "Long: close - stop_atr * ta.atr(df, 24). Short: close + stop_atr * ta.atr(df, 24).",
+  "exit": "Time stop only: max_hold = 24 bars.",
+  "params": {
+   "rank_max": 0.15,
+   "vol_min": 3,
+   "stop_atr": 2.5
+  },
+  "grid": {
+   "rank_max": [
+    0.15,
+    0.3
+   ],
+   "vol_min": [
+    0,
+    3
+   ],
+   "stop_atr": [
+    2.5
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 24,
+  "needs": [],
+  "events_in_design": 2363,
+  "est_gross_edge_bps": 5,
+  "evidence": "Dead on the event study, never taken to the engine. Rank <= 0.15, break up, long: n=1,176, 4h +8 bps (t 1.2), 12h +13, 24h -25, 48h -27; by year at 24h -79 / -31 / +22. Break down, short: n=1,187, 4h +2, 12h +3, 24h +1; by year at 24h +44 / -21 / -19. With volume >= 3x: up n=535, 4h +6, 24h -27; down n=606, 4h +5, 24h -13. Rank <= 0.3: up n=2,137, 4h +3, 24h -12; down n=2,089, 4h -3, 24h -3. One-bar delay changes nothing (up 4h +12, down 4h +4). Day-clustered t is negative for every cell (-2 to -6): the typical day loses. Related dead ends in the same lens: absorption bars (volume >= 3x, body < 0.25 ATR, one-sided aggressor) -5 to +15 bps at all horizons (n about 2,000 each side); top-2% single-bar buy imbalance -10 bps at 12h; 24h and 72h aggressor-imbalance ranks show no stable sign across years; liquidation spike on an up bar (short squeeze) fades +139 bps at 12h in 2022 but -118 in 2023 and -173 in 2024.",
+  "why_it_could_fail": "It already has: the gross edge is under 15 bps at every horizon tested, below the cost of one round trip, and the sign flips by year. Squeeze breakouts on 1-hour Kraken perps do not continue. Listed so nobody on the desk re-tests it.",
+  "fading_sign": "None; there was no edge to fade.",
+  "would_trade": false,
+  "lens": "flow"
+ },
+ {
+  "id": "cross_weekend_follow_majors",
+  "idea": "Trade BTC and ETH for 24 hours in the direction BTC moved over the weekend, entering at the Sunday 22:00 UTC open.",
+  "cause": "BTC and ETH have TradFi venues (CME futures, spot ETFs) that are shut from Friday evening to Sunday evening, so institutional hedging and fund flows can only react to the weekend move after the reopen and push the same way through Monday.",
+  "loser": "Weekend faders betting on the 'CME gap fill', and thin-book weekend liquidity providers who took the other side of the move.",
+  "regime": "trending",
+  "direction": "both",
+  "entry": "Signal bar = the bar whose open time is Sunday 21:00 UTC (index.dayofweek==6 and index.hour==21). At its close compute w = PF_XBTUSD close[t] / PF_XBTUSD close[t-48] - 1. If abs(w) >= thr, open side = sign(w) in PF_XBTUSD and in PF_ETHUSD (both use BTC's w), market at the next open (Sunday 22:00 UTC). No entries on any other bar.",
+  "stop": "stop = close[t] - side * stop_atr * ATR(24)[t], ATR = ta.atr(df, 24) on the symbol's own hourly bars (roughly 1.5-2.5% away on BTC).",
+  "exit": "Time stop only: max_hold = 24 bars, so the position closes at the Monday 22:00 UTC open. No take-profit, no trailing stop.",
+  "params": {
+   "look": 48,
+   "thr": 0.005,
+   "stop_atr": 4,
+   "sig_dow": 6,
+   "sig_hour": 21
+  },
+  "grid": {
+   "thr": [
+    0,
+    0.005,
+    0.01
+   ],
+   "stop_atr": [
+    3,
+    4,
+    5
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 24,
+  "needs": [],
+  "events_in_design": 180,
+  "est_gross_edge_bps": 80,
+  "evidence": "Event study, BTC, all 140 weekends, forward 24h from next open, signed by weekend move: mean +121.6 bps, median +87.1, hit 60.7%, t 4.36; sign-flip permutation p 5e-05; mean without the 5 best and 5 worst weekends +103.8. By year (n, bps, hit): 2022 35/+105/0.49, 2023 53/+102/0.64, 2024 52/+152/0.65. Long after up-weekends 82/+118 (t 3.2), short after down-weekends 58/+127 (t 2.9). One bar late: +112.9 (t 3.89). abs(w)>=0.5%: n 90, +157 (t 4.08); >=1%: n 59, +215 (t 4.21). ETH on BTC's sign: n 140, +71.9, hit 57.1%, t 2.12, years +78/+69/+71, one bar late +62.0 (t 1.76). Horizon: 12h +65.8, 24h +121.6, 48h +118.8. Placebo, same test ending on other weekdays: Mon -2, Tue -9, Wed -5, Thu +21, Fri +21 (t 1.65), Sat +2; Sunday only. Desk engine on design window, BTC+ETH, default params, all costs: 180 trades, +24.8% on the account, max DD -9.1%, Sharpe 1.28, win 49.4%, avg R 0.275, gross 83.6 bps/trade, net 72.2; 2022 +2.7%, 2023 +14.7%, 2024 +7.4%; longs 102/+18.7%, shorts 78/+6.1%. All 9 grid cells profitable (+24.0% to +45.0%, max DD -3.1% to -11.0%). One bar late +22.5%; fees doubled +21.1%; slippage tripled +22.9%. BTC alone: 90 trades, +20.3%, max DD -4.1%.",
+  "why_it_could_fail": "It is one calendar effect on 140 independent weekends, about 71 in the validation window. The 48h lookback is the best cell and its neighbours are half as strong (24h +62 bps, 60h +64 bps; engine with lookback 24: +5.2%), so the true edge is probably 60-80 bps, not 120. 2023Q4 alone is more than half the engine profit and 5 of 11 quarters lost. The 2022 hit rate is under 50%; that year is carried by the May and June crash weekends. ETH is much weaker than BTC (t 2.1, 1.3-1.8 one bar late). If the cause is the TradFi closure it can be removed by a venue decision: my recollection (not checked) is that CME announced round-the-clock crypto futures trading for 2026, which would fall inside validation. BTC and ETH are entered together, so a wrong weekend costs about 1% of equity.",
+  "fading_sign": "Trailing 26-weekend hit rate of 'BTC's Monday 24h return has the weekend's sign' at or below 50%, or trailing 26-weekend mean follow-through under 25 bps (design: 61% and +122 bps). Any announcement that CME crypto futures or the spot ETFs trade through the weekend.",
+  "would_trade": true,
+  "lens": "cross"
+ },
+ {
+  "id": "cross_weekend_follow_alts",
+  "idea": "After the same weekend signal, trade the three highest-volume alts of the month for 24 hours in BTC's weekend direction, but only those whose own weekend move agrees with BTC's.",
+  "cause": "The Monday institutional flow into BTC drags the liquid alts through beta, and an alt that already moved with BTC over the weekend has no idiosyncratic story pulling the other way.",
+  "loser": "Weekend faders in liquid alts and market makers who warehoused the weekend move in thin books.",
+  "regime": "trending",
+  "direction": "both",
+  "entry": "Same signal bar and same w as cross_weekend_follow_majors: at the close of the Sunday 21:00 UTC bar, w = PF_XBTUSD close[t]/close[t-48] - 1, require abs(w) >= thr. Candidates = the first n_alt symbols of that month's universe list (store.universe()[YYYY-MM], ordered by 30-day median USD volume) after removing PF_XBTUSD and PF_ETHUSD. Open side = sign(w) in a candidate only if sign(candidate close[t]/close[t-48] - 1) == sign(w). Market at the next open (Sunday 22:00 UTC).",
+  "stop": "stop = close[t] - side * stop_atr * ATR(24)[t], ATR = ta.atr(df, 24) on the alt's own bars.",
+  "exit": "Time stop only: max_hold = 24 bars (closes at the Monday 22:00 UTC open).",
+  "params": {
+   "look": 48,
+   "thr": 0.005,
+   "stop_atr": 5,
+   "n_alt": 3
+  },
+  "grid": {
+   "thr": [
+    0,
+    0.005,
+    0.01
+   ],
+   "stop_atr": [
+    4,
+    5,
+    6
+   ],
+   "n_alt": [
+    2,
+    3,
+    5
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 24,
+  "needs": [],
+  "events_in_design": 193,
+  "est_gross_edge_bps": 90,
+  "evidence": "Event study, every top-10 member on BTC's weekend sign, 24h: n 1400 over 140 weekends, +108.7 bps, hit 57.8%, t_day 3.31, years +78.5/+94.6/+143.4, one bar late +95.1 (t_day 2.73). Same members on their own sign: +66.6 (t_day 2.53), so BTC is the leader. Desk engine, design window, default params: 193 trades, +16.6%, max DD -9.2%, Sharpe 1.15, win 53.4%, avg R 0.172, gross 115.3 bps/trade, net 103.0; 2022 +4.2%, 2023 +4.7%, 2024 +7.6%; longs 105/+6.3%, shorts 88/+10.3%. Variants: n_alt 2 +7.6%, n_alt 5 +25.4% (DD -13.3%), thr 0 +23.4%, thr 1% +15.7%, stop 4 +18.0%, stop 6 +14.0%; one bar late +12.1%; fees doubled +14.6%. What NOT to do: all ten members at once made +35.9% with max DD -49.2% and 276 Guardian exits; alts-only without the agreement filter +16.3% with DD -46.8%.",
+  "why_it_could_fail": "This is the same bet as cross_weekend_follow_majors on the same 24 hours, so it adds trade count, not independent evidence; run both and a wrong weekend costs up to 2.5% of equity. Everything fragile about the majors version applies (140 weekends, lookback sensitivity, lumpy quarters, a cause a venue can switch off). The top-3 alt list rotates into meme coins (WIF, PEPE, DOGE in 2024) whose Monday moves are noisier and whose slippage is higher than the model's median. The agreement filter and n_alt were chosen after seeing that the unfiltered ten-symbol version drew down 49%, so there is some selection in the rule itself.",
+  "fading_sign": "Same as the majors version, plus: the alt sleeve's trailing 20-trade average falls below +30 bps gross while the BTC leg is still positive (alts stopped following BTC on Mondays).",
+  "would_trade": true,
+  "lens": "cross"
+ },
+ {
+  "id": "cross_rs_leader_long",
+  "idea": "Once a day, buy the two strongest coins of the month's top 10 on 14-day return, only while at least half the top 10 trade above their 200-hour average, and hold up to a week.",
+  "cause": "Coin-specific news and attention diffuse over days, so capital rotates into the recent leaders for another week or two before the move is fully priced.",
+  "loser": "Mean-reversion traders shorting the leader as 'overextended', and holders of laggards waiting for a catch-up that does not come.",
+  "regime": "trending",
+  "direction": "long",
+  "entry": "Decide once a day at the close of the 23:00 UTC bar. U = symbols in that month's top 10 with a valid close[t] and close[t-L]; skip the day if fewer than 8. mom = close[t]/close[t-L] - 1, ranked descending within U. breadth = share of the month's top-10 symbols with close[t] > SMA(close, 200). Go long at the next open (00:00 UTC) each symbol with rank <= 2 AND mom > 0 AND breadth >= 0.5. A signal on a symbol that already has a position is ignored by the engine.",
+  "stop": "stop = close[t] * (1 - stop_k * dvol), dvol = ta.realized_vol(close, 168) * sqrt(24) (std of hourly log returns over 168 bars scaled to one day; about 5% away on BTC, 10% on alts). Fixed after entry, no trailing.",
+  "exit": "exit=True at a daily decision bar (23:00 close) when the symbol's rank is worse than 5, filled at the next open; otherwise time stop max_hold = 168 bars. If the symbol drops out of the universe no exit signal fires and the time stop or the stop closes it.",
+  "params": {
+   "L": 336,
+   "top": 2,
+   "stop_k": 2,
+   "exit_rank": 5,
+   "breadth_min": 0.5,
+   "breadth_ma": 200
+  },
+  "grid": {
+   "L": [
+    168,
+    336,
+    504
+   ],
+   "stop_k": [
+    1.5,
+    2,
+    3
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 168,
+  "needs": [],
+  "events_in_design": 264,
+  "est_gross_edge_bps": 120,
+  "evidence": "Event study, daily sample (about 970 days), top 2 by L-hour return, forward return relative to the equal-weight top-10 basket: L=336 H=72h +55.4 bps (overlap-adjusted t 2.24; 2022 +52, 2023 +66, 2024 +47); L=336 H=168h +121.8 (t 2.17; +87/+146/+121); L=168 H=72h +50.0 (t 2.05; +57/+65/+30); L=720 H=72h +41.4 (t 1.73). Raw top-2 return L=336 H=168h +185 bps but 2022 is negative even with the gate (breadth>=0.6, H=72h: 2022 -157, 2023 +185, 2024 +192). Short leg fails: bottom 2 relative L=336 H=72h -7.4 (t -0.38), raw short with breadth<=0.4: 2022 +129, 2023 -48, 2024 -97. One-day lookback has nothing (L=24 H=24: +6.6 bps, t 0.92). Desk engine, design window, default (gated): 264 trades, +21.0%, max DD -9.7%, Sharpe 0.97, win 43.2%, avg R 0.159, gross 169.5 bps/trade, net 133.0; 2022 -3.2%, 2023 +13.5%, 2024 +10.6%. Variants: L 168 +24.5%, L 504 +10.8%, stop_k 1.5 +25.6% (DD -16.6%), stop_k 3 +16.1% (DD -5.4%), top 1 +8.3%, top 3 +15.5%, breadth on 480h MA +16.9%, ungated +10.4% (DD -16.6%); one bar late +19.5%; fees doubled +19.4%. Adding a mirrored short leg: +3.5%, avg R 0.008.",
+  "why_it_could_fail": "It is long-only momentum with a breadth switch, so it carries market beta: every tested setting lost money in 2022 (-1.6% to -8.8%) and it will lose in a falling or choppy validation year. The proven edge is relative (leader minus basket, about 55 bps per 3 days); the engine cannot hedge it, so most of the design-window profit is the 2023-24 bull market. Overlap-adjusted t-stats are only about 2 and the relative hit rate is 50%, so the result depends on a few big winners. The breadth gate was added after seeing the ungated drawdown. It may fail the 'beats holding the basket' gate if validation is a bull run and the profit gate if it is a bear.",
+  "fading_sign": "Top-2 minus basket forward 72h return, averaged over the trailing 90 daily samples, turns negative (design mean +55 bps), or 8 stop-outs in the last 10 trades while breadth stayed above 0.5.",
+  "would_trade": true,
+  "lens": "cross"
+ },
+ {
+  "id": "cross_ratio_break",
+  "idea": "When an alt's price ratio to BTC breaks its 14-day range, trade the alt in that direction for up to a week, long only when BTC is above its 20-day average and short only when below.",
+  "cause": "Relative repricing of an alt against BTC is driven by slow rotation flows that persist for days once the ratio leaves its range.",
+  "loser": "Pair traders fading the alt/BTC ratio back to its range, and alt holders who treat a relative breakdown as a discount.",
+  "regime": "trending",
+  "direction": "both",
+  "entry": "For every universe symbol except PF_XBTUSD: ratio = close / PF_XBTUSD close on the same bar. up = ratio[t] > max(ratio[t-N .. t-1]); down = ratio[t] < min(ratio[t-N .. t-1]). First-trigger rule: 'up' counts only if 'up' was False on each of the previous 48 bars (same for 'down'). Long at the next open if first up AND BTC close[t] > SMA(BTC close, 480). Short at the next open if first down AND BTC close[t] < SMA(BTC close, 480).",
+  "stop": "long: close[t] * (1 - stop_k * dvol); short: close[t] * (1 + stop_k * dvol); dvol = ta.realized_vol(close, 168) * sqrt(24).",
+  "exit": "Time stop only: max_hold = 168 bars. No take-profit, no trailing, no exit signal.",
+  "params": {
+   "N": 336,
+   "btc_ma": 480,
+   "stop_k": 2.5,
+   "refractory": 48
+  },
+  "grid": {
+   "N": [
+    168,
+    336,
+    504
+   ],
+   "stop_k": [
+    2,
+    2.5,
+    3
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 168,
+  "needs": [],
+  "events_in_design": 417,
+  "est_gross_edge_bps": 55,
+  "evidence": "Event study, N=336, first trigger in 48 bars. Ratio breakout, long alt: n 367, forward 72h raw +138.4 bps (t_day 1.71; 2022 -17, 2023 +185, 2024 +212), relative to BTC +94.2 (2022 +39, 2023 +148, 2024 +81); one bar late raw +120.9, relative +74.9; 168h relative +132.1 (+168/+37/+204). Ratio breakdown, short alt: n 589, 72h raw +42.9 (t_day -0.28; 2022 +337, 2023 -22, 2024 -74), relative to BTC +68.6 with 58.7% hit (2022 +95, 2023 +72, 2024 +49); 168h relative +93.2, hit 62.0%. N=168 is weaker (long relative +36.0, 2022 -2). Desk engine, design window, default: 417 trades, +6.6%, max DD -15.8%, Sharpe 0.21, win 42.2%, avg R 0.032, gross 56.7 bps/trade, net 32.0; 2022 -3.5%, 2023 +15.5%, 2024 -5.4%; longs 191/+11.8%, shorts 226/-5.2%. Variants: N 168 +15.5%, N 504 +16.9%, stop_k 2 +21.9%, stop_k 3 +13.3%, BTC MA 200 +16.6%, long only +9.1%, short only +0.2%, ungated +7.6%; one bar late +4.8%; fees doubled +6.5%. All 11 runs at or above zero, none good.",
+  "why_it_could_fail": "Weakest of the tradable four. The edge that is consistent across years is relative to BTC; the engine trades the alt outright, and the BTC-trend gate does not remove the beta (two of three design years lost at the default, the short side lost overall, Sharpe 0.2-0.6 with 12-16% drawdowns). Entries cluster when several alts break against BTC in the same hours, which caused 91 Guardian exits out of 417 trades. It overlaps with cross_rs_leader_long on the long side. Passing 'beats holding the basket' looks unlikely unless validation is a bear market in which alts bleed against BTC.",
+  "fading_sign": "Alt minus BTC forward 72h return after ratio breakouts and breakdowns, averaged over the trailing 60 events, at or below zero (design: +94 and +69 bps), or the short side losing for two consecutive quarters while BTC is below its 480h average.",
+  "would_trade": true,
+  "lens": "cross"
+ },
+ {
+  "id": "cross_flush_bounce",
+  "idea": "Buy every top-10 member for 12 hours after the whole basket drops 4 sigma in one hour on a liquidation spike.",
+  "cause": "A simultaneous forced liquidation across the top 10 pushes prices below where discretionary sellers would sell, and the gap refills once the liquidation engine is done.",
+  "loser": "Over-leveraged longs liquidated at the low and late momentum shorts who sell the flush.",
+  "regime": "wild",
+  "direction": "long",
+  "entry": "U = the month's top 10 with a valid close (need at least 8). r = mean over U of 1-bar close-to-close returns; z = r[t] / std(r over the previous 168 bars, excluding t). liq = sum over U of liq_vol * close. Signal when z < -k AND liq[t] > liq_mult * mean(liq over the previous 168 bars). Long every member of U, market at the next open.",
+  "stop": "stop = close[t] - stop_atr * ATR(24)[t], ATR = ta.atr(df, 24).",
+  "exit": "Time stop only: max_hold = 12 bars.",
+  "params": {
+   "k": 4,
+   "liq_mult": 5,
+   "stop_atr": 4
+  },
+  "grid": {
+   "k": [
+    3,
+    4,
+    5
+   ],
+   "stop_atr": [
+    3,
+    4,
+    6
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 12,
+  "needs": [
+   "liq_vol"
+  ],
+  "events_in_design": 768,
+  "est_gross_edge_bps": 25,
+  "evidence": "Event study pooled over every shock hour looks strong: z<-4, 114 hours, n 1140, forward 12h +81.3 bps, t_day 2.62, 2022 +94, 2023 +87, 2024 +67; one bar late +92.2; with liquidations > 5x: 88 hours, n 880, +100.0 (t_day 2.81; +225/+89/+41). But counting only the first shock hour in 12h, which is all a one-position-per-symbol engine can take: n 980, +40.9 bps, t_day 1.18, years +8/+87/+5. BTC+ETH only: +20.0 (t_day 1.26). z<-3: +55.7 but 2022 -34. Desk engine, design window, default: 768 trades, -2.1%, max DD -27.4%, Sharpe -0.05, win 51.8%, gross 25.3 bps/trade, net 14.9; 2022 +10.0%, 2023 +2.2%, 2024 -14.4%. k 3: -43.2%; k 5: -9.0%; no liquidation filter: -38.5%; stop 3: -29.6%; stop 6: -2.6%; hold 6: -22.8%; hold 24: -15.3%; fees doubled: -11.6%.",
+  "why_it_could_fail": "It already failed where it counts. The attractive pooled mean comes from the second and third shock hours of a cascade, which the engine cannot buy because it is already long from the first one; the first-trigger edge is 41 bps with no statistical support and near zero in two of three years. Ten simultaneous longs into a falling market are one bet, and three stop-outs in a row make the Guardian flatten the rest at the worst moment (82 Guardian exits). Listed so nobody re-derives the pooled number and believes it.",
+  "fading_sign": "Not applicable; not traded. If revisited: first-trigger 12h bounce below 25 bps over the trailing 30 events.",
+  "would_trade": false,
+  "lens": "cross"
+ },
+ {
+  "id": "cross_btc_lead_catchup",
+  "idea": "After a 3-sigma BTC hour, trade the alts that have not yet moved in BTC's direction for the next 1-6 bars.",
+  "cause": "Supposed cause: alt order books reprice more slowly than BTC, so laggards catch up; the data says this is already arbitraged inside the hour.",
+  "loser": "Nobody: the supposed losers (slow alt market makers) reprice within the same bar.",
+  "regime": "wild",
+  "direction": "both",
+  "entry": "z = PF_XBTUSD 1-bar return / std of its 1-bar returns over the previous 168 bars (excluding t). When abs(z) > k: for each alt in the universe, resid = alt 1-bar return - beta * BTC 1-bar return, beta = 720-bar rolling cov/var lagged one bar. Trade side = sign(BTC return) at the next open in alts with resid * sign(BTC return) < -lag_frac * abs(BTC return).",
+  "stop": "stop = close[t] - side * stop_atr * ATR(24)[t].",
+  "exit": "Time stop only: max_hold = 3 bars.",
+  "params": {
+   "k": 3,
+   "lag_frac": 0.5,
+   "stop_atr": 2
+  },
+  "grid": {
+   "k": [
+    2,
+    3,
+    4
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 3,
+  "needs": [],
+  "events_in_design": 1078,
+  "est_gross_edge_bps": -28,
+  "evidence": "Laggards after a 3-sigma BTC hour, forward 3h from next open: n 1078, -28.5 bps, hit 43.8%, t -3.34, t_day -1.68; one bar late -27.3 (t -3.18). By year 2022 -28, 2023 -12, 2024 -44. BTC-up hours (long laggards): n 622, -2.8 bps; BTC-down hours (short laggards): n 456, -63.4 bps (t -3.71): laggards bounce instead of catching down. All alts after a 3-sigma hour: 1h +5.1 bps (t 1.73, t_day 0.59), one bar late -4.3; 3h one bar late -18.9; 6h one bar late -18.3. k=2 laggards 1h: +7.9 bps (t 2.62), one bar late -5.6. k=4 laggards 3h: -26.7. Pooled correlation of alt return[t+1] with BTC return[t]: -0.0003; ETH[t+1] on BTC[t] -0.0045; BTC[t+1] on ETH[t] -0.0095. BTC itself after its own 3-sigma hour: 3h +3.0 bps (t 0.41).",
+  "why_it_could_fail": "It does fail: the sign is wrong. Whatever follow-through exists (5-8 bps) is gone by the next bar and is a third of the round-trip cost; over 3-6 bars the 'laggards' move further against BTC's direction. Listed as the lens's headline hypothesis so it is on record as dead at one-hour resolution.",
+  "fading_sign": "Not applicable; not traded.",
+  "would_trade": false,
+  "lens": "cross"
+ },
+ {
+  "id": "cross_xs_reversal_1h",
+  "idea": "Each hour buy the top-10 member that fell most against the basket in the last hour and sell the one that rose most, for one hour.",
+  "cause": "A one-hour idiosyncratic move is partly order-flow pressure that liquidity providers are paid to absorb, and it relaxes in the next hour.",
+  "loser": "Impatient takers who paid the spread to move one coin against the rest of the market.",
+  "regime": "ranging",
+  "direction": "both",
+  "entry": "Every bar, with at least 8 universe members: rel = 1-bar return minus the equal-weight universe mean. Long the symbol with the lowest rel, short the symbol with the highest rel, market at the next open.",
+  "stop": "stop = close[t] - side * stop_atr * ATR(24)[t].",
+  "exit": "Time stop only: max_hold = 1 bar.",
+  "params": {
+   "L": 1,
+   "stop_atr": 2
+  },
+  "grid": {
+   "L": [
+    1,
+    4,
+    12
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 1,
+  "needs": [],
+  "events_in_design": 23342,
+  "est_gross_edge_bps": 7,
+  "evidence": "Worst 1-hour performer, next hour relative to basket: n 23342, +7.1 bps, median +5.0, hit 54.7%, t 14.8, t_day 12.65; raw +7.6 bps. Best performer: -5.0 bps relative (t_day -8.45). Holding 4h: +8.0 / -5.6; 12h: +7.9 / -4.8; 24h: +5.8 / -2.9. Lookback 4h, hold 1h: +4.8 / -2.7 (t_day 9.3 / -4.6). Lookback 12h, hold 24h flips to momentum: +9.9 for the winner (t_day 1.60).",
+  "why_it_could_fail": "The effect is the most statistically certain thing in this lens and is worth 7 bps against a taker round trip of 12-25 bps, so every trade loses after costs. It could only be harvested with resting maker orders, and the engine's fill model (trade-through required, stop wins ties) plus adverse selection would eat the 7 bps. Listed as an instructive near-miss, not a strategy.",
+  "fading_sign": "Not applicable; not traded.",
+  "would_trade": false,
+  "lens": "cross"
+ },
+ {
+  "id": "cross_breakout_mid_breadth",
+  "idea": "Buy a 4-day high only when between 30% and 70% of the top 10 are above their 200-hour average, on the theory that early leaders in an undecided market run furthest.",
+  "cause": "Supposed cause: a breakout in a half-participating market is early and uncrowded, while one with full participation is late and one with none is a bear rally.",
+  "loser": "Supposed losers: traders waiting for full market confirmation before buying the leader.",
+  "regime": "trending",
+  "direction": "long",
+  "entry": "Long at the next open when close[t] > max(high[t-N .. t-1]) with no such breakout on any of the previous 24 bars AND lo < breadth < hi, breadth = share of the month's top-10 symbols with close[t] > SMA(close, ma).",
+  "stop": "stop = close[t] * (1 - 2.0 * dvol), dvol = ta.realized_vol(close, 168) * sqrt(24).",
+  "exit": "Time stop only: max_hold = 72 bars.",
+  "params": {
+   "N": 96,
+   "ma": 200,
+   "lo": 0.3,
+   "hi": 0.7
+  },
+  "grid": {
+   "N": [
+    72,
+    96,
+    168
+   ],
+   "ma": [
+    100,
+    200,
+    480
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 72,
+  "needs": [],
+  "events_in_design": 164,
+  "est_gross_edge_bps": 60,
+  "evidence": "The cell that looked like an edge: N=96, MA=200, breadth 0.3-0.7: n 164, forward 72h +207.6 bps, hit 56.7%, t 2.69, t_day 2.36, 2022 +66, 2023 +256, 2024 +257; one bar late +206.0. Same breakout with breadth>=0.7: n 999, +75.7 (2022 -111); breadth<=0.3: n 133, -68.0. Neighbouring definitions of the same idea: N=96 MA=480: n 217, +62.0, t_day 0.02, 2023 -6; N=168 MA=480: n 130, -48.6, 2024 -182; N=72 MA=100: n 145, +106.2, 2022 -43, 2023 -37; N=168 MA=200: n 66, +167.1, 2024 -98; N=72 MA=200: n 251, +150.1, all years positive; N=72 MA=480: n 263, +90.1, t_day 0.56.",
+  "why_it_could_fail": "Only 2 of the 9 neighbouring cells are positive in all three years and two are negative outright, so the headline cell is most likely selection luck from slicing 1,300 breakouts into small buckets. 164 events in 32 months is about 85 in validation, barely over the trade gate. I would not trade it; listed so the Auditor does not mistake the one good cell for a filter worth bolting onto a breakout strategy.",
+  "fading_sign": "Not applicable; not traded.",
+  "would_trade": false,
+  "lens": "cross"
+ },
+ {
+  "id": "carry_cascade_discount",
+  "idea": "Buy a perp that trades unusually far below its index, but only when at least two of the tradable top-10 perps are at an unusual discount at the same time (a market-wide leverage flush, not coin-specific news).",
+  "cause": "Cross-margined longs are liquidated at market in a cascade, pushing perps below index and price below where unforced sellers would trade; once the forced flow ends the gap closes and price rebounds.",
+  "loser": "Over-leveraged longs being liquidated at market and late momentum shorts who sell the perp below index.",
+  "regime": "wild",
+  "direction": "long",
+  "entry": "At the close of bar t, for every symbol u in data: pm_u = premium.rolling(pm_n=8, min_periods=8).mean(); med_u = pm_u.rolling(720, min_periods=360).median(); sd_u = premium.rolling(720, min_periods=360).std() (std of the RAW hourly premium, not of pm); z_u = (pm_u - med_u) / sd_u. Breadth B(t) = number of symbols u with z_u(t) <= -zb (zb fixed at 2.0) AND store.tradable_mask(u, index)[t] AND not bar_missing[t], summed on a union hourly index (absent symbol = 0). Go long symbol s at market on the open of t+1 when z_s(t) <= -z AND pm_s(t) < 0 AND B(t) >= k AND ta.atr(df,24)[t] is not NaN. The signal is emitted on every qualifying bar (no cooldown); the engine ignores it while a position is open.",
+  "stop": "close[t] - stop_atr * ta.atr(df, 24)[t]  (default 3.0 ATR, typically 4-5% below entry)",
+  "exit": "Time stop only: close at 36 bars (max_hold=36). No take-profit, no trailing stop, no exit signal.",
+  "params": {
+   "pm_n": 8,
+   "norm_n": 720,
+   "z": 2,
+   "zb": 2,
+   "k": 2,
+   "atr_n": 24,
+   "stop_atr": 3
+  },
+  "grid": {
+   "z": [
+    1.5,
+    2,
+    2.5
+   ],
+   "k": [
+    2,
+    3
+   ],
+   "stop_atr": [
+    2.5,
+    3,
+    4
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 36,
+  "needs": [
+   "premium"
+  ],
+  "events_in_design": 199,
+  "est_gross_edge_bps": 130,
+  "evidence": "Event study (36h, de-clustered 24 bars, tradable bars only): 199 events, mean +330 bps, median +184, hit 0.62, t 4.9; by-day t 2.5 on 59 distinct days. By year 2022 +157 (n=53, t 0.9) / 2023 +262 (73) / 2024 +525 (73). BTC/ETH +146 (35), alts +370 (164). One bar late +345. Long only. Longs received ~10 bps estimated funding. Control with breadth==1 (discount on that coin alone): 226 events, +60 bps, t 1.3, 2022 -156 bps, by-day t 0.5. Unconditional 36h drift +12 bps (2022 -46). Desk engine on the design window with all costs: 185 trades, win 0.61, avgR 0.38, gross 276 bps/net 273 bps per trade, total +35.2%, max DD -4.9%, 20% stopped; 2022 +3.8%/46 trades, 2023 +8.5%/68, 2024 +23.0%/71; t(R) 4.4, by-entry-day t 2.6. One bar late avgR 0.32; fees doubled 0.36; slippage x3 0.33. Neighbours: z 1.5/2.5 -> avgR 0.28/0.26; k=3 -> 0.43; stop 2.5/4 ATR -> 0.28/0.28; hold 48/72 -> 0.39/0.45. est_gross_edge_bps is the in-sample 276 cut by half.",
+  "why_it_could_fail": "Only 59 independent entry days in 33 months and the best 5 days are 67% of total R, so a 16-month test rests on ~30 days and a handful decide it. 2024 supplied two thirds of the profit; in the 2022 bear it made +3.8%, not +23%. It is threshold-sensitive in one place: loosening the BREADTH threshold to z<=-1.5 collapses avgR to 0.05-0.10 (2022 negative) and k=4 gives 0.12. It buys falling knives: a cascade that keeps going (exchange failure, depeg) stops out every position on the same day. Alts carry the edge and their real slippage in those hours is worse than average. Long-only.",
+  "fading_sign": "The breadth==1 control starts doing as well as breadth>=2, or the median 36h return of the last 15 cascade trades is below zero; also discounts closing within an hour so the 8h z rarely reaches -2 (events per quarter falling well under ~15).",
+  "would_trade": true,
+  "lens": "carry"
+ },
+ {
+  "id": "carry_deep_discount",
+  "idea": "Buy the first hour a perp's 8h average premium is both 2 standard deviations below its own 30-day norm and at least 5 bps below index.",
+  "cause": "A sustained perp discount means sellers are paying up to get out through the perp (liquidations, panic hedging) while longs are paid funding, and the gap closes when the forced flow stops.",
+  "loser": "Forced and panicked perp sellers who accept a price below the spot index.",
+  "regime": "wild",
+  "direction": "long",
+  "entry": "pm = premium.rolling(8, min_periods=8).mean(); med = pm.rolling(720, min_periods=360).median(); sd = premium.rolling(720, min_periods=360).std() (raw hourly premium); zs = (pm - med)/sd. raw[t] = (zs[t] <= -z) AND (pm[t] <= -floor_bp/1e4) AND ATR(24) not NaN. Signal only on the first qualifying bar: raw[t] is True and raw was False on every one of the previous 24 bars (raw.shift(1).rolling(24, min_periods=1).max() == 0). Long at market on the open of t+1.",
+  "stop": "close[t] - stop_atr * ta.atr(df, 24)[t]  (default 3.0 ATR)",
+  "exit": "Time stop only: close at 36 bars. No take-profit, no trail.",
+  "params": {
+   "pm_n": 8,
+   "norm_n": 720,
+   "z": 2,
+   "floor_bp": 5,
+   "cool": 24,
+   "atr_n": 24,
+   "stop_atr": 3
+  },
+  "grid": {
+   "z": [
+    2,
+    2.5,
+    3
+   ],
+   "stop_atr": [
+    2.5,
+    3,
+    4
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 36,
+  "needs": [
+   "premium"
+  ],
+  "events_in_design": 295,
+  "est_gross_edge_bps": 80,
+  "evidence": "Event study (36h): 295 events, mean +236 bps, median +131, hit 0.60, t 4.9; by-day t 2.6 on 183 days. By year 2022 -7 (n=95, vs unconditional -46) / 2023 +224 (121) / 2024 +545 (79). BTC/ETH +74 (32, t 0.6), alts +256 (263). One bar late +228. Longs received ~12 bps estimated funding. Dose-response on absolute depth (24h hold): 8h premium -8..-5 bps +27, -12..-8 +56, -20..-12 +119, -30..-20 +361. Engine: 205 trades, win 0.55, avgR 0.29, gross 156/net 152 bps, total +30.1%, max DD -5.3%, 32% stopped; 2022 +2.3%/63, 2023 +7.7%/83, 2024 +20.1%/59; t(R) 3.2, by-day t 2.5 on 144 days. One bar late avgR 0.28; fees doubled 0.27. Grid z{2,2.5,3} x stop{2.5,3,4}: 9/9 cells profitable, avgR 0.14-0.32. Floor 0/3/8 bps -> 0.17/0.23/0.19. est is the in-sample 156 cut by half.",
+  "why_it_could_fail": "Same bet as carry_cascade_discount on the big days, without the breadth check that removed the coin-specific losers (those lost 156 bps on average in 2022); do not run both at full risk. Flat in the 2022 bear before stops. BTC/ETH contribute nothing. z=2.5 is the weakest cell (avgR 0.14-0.17) between two better ones, which smells of noise. If the venue's premium behaviour changes (tighter arbitrage, different funding formula) the 5 bps floor stops firing.",
+  "fading_sign": "Trade count drops below ~3 a month, or 2022-style results (flat or negative after costs) for two consecutive quarters while the market is not in a bear.",
+  "would_trade": true,
+  "lens": "carry"
+ },
+ {
+  "id": "carry_oi_washout",
+  "idea": "Buy the first new 72-hour closing low that comes with open interest down 15% or more in 24 hours.",
+  "cause": "A new low on collapsing open interest is positions being closed or liquidated rather than new shorts being opened, so the selling is exhaustible and stops when the leverage is gone.",
+  "loser": "Leveraged longs closed out at the low and traders who short the breakdown after the fuel is spent.",
+  "regime": "wild",
+  "direction": "long",
+  "entry": "d = oi / oi.shift(24) - 1. raw[t] = (close[t] < ta.donchian_low(df, don_n)[t], the lowest low of the previous don_n bars excluding the current one) AND (d[t] <= -oi_drop) AND ATR(24) not NaN; no signal while oi is NaN. Signal only on the first qualifying bar in 24 (raw False on all of the previous 24 bars). Long at market on the open of t+1.",
+  "stop": "close[t] - stop_atr * ta.atr(df, 24)[t]  (3.0 ATR)",
+  "exit": "Time stop only: close at 36 bars.",
+  "params": {
+   "don_n": 72,
+   "oi_n": 24,
+   "oi_drop": 0.15,
+   "cool": 24,
+   "atr_n": 24,
+   "stop_atr": 3
+  },
+  "grid": {
+   "oi_drop": [
+    0.1,
+    0.15,
+    0.2
+   ],
+   "don_n": [
+    48,
+    72,
+    96
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 36,
+  "needs": [
+   "oi"
+  ],
+  "events_in_design": 181,
+  "est_gross_edge_bps": 60,
+  "evidence": "OI exists only from 2023-03, so 22 months and no bear market. Event study (36h): 181 events, mean +205 bps, median +176, hit 0.62, t 3.6; by-day t 2.1 on 109 days. 2023 +91 (n=60, t 1.4) / 2024 +261 (121). One bar late +200. Funding ~0. Control at 24h: new 72h low with no OI filter +68 bps, with OI rising +43, with OI -10% +184, -15% +259, -20% +281 (dose-response). Engine: 166 trades, win 0.54, avgR 0.18, gross 136/net 125 bps, total +15.1%, max DD -7.2%, 34% stopped; 2023 +7.3%/56, 2024 +7.8%/110; t(R) 1.9, by-day t 1.5. One bar late avgR 0.19; fees doubled 0.16. Grid 9/9 profitable but avgR only 0.09-0.18 and t(R) 1.1-1.9. Trades after a stop-out within 24h lost 76 bps on average, hence the first-signal rule. est is the in-sample 136 cut by more than half.",
+  "why_it_could_fail": "Statistically thin: t(R) under 2 and by-day t 1.5 in a pure bull sample; the event-study +205 bps shrinks to 0.18R because 37% of entries go 3 ATR against you first. Never seen a bear market. A third of the losers come from a wide-window setting (96h) going negative in 2023. Overlaps with the cascade idea on the big flush days. OI is a venue statistic that can be restated or lag.",
+  "fading_sign": "The control (new 72h low without the OI filter) matches or beats it over a quarter, or stop-out share rises above 45%.",
+  "would_trade": true,
+  "lens": "carry"
+ },
+ {
+  "id": "carry_flush_basket",
+  "idea": "NEAR-MISS: when three or more of the tradable top-10 perps are at an unusual discount at once, buy every tradable symbol for 48 hours.",
+  "cause": "A simultaneous perp discount across coins marks a market-wide liquidation flush, after which the whole market rebounds, not only the coins that were hit hardest.",
+  "loser": "Liquidated longs across the market and whoever sells the index low into the flush.",
+  "regime": "wild",
+  "direction": "long",
+  "entry": "Compute z_u and breadth B(t) exactly as in carry_cascade_discount with zb=2.0. on[t] = B(t) >= k. For every symbol: signal on the first bar where on is True after 24 bars of False (on.shift(1).rolling(24, min_periods=1).max() == 0) and ATR(24) not NaN. Long at market on the open of t+1. The engine only fills symbols in the tradable set.",
+  "stop": "close[t] - 3.0 * ta.atr(df, 24)[t]",
+  "exit": "Time stop only: close at 48 bars.",
+  "params": {
+   "pm_n": 8,
+   "norm_n": 720,
+   "zb": 2,
+   "k": 3,
+   "cool": 24,
+   "atr_n": 24,
+   "stop_atr": 3
+  },
+  "grid": {
+   "k": [
+    2,
+    3,
+    4
+   ],
+   "stop_atr": [
+    2.5,
+    3,
+    4
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 48,
+  "needs": [
+   "premium"
+  ],
+  "events_in_design": 270,
+  "est_gross_edge_bps": 100,
+  "evidence": "Event study (48h): 270 symbol-events on only 27 distinct days, mean +337 bps, t 6.8 per event but by-day t 2.7. 2022 +55 (n=70, t 0.5) / 2023 +425 (70) / 2024 +442 (130). BTC/ETH +191 (54), alts +374 (216). One bar late +415. Engine k=3: 190 trades, avgR 0.39, total +36.6%, max DD -8.7%, 2022 +8.9% / 2023 +0.8% / 2024 +26.9%, by-day t 1.8 on 19 days; one bar late 0.40; fees doubled 0.37. But k=2: 2022 -3.2%, 2023 -1.8%, max DD -30%, 121 Guardian exits; k=4: avgR 0.03; breadth z 1.5: avgR 0.01; breadth z 2.5: 2022 and 2023 negative. BTC/ETH-only versions are all positive (avgR 0.23-0.67 across four settings) but make only 28-60 trades in 33 months.",
+  "why_it_could_fail": "Knife-edge on k and on the breadth threshold: the neighbours either lose two of three years or earn nothing, so it would fail the nearby-settings gate. 19 entry days is not evidence. Ten correlated longs opened in the same hour is the opposite of what a desk that has blown up before should run. The majors-only version cannot reach 50 trades in the test window. Kept because it shows the own-discount condition in carry_cascade_discount is doing real work.",
+  "fading_sign": "Already unstable in-sample; any quarter where the k=3 default loses while the cascade idea wins confirms it.",
+  "would_trade": false,
+  "lens": "carry"
+ },
+ {
+  "id": "carry_hot_dip",
+  "idea": "NEAR-MISS: buy a new 24-hour closing low while the 24h average premium is still 5 bps or more above index.",
+  "cause": "When longs keep paying a premium through a dip, real demand is still there and the dip is short-term profit-taking that gets bought.",
+  "loser": "Short-term sellers and breakdown shorts in a market where buyers are still paying up.",
+  "regime": "trending",
+  "direction": "long",
+  "entry": "raw[t] = (close[t] < ta.donchian_low(df, don_n)[t]) AND (premium.rolling(24, min_periods=24).mean()[t] >= thr_bp/1e4) AND ATR(24) not NaN. Signal on the first qualifying bar in 24 (raw False on all of the previous 24 bars). Long at market on the open of t+1.",
+  "stop": "close[t] - 3.0 * ta.atr(df, 24)[t]",
+  "exit": "Time stop only: close at 24 bars.",
+  "params": {
+   "pm_n": 24,
+   "thr_bp": 5,
+   "don_n": 24,
+   "cool": 24,
+   "atr_n": 24,
+   "stop_atr": 3
+  },
+  "grid": {
+   "thr_bp": [
+    3,
+    5,
+    8
+   ],
+   "don_n": [
+    12,
+    24,
+    48
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 24,
+  "needs": [
+   "premium"
+  ],
+  "events_in_design": 909,
+  "est_gross_edge_bps": 30,
+  "evidence": "Event study (24h): 909 events, mean +87 bps, median +68, hit 0.57, t 4.7, by-day t 3.9 on 359 days. 2022 +44 (n=36) / 2023 +109 (282) / 2024 +79 (591). BTC/ETH +78, alts +88. One bar late +73. Longs PAY ~8 bps funding. By premium bucket at a new 24h low: 0..3 bps +14, 3..8 +78, 8..15 +83, >15 +125. Engine: 784 trades, win 0.47, avgR 0.06, gross 57/net 39 bps, total +23.9%, max DD -20.4%, 96 Guardian exits, losing streak 20; 2022 -2.6%/33, 2023 +21.6%/246, 2024 +4.9%/505; t(R) 1.2. Grid: 5/9 cells profitable, median total +0.4%; don_n=12 loses 18-34%.",
+  "why_it_could_fail": "It already fails: 4 of 9 neighbouring settings lose money, drawdown is 20%, and nearly all the profit is one year (2023). 96% of events are in the 2023-24 bull, so it is mostly 'buy dips in a bull market' with a premium label on it. Longs pay rich funding while they wait. In a bear, rich premium at a new low is trapped longs, and the two 2022 results are negative.",
+  "fading_sign": "Net bps per trade under 20 for a quarter, or the neutral-premium control (0..3 bps) performing the same.",
+  "would_trade": false,
+  "lens": "carry"
+ },
+ {
+  "id": "carry_premium_spike_short",
+  "idea": "NEAR-MISS: short a perp in the hour its average premium over index reaches 40 bps and hold 8 hours.",
+  "cause": "A 40 bps premium means longs are paying far above spot and a punitive funding rate to chase, which should be unsustainable for a few hours.",
+  "loser": "Late leveraged longs paying 40 bps over index plus funding.",
+  "regime": "wild",
+  "direction": "short",
+  "entry": "premium[t] >= thr_bp/1e4 (the hour-average premium of bar t) AND ATR(24) not NaN -> short at market on the open of t+1. Signal on every qualifying bar.",
+  "stop": "close[t] + 3.0 * ta.atr(df, 24)[t]",
+  "exit": "Time stop only: close at 8 bars.",
+  "params": {
+   "thr_bp": 40,
+   "atr_n": 24,
+   "stop_atr": 3
+  },
+  "grid": {
+   "thr_bp": [
+    20,
+    40,
+    60
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 8,
+  "needs": [
+   "premium"
+  ],
+  "events_in_design": 77,
+  "est_gross_edge_bps": 20,
+  "evidence": "Event study (short 8h, de-clustered 24 bars): 77 events on 53 days, mean +75 bps, median +84, hit 0.62, t 1.2, by-day t 1.1. 2022 -164 (n=20) / 2023 +85 (9) / 2024 +173 (48). BTC/ETH +309 (7), alts +52 (70). One bar late +133. Shorts received ~9 bps funding. At a 24h hold the same signal loses 146 bps; with price stalled it loses 431 bps (t -3.6). The 20 bps version: 1,203 events, +22 bps at 8h, t 1.8, 2022 and 2023 negative. Engine at 40 bps: 108 trades, win 0.56, avgR 0.11, gross 41 bps, total +6.0%, max DD -3.0%; 2022 -1.1%/25, 2023 -0.6%/14, 2024 +7.7%/69. The mirror of the cascade (short when two or more perps are unusually rich) lost: 467 events, -50 bps, engine avgR -0.02 with -28% drawdown.",
+  "why_it_could_fail": "Two of three years lose and all the profit is 2024 memecoin spikes (WIF, PEPE, BONK, POPCAT). t-stat 1.2. Holding longer than 8 hours turns it into a large loss, so the result depends on the exit hour. A 40 bps premium on a small alt is exactly when the book is thinnest and a squeeze can run 20% in an hour. This is the only short this lens produced and it is not good enough.",
+  "fading_sign": "It never demonstrably worked outside 2024; one more losing year closes it.",
+  "would_trade": false,
+  "lens": "carry"
+ },
+ {
+  "id": "carry_short_pile_squeeze",
+  "idea": "NEAR-MISS: buy after a 5% one-day drop when open interest ROSE 5% or more and the perp trades below index, betting on a squeeze of the new shorts.",
+  "cause": "Rising open interest into a falling price with the perp below index means fresh shorts are being opened at the low, and they must buy back when the selling runs out.",
+  "loser": "Shorts who opened late into the drop.",
+  "regime": "wild",
+  "direction": "long",
+  "entry": "raw[t] = (close/close.shift(24) - 1 <= -drop) AND (oi/oi.shift(24) - 1 >= oi_up) AND (premium.rolling(8, min_periods=8).mean() < 0) AND ATR(24) not NaN; no signal while oi is NaN. Signal on the first qualifying bar in 24. Long at market on the open of t+1.",
+  "stop": "close[t] - 3.0 * ta.atr(df, 24)[t]",
+  "exit": "Time stop only: close at 24 bars.",
+  "params": {
+   "drop": 0.05,
+   "oi_up": 0.05,
+   "pm_n": 8,
+   "cool": 24,
+   "atr_n": 24,
+   "stop_atr": 3
+  },
+  "grid": {
+   "drop": [
+    0.03,
+    0.05,
+    0.08
+   ],
+   "oi_up": [
+    0.05,
+    0.1
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 24,
+  "needs": [
+   "oi",
+   "premium"
+  ],
+  "events_in_design": 195,
+  "est_gross_edge_bps": 20,
+  "evidence": "Event study (24h, 2023-03 onward): 195 events on 116 days, mean +125 bps, median +131, hit 0.67, t 3.0, by-day t 3.0. 2023 +119 (113) / 2024 +135 (82, t 1.5). One bar late +101. Same drop and OI build with premium above zero: +37 bps (t 1.3), so the discount is the part that matters. Engine: 174 trades, win 0.56, avgR 0.01, gross 75/net 67 bps, total +1.1%, max DD -9.1%, t(R) 0.2; one bar late avgR 0.01. Neighbours avgR 0.06 (OI +10%), 0.06 (drop 3%), 0.15 (drop 8%, 78 trades).",
+  "why_it_could_fail": "It does: a healthy-looking event study (+125 bps, hit 0.67) turns into zero once a stop is attached, because the winners are small and the 31% that stop out lose a full R. One more bar of delay removes a fifth of the event-study edge. No bear data. Included as the clearest example in this lens of an event study that does not survive execution.",
+  "fading_sign": "Not applicable; it does not clear costs and stops in-sample.",
+  "would_trade": false,
+  "lens": "carry"
+ },
+ {
+  "id": "carry_retail_capitulation",
+  "idea": "NEAR-MISS: buy when the share of accounts net long is in the bottom 10% of its last 30 days after a 3% one-day drop.",
+  "cause": "Retail accounts giving up their longs after a drop would mark capitulation, leaving fewer sellers.",
+  "loser": "Retail accounts that close longs at the low.",
+  "regime": "wild",
+  "direction": "long",
+  "entry": "rk = ls_ratio.rolling(720, min_periods=360).rank(pct=True). Signal when rk[t] <= q AND close/close.shift(24) - 1 <= -drop AND ATR(24) not NaN; no signal while ls_ratio is NaN. Long at market on the open of t+1; every qualifying bar.",
+  "stop": "close[t] - 3.0 * ta.atr(df, 24)[t]",
+  "exit": "Time stop only: close at 24 bars.",
+  "params": {
+   "q": 0.1,
+   "drop": 0.03,
+   "rank_n": 720,
+   "atr_n": 24,
+   "stop_atr": 3
+  },
+  "grid": {
+   "q": [
+    0.05,
+    0.1,
+    0.2
+   ],
+   "drop": [
+    0.02,
+    0.03,
+    0.05
+   ]
+  },
+  "valid_bars": 1,
+  "max_hold": 24,
+  "needs": [
+   "ls_ratio"
+  ],
+  "events_in_design": 368,
+  "est_gross_edge_bps": 10,
+  "evidence": "ls_ratio exists from 2023-05 only. Event study (24h): 368 events on 210 days, mean +87 bps, median +74, hit 0.58, t 3.1, by-day t 3.0. 2023 +38 (77, t 0.8) / 2024 +100 (291). One bar late +71. Control (3% drop, no ls filter): 2,085 events, +49 bps. Engine: 378 trades, win 0.49, avgR -0.02, gross 23/net 11 bps, total -3.2%, max DD -11.8%; q=0.05: avgR -0.06, total -6.8%. High long share as a short signal: +13 to +36 bps the wrong way. Fast 24h changes in ls_ratio: no consistent sign.",
+  "why_it_could_fail": "It loses money in the engine at both settings tried. The event-study edge over the plain 'price dropped 3%' control is about 38 bps, which is the bull-market dip-buying drift plus noise. The ratio counts accounts, not size, so one whale and a thousand small accounts are indistinguishable. 19 months of data, no bear.",
+  "fading_sign": "Not applicable; dead on arrival after stops and costs.",
+  "would_trade": false,
+  "lens": "carry"
+ }
+]

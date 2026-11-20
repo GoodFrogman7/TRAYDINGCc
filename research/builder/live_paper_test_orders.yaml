@@ -1,0 +1,9 @@
+# TEMPORARY config for the builder's second live paper test: same champion as live_paper_test.yaml plus two
+# fast challengers (short channels), only so that real orders, fills and Guardian blocks show up within an
+# hour or two. NOT the bot's config (config/bot.yaml ships with champion: null). Paper only, no credentials.
+mode: paper
+kill: false
+champion: {strategy: desk.strategies.ref_donchian}
+challengers:
+  - {strategy: desk.strategies.ref_donchian, params: {n: 2, atr_n: 6, stop_atr: 1.0}}
+  - {strategy: desk.strategies.ref_donchian, params: {n: 3, atr_n: 24, stop_atr: 3.0}}

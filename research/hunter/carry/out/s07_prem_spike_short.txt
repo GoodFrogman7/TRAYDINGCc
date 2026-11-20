@@ -1,0 +1,62 @@
+### hold 8h
+prem_ma1 abs>=20 [None] -> short 8h
+    n=1203 mean=22.4 med=23.0 hit=0.54 t=1.78 | byday t=1.61 days=271 | 2022:-8(84) 2023:-32(230) 2024:40(889) | S:22(1203) | maj=-0(87) alts=24(1116) | delay1=28.1 | fund=-6.7
+prem_ma1 abs>=20 [stall] -> short 8h
+    n=765 mean=15.6 med=11.9 hit=0.51 t=1.05 | byday t=0.73 days=204 | 2022:-58(48) 2023:-12(131) 2024:28(586) | S:16(765) | maj=-48(45) alts=20(720) | delay1=28.5 | fund=-6.9
+prem_ma1 abs>=20 [run] -> short 8h
+    n=925 mean=19.3 med=30.9 hit=0.54 t=1.37 | byday t=0.79 days=234 | 2022:29(53) 2023:-36(175) 2024:32(697) | S:19(925) | maj=45(68) alts=17(857) | delay1=24.9 | fund=-7.1
+prem_ma1 abs>=40 [None] -> short 8h
+    n=112 mean=68.7 med=81.4 hit=0.61 t=1.43 | byday t=2.36 days=58 | 2022:-184(26) 2023:90(16) 2024:158(70) | S:69(112) | maj=214(8) alts=58(104) | delay1=90.9 | fund=-10.5
+prem_ma1 abs>=40 [stall] -> short 8h
+    n=70 mean=2.1 med=7.8 hit=0.51 t=0.03 | byday t=0.43 days=39 | 2022:-475(15) 2023:9(10) 2024:159(45) | S:2(70) | maj=57(3) alts=-0(67) | delay1=60.5 | fund=-10.0
+prem_ma1 abs>=40 [run] -> short 8h
+    n=78 mean=51.0 med=82.4 hit=0.62 t=1.03 | byday t=1.78 days=51 | 2022:65(17) 2023:99(14) 2024:31(47) | S:51(78) | maj=308(5) alts=33(73) | delay1=31.7 | fund=-12.4
+prem_ma8 abs>=20 [None] -> short 8h
+    n=759 mean=30.2 med=33.2 hit=0.54 t=2.15 | byday t=2.65 days=148 | 2022:-39(20) 2023:42(98) 2024:31(641) | S:30(759) | maj=23(40) alts=31(719) | delay1=22.4 | fund=-7.7
+prem_ma8 abs>=20 [stall] -> short 8h
+    n=599 mean=19.5 med=11.7 hit=0.51 t=1.17 | byday t=1.59 days=137 | 2022:-78(18) 2023:29(77) 2024:21(504) | S:20(599) | maj=18(33) alts=20(566) | delay1=13.8 | fund=-7.6
+prem_ma8 abs>=20 [run] -> short 8h
+    n=595 mean=21.1 med=20.7 hit=0.53 t=1.32 | byday t=1.74 days=135 | 2022:-37(17) 2023:36(83) 2024:21(495) | S:21(595) | maj=11(34) alts=22(561) | delay1=27.6 | fund=-7.9
+prem_ma8 z>=3 [None] -> short 8h
+    n=254 mean=41.0 med=16.5 hit=0.54 t=1.51 | byday t=0.73 days=102 | 2022:-52(38) 2023:10(84) 2024:87(132) | S:41(254) | maj=7(66) alts=53(188) | delay1=24.9 | fund=-5.6
+prem_ma8 z>=3 [stall] -> short 8h
+    n=199 mean=1.6 med=1.1 hit=0.50 t=0.05 | byday t=0.07 days=88 | 2022:-134(31) 2023:20(61) 2024:30(107) | S:2(199) | maj=27(48) alts=-7(151) | delay1=17.3 | fund=-5.5
+prem_ma8 z>=3 [run] -> short 8h
+    n=199 mean=9.5 med=16.0 hit=0.54 t=0.30 | byday t=-0.37 days=90 | 2022:-75(31) 2023:-5(67) 2024:45(101) | S:10(199) | maj=2(58) alts=13(141) | delay1=6.5 | fund=-5.4
+prem_ma24 abs>=15 [None] -> short 8h
+    n=1493 mean=5.4 med=11.7 hit=0.52 t=0.57 | byday t=0.32 days=182 | 2022:-46(25) 2023:-15(253) 2024:11(1215) | S:5(1493) | maj=-13(92) alts=7(1401) | delay1=8.0 | fund=-6.2
+prem_ma24 abs>=15 [stall] -> short 8h
+    n=1193 mean=4.2 med=-1.9 hit=0.50 t=0.40 | byday t=0.05 days=173 | 2022:-60(17) 2023:2(197) 2024:6(979) | S:4(1193) | maj=-24(70) alts=6(1123) | delay1=9.1 | fund=-6.1
+prem_ma24 abs>=15 [run] -> short 8h
+    n=1201 mean=15.6 med=13.6 hit=0.53 t=1.50 | byday t=0.83 days=172 | 2022:23(20) 2023:-8(203) 2024:20(978) | S:16(1201) | maj=-6(76) alts=17(1125) | delay1=16.6 | fund=-6.3
+### hold 24h
+prem_ma1 abs>=20 [None] -> short 24h
+    n=635 mean=21.7 med=72.1 hit=0.56 t=0.80 | byday t=1.98 days=256 | 2022:92(64) 2023:-26(142) 2024:27(429) | S:22(635) | maj=74(58) alts=17(577) | delay1=30.4 | fund=-15.7
+prem_ma1 abs>=20 [stall] -> short 24h
+    n=453 mean=30.2 med=44.2 hit=0.54 t=0.98 | byday t=1.65 days=192 | 2022:-39(36) 2023:19(88) 2024:41(329) | S:30(453) | maj=-41(31) alts=35(422) | delay1=48.8 | fund=-16.9
+prem_ma1 abs>=20 [run] -> short 24h
+    n=526 mean=38.1 med=92.7 hit=0.59 t=1.37 | byday t=2.06 days=216 | 2022:213(43) 2023:-43(115) 2024:43(368) | S:38(526) | maj=120(48) alts=30(478) | delay1=42.0 | fund=-17.0
+prem_ma1 abs>=40 [None] -> short 24h
+    n=77 mean=-145.7 med=41.6 hit=0.55 t=-1.52 | byday t=0.75 days=53 | 2022:-439(20) 2023:346(9) 2024:-116(48) | S:-146(77) | maj=235(7) alts=-184(70) | delay1=-109.2 | fund=-20.6
+prem_ma1 abs>=40 [stall] -> short 24h
+    n=51 mean=-430.6 med=-253.7 hit=0.35 t=-3.63 | byday t=-1.25 days=35 | 2022:-1351(11) 2023:223(7) 2024:-263(33) | S:-431(51) | maj=-641(3) alts=-417(48) | delay1=-351.8 | fund=-20.3
+prem_ma1 abs>=40 [run] -> short 24h
+    n=54 mean=84.3 med=229.5 hit=0.69 t=0.96 | byday t=1.00 days=44 | 2022:188(15) 2023:310(9) 2024:-35(30) | S:84(54) | maj=542(5) alts=38(49) | delay1=68.2 | fund=-26.5
+prem_ma8 abs>=20 [None] -> short 24h
+    n=346 mean=12.8 med=14.9 hit=0.51 t=0.39 | byday t=0.99 days=134 | 2022:-148(11) 2023:-2(50) 2024:22(285) | S:13(346) | maj=15(23) alts=13(323) | delay1=5.1 | fund=-20.1
+prem_ma8 abs>=20 [stall] -> short 24h
+    n=319 mean=-16.4 med=7.6 hit=0.51 t=-0.46 | byday t=-0.06 days=125 | 2022:-157(10) 2023:-36(44) 2024:-8(265) | S:-16(319) | maj=-17(21) alts=-16(298) | delay1=-19.6 | fund=-19.4
+prem_ma8 abs>=20 [run] -> short 24h
+    n=311 mean=26.4 med=52.0 hit=0.55 t=0.76 | byday t=0.75 days=125 | 2022:-204(10) 2023:-5(47) 2024:41(254) | S:26(311) | maj=-7(21) alts=29(290) | delay1=29.8 | fund=-20.4
+prem_ma8 z>=3 [None] -> short 24h
+    n=161 mean=-51.1 med=12.6 hit=0.50 t=-0.95 | byday t=0.22 days=92 | 2022:-260(23) 2023:-8(55) 2024:-22(83) | S:-51(161) | maj=2(42) alts=-70(119) | delay1=-65.9 | fund=-12.6
+prem_ma8 z>=3 [stall] -> short 24h
+    n=146 mean=-106.3 med=-17.3 hit=0.49 t=-1.87 | byday t=-0.46 days=82 | 2022:-399(19) 2023:10(48) 2024:-107(79) | S:-106(146) | maj=-16(36) alts=-136(110) | delay1=-96.2 | fund=-12.3
+prem_ma8 z>=3 [run] -> short 24h
+    n=139 mean=-24.3 med=38.7 hit=0.56 t=-0.40 | byday t=0.67 days=82 | 2022:-229(21) 2023:21(46) 2024:7(72) | S:-24(139) | maj=22(39) alts=-42(100) | delay1=-32.8 | fund=-12.5
+prem_ma24 abs>=15 [None] -> short 24h
+    n=568 mean=-2.9 med=61.8 hit=0.55 t=-0.11 | byday t=0.46 days=172 | 2022:-161(12) 2023:-47(99) 2024:11(457) | S:-3(568) | maj=-44(37) alts=-0(531) | delay1=-3.2 | fund=-17.4
+prem_ma24 abs>=15 [stall] -> short 24h
+    n=519 mean=2.2 med=48.2 hit=0.54 t=0.08 | byday t=0.27 days=164 | 2022:-34(10) 2023:-22(88) 2024:8(421) | S:2(519) | maj=-64(34) alts=7(485) | delay1=1.3 | fund=-17.2
+prem_ma24 abs>=15 [run] -> short 24h
+    n=518 mean=16.0 med=71.0 hit=0.57 t=0.62 | byday t=0.57 days=162 | 2022:-113(11) 2023:-31(89) 2024:29(418) | S:16(518) | maj=-20(33) alts=18(485) | delay1=25.7 | fund=-17.6

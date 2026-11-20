@@ -1,0 +1,62 @@
+### breadth of perp discount: >=k of the tradable set with prem_ma8 z<=-zthr; first in 24h; long
+breadth z<=-2.0 k>=3 -> long maj 24h
+    n=54 mean=116.2 med=99.0 hit=0.61 t=2.16 | byday t=1.56 days=27 | 2022:78(14) 2023:156(14) 2024:115(26) | L:116(54) | maj=116(54) alts=nan(0) | delay1=119.2 | fund=-2.8
+breadth z<=-2.0 k>=3 -> long maj 48h
+    n=54 mean=191.4 med=57.5 hit=0.54 t=2.72 | byday t=1.97 days=27 | 2022:-2(14) 2023:401(14) 2024:182(26) | L:191(54) | maj=191(54) alts=nan(0) | delay1=272.9 | fund=-5.1
+breadth z<=-2.0 k>=3 -> long alts 24h
+    n=216 mean=281.7 med=237.6 hit=0.65 t=4.49 | byday t=1.90 days=27 | 2022:226(56) 2023:234(56) 2024:338(104) | L:282(216) | maj=nan(0) alts=282(216) | delay1=248.6 | fund=-4.0
+breadth z<=-2.0 k>=3 -> long alts 48h
+    n=216 mean=373.8 med=301.0 hit=0.70 t=6.25 | byday t=2.74 days=27 | 2022:69(56) 2023:431(56) 2024:507(104) | L:374(216) | maj=nan(0) alts=374(216) | delay1=450.9 | fund=-5.9
+breadth z<=-2.0 k>=5 -> long maj 24h
+    n=26 mean=111.5 med=68.8 hit=0.65 t=0.92 | byday t=0.65 days=13 | 2022:-71(6) 2023:151(10) 2024:182(10) | L:112(26) | maj=112(26) alts=nan(0) | delay1=131.5 | fund=-6.4
+breadth z<=-2.0 k>=5 -> long maj 48h
+    n=26 mean=353.1 med=122.3 hit=0.65 t=2.92 | byday t=2.10 days=13 | 2022:124(6) 2023:516(10) 2024:327(10) | L:353(26) | maj=353(26) alts=nan(0) | delay1=356.5 | fund=-11.3
+breadth z<=-2.0 k>=5 -> long alts 24h
+    n=104 mean=278.2 med=237.9 hit=0.62 t=2.58 | byday t=0.98 days=13 | 2022:-121(24) 2023:246(40) 2024:550(40) | L:278(104) | maj=nan(0) alts=278(104) | delay1=343.7 | fund=-6.2
+breadth z<=-2.0 k>=5 -> long alts 48h
+    n=104 mean=550.0 med=419.8 hit=0.74 t=5.35 | byday t=2.26 days=13 | 2022:-51(24) 2023:574(40) 2024:887(40) | L:550(104) | maj=nan(0) alts=550(104) | delay1=583.8 | fund=-11.0
+breadth z<=-1.5 k>=5 -> long maj 24h
+    n=76 mean=150.8 med=108.6 hit=0.63 t=2.53 | byday t=1.81 days=38 | 2022:118(10) 2023:112(16) 2024:170(50) | L:151(76) | maj=151(76) alts=nan(0) | delay1=124.9 | fund=-0.4
+breadth z<=-1.5 k>=5 -> long maj 48h
+    n=76 mean=289.4 med=168.3 hit=0.75 t=4.77 | byday t=3.52 days=38 | 2022:226(10) 2023:364(16) 2024:278(50) | L:289(76) | maj=289(76) alts=nan(0) | delay1=251.9 | fund=-0.1
+breadth z<=-1.5 k>=5 -> long alts 24h
+    n=304 mean=261.6 med=190.9 hit=0.63 t=4.98 | byday t=1.92 days=38 | 2022:254(40) 2023:162(64) 2024:295(200) | L:262(304) | maj=nan(0) alts=262(304) | delay1=191.5 | fund=-1.7
+breadth z<=-1.5 k>=5 -> long alts 48h
+    n=304 mean=424.0 med=287.1 hit=0.71 t=8.08 | byday t=3.37 days=38 | 2022:261(40) 2023:379(64) 2024:471(200) | L:424(304) | maj=nan(0) alts=424(304) | delay1=338.0 | fund=-2.1
+breadth z<=-2.5 k>=3 -> long maj 24h
+    n=24 mean=144.3 med=114.2 hit=0.67 t=1.12 | byday t=0.78 days=12 | 2022:-93(8) 2023:146(10) 2024:458(6) | L:144(24) | maj=144(24) alts=nan(0) | delay1=179.1 | fund=-7.0
+breadth z<=-2.5 k>=3 -> long maj 48h
+    n=24 mean=348.3 med=180.8 hit=0.67 t=2.82 | byday t=2.00 days=12 | 2022:-47(8) 2023:490(10) 2024:640(6) | L:348(24) | maj=348(24) alts=nan(0) | delay1=428.7 | fund=-12.6
+breadth z<=-2.5 k>=3 -> long alts 24h
+    n=96 mean=428.3 med=432.6 hit=0.67 t=3.60 | byday t=1.46 days=12 | 2022:41(32) 2023:240(40) 2024:1259(24) | L:428(96) | maj=nan(0) alts=428(96) | delay1=473.5 | fund=-7.7
+breadth z<=-2.5 k>=3 -> long alts 48h
+    n=96 mean=625.8 med=570.9 hit=0.76 t=5.57 | byday t=2.55 days=12 | 2022:12(32) 2023:536(40) 2024:1593(24) | L:626(96) | maj=nan(0) alts=626(96) | delay1=728.1 | fund=-13.2
+### control: own-symbol z<=-2 when breadth <=1 (idiosyncratic discount) vs breadth>=3
+own z<=-2 & breadth in [1,1] long 24h
+    n=229 mean=-8.3 med=16.4 hit=0.52 t=-0.22 | byday t=-0.75 days=199 | 2022:-198(62) 2023:33(91) 2024:96(76) | L:-8(229) | maj=-67(27) alts=-0(202) | delay1=-1.9 | fund=-6.6
+own z<=-2 & breadth in [2,2] long 24h
+    n=125 mean=197.9 med=76.4 hit=0.55 t=3.06 | byday t=2.44 days=57 | 2022:255(36) 2023:112(44) 2024:236(45) | L:198(125) | maj=209(22) alts=196(103) | delay1=169.2 | fund=-7.2
+own z<=-2 & breadth in [3,99] long 24h
+    n=137 mean=249.7 med=202.7 hit=0.64 t=3.06 | byday t=1.18 days=30 | 2022:179(33) 2023:244(41) 2024:290(63) | L:250(137) | maj=94(27) alts=288(110) | delay1=231.0 | fund=-7.8
+### BTC/ETH own absolute discount (prem_ma8 <= thr bps) long
+majors prem_ma8<=-4bp long 24h
+    n=150 mean=28.0 med=25.0 hit=0.55 t=0.80 | byday t=0.45 days=122 | 2022:-22(125) 2023:262(18) 2024:326(7) | L:28(150) | maj=28(150) alts=nan(0) | delay1=30.8 | fund=-4.6
+majors prem_ma8<=-4bp long 48h
+    n=150 mean=78.0 med=26.3 hit=0.57 t=1.54 | byday t=1.03 days=122 | 2022:-9(125) 2023:548(18) 2024:418(7) | L:78(150) | maj=78(150) alts=nan(0) | delay1=84.3 | fund=-8.5
+majors prem_ma8<=-6bp long 24h
+    n=73 mean=-5.0 med=30.7 hit=0.52 t=-0.10 | byday t=-0.36 days=58 | 2022:-71(61) 2023:276(10) 2024:615(2) | L:-5(73) | maj=-5(73) alts=nan(0) | delay1=9.4 | fund=-7.4
+majors prem_ma8<=-6bp long 48h
+    n=73 mean=31.4 med=6.0 hit=0.51 t=0.40 | byday t=-0.04 days=58 | 2022:-80(61) 2023:598(10) 2024:591(2) | L:31(73) | maj=31(73) alts=nan(0) | delay1=49.0 | fund=-13.4
+majors prem_ma8<=-8bp long 24h
+    n=39 mean=-11.1 med=-5.8 hit=0.49 t=-0.13 | byday t=-0.16 days=27 | 2022:-89(32) 2023:347(7) | L:-11(39) | maj=-11(39) alts=nan(0) | delay1=-3.9 | fund=-11.0
+majors prem_ma8<=-8bp long 48h
+    n=39 mean=31.5 med=-115.7 hit=0.46 t=0.25 | byday t=-0.11 days=27 | 2022:-148(32) 2023:853(7) | L:31(39) | maj=31(39) alts=nan(0) | delay1=55.2 | fund=-20.2
+### shorts piling into the low: price <= -5%/24h, OI up >= x/24h, prem_ma8<0 -> long (squeeze) ; mirror with prem>0
+price<=-5% & OI>=+0.05 & prem <0 long 24h
+    n=195 mean=125.3 med=131.2 hit=0.67 t=2.95 | byday t=2.95 days=116 | 2023:118(113) 2024:135(82) | L:125(195) | maj=215(3) alts=124(192) | delay1=101.1 | fund=-3.3
+price<=-5% & OI>=+0.05 & prem >0 long 24h
+    n=434 mean=37.2 med=29.4 hit=0.53 t=1.31 | byday t=1.54 days=249 | 2023:37(111) 2024:37(324) | L:37(435) | maj=149(23) alts=31(411) | delay1=38.1 | fund=6.4
+price<=-5% & OI>=+0.1 & prem <0 long 24h
+    n=134 mean=156.3 med=139.2 hit=0.65 t=2.90 | byday t=2.44 days=90 | 2023:132(82) 2024:195(52) | L:156(134) | maj=41(2) alts=158(132) | delay1=126.8 | fund=-3.6
+price<=-5% & OI>=+0.1 & prem >0 long 24h
+    n=317 mean=54.7 med=48.9 hit=0.55 t=1.62 | byday t=2.07 days=203 | 2023:35(84) 2024:62(233) | L:55(317) | maj=110(15) alts=52(302) | delay1=46.6 | fund=6.6
