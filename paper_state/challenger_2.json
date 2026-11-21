@@ -2,19 +2,19 @@
  "schema": 1,
  "book": "challenger_2",
  "started_bar": "2026-11-18T18:00:00+00:00",
- "updated_utc": "2026-11-20T12:16:11+00:00",
+ "updated_utc": "2026-11-21T12:13:32+00:00",
  "engine": {
   "cash": 10000.0,
   "equity": 10000.0,
   "positions": {},
   "orders": {},
-  "day": 20777,
+  "day": 20778,
   "day_start_equity": 10000.0,
   "consec_losses": 0,
   "halted": false,
   "halt_reason": "",
   "halt_day": -1,
-  "last_time": "2026-11-20T11:00:00+00:00",
+  "last_time": "2026-11-21T11:00:00+00:00",
   "n_trades": 0
  },
  "strategy": {
@@ -32,6 +32,6 @@
  "log_bytes": {
   "decisions": 268,
   "ledger": 0,
-  "equity": 2715
+  "equity": 4251
  }
 }
