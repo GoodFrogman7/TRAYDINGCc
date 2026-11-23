@@ -2,19 +2,80 @@
  "schema": 1,
  "book": "challenger_1",
  "started_bar": "2026-11-18T18:00:00+00:00",
- "updated_utc": "2026-11-22T12:12:37+00:00",
+ "updated_utc": "2026-11-23T12:13:05+00:00",
  "engine": {
-  "cash": 10000.0,
-  "equity": 10000.0,
-  "positions": {},
+  "cash": 9998.810173605738,
+  "equity": 10036.197493414056,
+  "positions": {
+   "PF_NEARUSD": {
+    "symbol": "PF_NEARUSD",
+    "side": 1,
+    "qty": 253.94468989697765,
+    "entry_price": 2.997135560011042,
+    "entry_time": "2026-11-22T22:00:00+00:00",
+    "stop": 2.8002422915584337,
+    "stop0": 2.8002422915584337,
+    "tp": null,
+    "risk_usd": 50.0,
+    "maker_entry": false,
+    "limit_entry": false,
+    "fees": 0.3805533301831043,
+    "funding": 0.09980440689780705,
+    "bars_held": 14,
+    "last_price": 3.006,
+    "exit_pending": "",
+    "new": false,
+    "tag": ""
+   },
+   "PF_SOLUSD": {
+    "symbol": "PF_SOLUSD",
+    "side": 1,
+    "qty": 17.68228161844512,
+    "entry_price": 70.3908392264167,
+    "entry_time": "2026-11-22T22:00:00+00:00",
+    "stop": 67.56314984339936,
+    "stop0": 67.56314984339936,
+    "tp": null,
+    "risk_usd": 50.0,
+    "maker_entry": false,
+    "limit_entry": false,
+    "fees": 0.6223353212800969,
+    "funding": -0.29503872610771714,
+    "bars_held": 14,
+    "last_price": 72.46,
+    "exit_pending": "",
+    "new": false,
+    "tag": ""
+   },
+   "PF_ZECUSD": {
+    "symbol": "PF_ZECUSD",
+    "side": 1,
+    "qty": 0.8495319707646191,
+    "entry_price": 796.2482831701091,
+    "entry_time": "2026-11-22T22:00:00+00:00",
+    "stop": 737.3923463476283,
+    "stop0": 737.3923463476283,
+    "tp": null,
+    "risk_usd": 50.0,
+    "maker_entry": false,
+    "limit_entry": false,
+    "fees": 0.3382191866097236,
+    "funding": 0.04395287539259459,
+    "bars_held": 14,
+    "last_price": 794.54,
+    "exit_pending": "",
+    "new": false,
+    "tag": ""
+   }
+  },
   "orders": {},
-  "day": 20779,
-  "day_start_equity": 10000.0,
+  "day": 20780,
+  "day_start_equity": 9999.245594739341,
   "consec_losses": 0,
   "halted": false,
   "halt_reason": "",
   "halt_day": -1,
-  "last_time": "2026-11-22T11:00:00+00:00",
+  "last_time": "2026-11-23T11:00:00+00:00",
   "n_trades": 0
  },
  "strategy": {
@@ -31,8 +92,8 @@
   "equity0": 10000.0
  },
  "log_bytes": {
-  "decisions": 276,
+  "decisions": 2288,
   "ledger": 0,
-  "equity": 5787
+  "equity": 7676
  }
 }
