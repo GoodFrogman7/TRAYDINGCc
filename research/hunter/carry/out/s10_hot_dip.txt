@@ -1,0 +1,28 @@
+### 24h hold, donchian24 low break, by premium(24h mean) bucket in bps
+don24 low & prem_ma24 in (-1000000000.0,-8]
+    n=123 mean=144.8 med=110.3 hit=0.62 t=1.91 | byday t=2.41 days=95 | 2022:115(80) 2023:117(34) 2024:512(9) | L:145(123) | maj=172(7) alts=143(116) | delay1=143.7 | fund=-12.0
+don24 low & prem_ma24 in (-8,-3]
+    n=555 mean=58.3 med=63.7 hit=0.56 t=2.37 | byday t=3.85 days=274 | 2022:37(328) 2023:65(195) 2024:241(32) | L:58(555) | maj=106(35) alts=55(520) | delay1=58.5 | fund=-4.3
+don24 low & prem_ma24 in (-3,0]
+    n=1030 mean=28.7 med=35.1 hit=0.53 t=1.72 | byday t=3.86 days=420 | 2022:-21(484) 2023:49(327) 2024:109(219) | L:29(1030) | maj=22(159) alts=30(871) | delay1=25.5 | fund=-1.5
+don24 low & prem_ma24 in (0,3]
+    n=1049 mean=13.5 med=26.9 hit=0.53 t=0.98 | byday t=3.22 days=452 | 2022:8(268) 2023:16(363) 2024:15(419) | L:14(1050) | maj=-6(280) alts=21(769) | delay1=5.9 | fund=0.6
+don24 low & prem_ma24 in (3,8]
+    n=814 mean=78.0 med=41.8 hit=0.54 t=4.18 | byday t=4.25 days=382 | 2022:92(66) 2023:68(302) 2024:82(446) | L:78(814) | maj=65(162) alts=81(652) | delay1=71.9 | fund=3.4
+don24 low & prem_ma24 in (8,15]
+    n=385 mean=82.9 med=64.2 hit=0.56 t=2.87 | byday t=3.39 days=205 | 2022:183(14) 2023:124(108) 2024:61(263) | L:83(385) | maj=52(48) alts=87(337) | delay1=71.4 | fund=8.0
+don24 low & prem_ma24 in (15,1000000000.0]
+    n=196 mean=125.1 med=117.2 hit=0.57 t=2.64 | byday t=2.24 days=89 | 2022:123(3) 2023:200(29) 2024:112(164) | L:125(196) | maj=244(10) alts=119(186) | delay1=92.5 | fund=15.7
+### robustness: premium window / dip window / hold
+don24 low & prem_ma24>8 hold 12
+    n=644 mean=60.1 med=45.1 hit=0.57 t=3.52 | byday t=3.59 days=245 | 2022:123(17) 2023:57(152) 2024:59(475) | L:60(644) | maj=58(64) alts=60(580) | delay1=48.1 | fund=5.2
+don24 low & prem_ma24>8 hold 48
+    n=437 mean=63.7 med=-6.9 hit=0.50 t=1.67 | byday t=1.85 days=210 | 2022:10(13) 2023:93(112) 2024:55(313) | L:64(438) | maj=103(47) alts=59(390) | delay1=64.3 | fund=20.5
+don48 low & prem_ma24>8 hold 24
+    n=325 mean=92.5 med=43.9 hit=0.54 t=2.66 | byday t=2.27 days=150 | 2022:304(10) 2023:121(78) 2024:74(237) | L:93(325) | maj=165(32) alts=85(293) | delay1=84.2 | fund=9.3
+don12 low & prem_ma24>8 hold 24
+    n=818 mean=79.0 med=63.1 hit=0.56 t=3.95 | byday t=3.61 days=303 | 2022:85(24) 2023:86(233) 2024:76(561) | L:79(818) | maj=72(89) alts=80(729) | delay1=65.3 | fund=11.1
+don24 low & prem_ma72>8 hold 24
+    n=485 mean=105.8 med=99.1 hit=0.57 t=3.73 | byday t=2.85 days=194 | 2022:-22(7) 2023:151(118) 2024:94(360) | L:106(485) | maj=110(54) alts=105(431) | delay1=82.3 | fund=11.0
+don24 low & prem_ma8>8 hold 24
+    n=576 mean=90.4 med=69.2 hit=0.56 t=3.64 | byday t=3.83 days=248 | 2022:18(21) 2023:136(146) 2024:78(409) | L:90(576) | maj=100(63) alts=89(513) | delay1=70.5 | fund=10.5

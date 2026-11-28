@@ -1,0 +1,65 @@
+{
+ "schema": 1,
+ "tick_utc": "2026-11-28T12:13:08+00:00",
+ "ok": true,
+ "mode": "paper",
+ "killed": false,
+ "seconds": 21.794,
+ "error": null,
+ "feed": {
+  "usable": true,
+  "frozen": false,
+  "feed_time": "2026-11-28T11:00:00+00:00",
+  "age_minutes": 13.139597966666665,
+  "symbols": 16,
+  "failed": [],
+  "unusable_since": null,
+  "failing_since": {}
+ },
+ "alerts": {
+  "info": 0,
+  "warn": 2,
+  "critical": 0
+ },
+ "books": {
+  "champion": {
+   "strategy": null,
+   "status": "empty",
+   "detail": "no strategy configured",
+   "last_bar": null,
+   "lag_bars": null,
+   "equity": null,
+   "day_pnl": null,
+   "positions": 0,
+   "orders": 0,
+   "halted": false,
+   "halt_reason": ""
+  },
+  "challenger_1": {
+   "strategy": "cross_weekend_follow_alts",
+   "status": "ok",
+   "detail": "processed 24 bar(s)",
+   "last_bar": "2026-11-28T11:00:00+00:00",
+   "lag_bars": 0,
+   "equity": 10011.133380332829,
+   "day_pnl": 0.0,
+   "positions": 0,
+   "orders": 0,
+   "halted": false,
+   "halt_reason": ""
+  },
+  "challenger_2": {
+   "strategy": "trend_quiet_grind",
+   "status": "ok",
+   "detail": "processed 24 bar(s)",
+   "last_bar": "2026-11-28T11:00:00+00:00",
+   "lag_bars": 0,
+   "equity": 10000.0,
+   "day_pnl": 0.0,
+   "positions": 0,
+   "orders": 0,
+   "halted": false,
+   "halt_reason": ""
+  }
+ }
+}

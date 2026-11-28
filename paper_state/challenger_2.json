@@ -1,0 +1,37 @@
+{
+ "schema": 1,
+ "book": "challenger_2",
+ "started_bar": "2026-11-18T18:00:00+00:00",
+ "updated_utc": "2026-11-28T12:13:08+00:00",
+ "engine": {
+  "cash": 10000.0,
+  "equity": 10000.0,
+  "positions": {},
+  "orders": {},
+  "day": 20785,
+  "day_start_equity": 10000.0,
+  "consec_losses": 0,
+  "halted": false,
+  "halt_reason": "",
+  "halt_day": -1,
+  "last_time": "2026-11-28T11:00:00+00:00",
+  "n_trades": 0
+ },
+ "strategy": {
+  "module": "desk.strategies.s_trend_quiet_grind",
+  "name": "trend_quiet_grind",
+  "params": {
+   "L": 336,
+   "q": 0.9,
+   "stop_atr": 7.0
+  },
+  "valid_bars": 1,
+  "max_hold": 168,
+  "equity0": 10000.0
+ },
+ "log_bytes": {
+  "decisions": 268,
+  "ledger": 0,
+  "equity": 15003
+ }
+}

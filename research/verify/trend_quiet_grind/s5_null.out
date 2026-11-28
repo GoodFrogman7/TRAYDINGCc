@@ -1,0 +1,12 @@
+sanity (own signals through the null machinery): ret +10.39% n 135
+A same symbol-MONTH, random hour (same count)                  draws 300 | trades median 108 | return: mean +11.41% median +11.09% p05 +0.31% p95 +24.04% | share >= real (+10.39%): 0.530 | avg_r mean +0.212, share >= real (0.154): 0.650
+A2 same symbol, random hour within +-3.5 days of real signal   draws 300 | trades median 108 | return: mean +27.20% median +26.80% p05 +17.40% p95 +38.42% | share >= real (+10.39%): 1.000 | avg_r mean +0.507, share >= real (0.154): 1.000
+B random universe symbol-month of the window, random hour      draws 300 | trades median 116 | return: mean -6.26% median -5.90% p05 -14.99% p95 +2.78% | share >= real (+10.39%): 0.007 | avg_r mean -0.108, share >= real (0.154): 0.007
+C same symbol-QUARTER, random hour with 14d return > 0         draws 300 | trades median 102 | return: mean +1.39% median +0.98% p05 -7.93% p95 +12.15% | share >= real (+10.39%): 0.097 | avg_r mean +0.028, share >= real (0.154): 0.143
+naive: always long every universe coin (weekly roll, 7-ATR stop)            ret -35.84% dd -57.77% n 1122 avg_r -0.064 p 0.820 | guardian off -32.95%
+naive: 14-day return > 0, no smoothness filter                              ret +5.06% dd -32.19% n 589 avg_r +0.017 p 0.447 | guardian off +1.69%
+naive: smoothness rank >= 0.8 but 14-day return < 0 (smooth FALLS, bought)  ret -4.86% dd -17.60% n 289 avg_r -0.034 p 0.650 | guardian off -16.58%
+naive: 14-day return > 0 and smoothness rank < 0.5 (choppy rises)           ret +1.49% dd -29.55% n 523 avg_r +0.006 p 0.494 | guardian off +3.32%
+naive: 14-day return > 0 and rank >= 0.7 (fixed cell)                       ret +11.17% dd -16.86% n 203 avg_r +0.110 p 0.313 | guardian off +9.94%
+naive: 14-day return > 0 and rank >= 0.9 (fixed cell)                       ret +6.31% dd -12.16% n 92 avg_r +0.137 p 0.323 | guardian off +4.48%
+time 106.1

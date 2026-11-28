@@ -1,0 +1,6 @@
+{
+ "source": "https://api.coinbase.com/api/v3/brokerage/market/products?product_type=FUTURE (public, unauthenticated)",
+ "fetched_utc": "2026-11-18T01:58:00Z",
+ "note": "Crypto perpetual-style futures listed on Coinbase Derivatives on that date, mapped to the Kraken Futures symbol of the same coin. This is TODAY's list applied to history: a forward-looking tradability filter, not a point-in-time one. Coinbase's contracts are whole-contract sized and their fees and funding differ from Kraken's.",
+ "kraken_symbols": ["PF_XBTUSD", "PF_ETHUSD", "PF_ZECUSD", "PF_SOLUSD", "PF_AAVEUSD", "PF_HYPEUSD", "PF_BNBUSD", "PF_BCHUSD", "PF_LTCUSD", "PF_AVAXUSD", "PF_NEARUSD", "PF_XRPUSD", "PF_LINKUSD", "PF_SUIUSD", "PF_ADAUSD", "PF_DOTUSD", "PF_ONDOUSD", "PF_XLMUSD", "PF_ENAUSD", "PF_HBARUSD", "PF_DOGEUSD", "PF_PEPEUSD", "PF_SHIBUSD"]
+}

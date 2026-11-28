@@ -1,0 +1,18 @@
+== oi_washout: n=181 atr%=1.59 fwd36h mean=205bp  MAE(ATR) q25/50/75=[-4.43, -2.05, -0.97] MFE q50=3.08
+   stop 2 ATR: hit 0.50; mean fwd of those hit (if held)=-188bp; not hit=601bp
+   stop 3 ATR: hit 0.37; mean fwd of those hit (if held)=-366bp; not hit=540bp
+   stop 4 ATR: hit 0.28; mean fwd of those hit (if held)=-453bp; not hit=463bp
+   stop 5 ATR: hit 0.21; mean fwd of those hit (if held)=-596bp; not hit=418bp
+   bars to the low within hold: q25/50/75 = [0.0, 8.0, 25.0]
+== discount: n=167 atr%=1.67 fwd36h mean=209bp  MAE(ATR) q25/50/75=[-4.04, -2.16, -1.06] MFE q50=2.77
+   stop 2 ATR: hit 0.51; mean fwd of those hit (if held)=-251bp; not hit=697bp
+   stop 3 ATR: hit 0.35; mean fwd of those hit (if held)=-508bp; not hit=601bp
+   stop 4 ATR: hit 0.25; mean fwd of those hit (if held)=-641bp; not hit=494bp
+   stop 5 ATR: hit 0.17; mean fwd of those hit (if held)=-766bp; not hit=405bp
+   bars to the low within hold: q25/50/75 = [3.0, 11.0, 23.0]
+== hot_dip: n=908 atr%=1.27 fwd36h mean=62bp  MAE(ATR) q25/50/75=[-5.02, -2.64, -1.23] MFE q50=2.70
+   stop 2 ATR: hit 0.61; mean fwd of those hit (if held)=-204bp; not hit=483bp
+   stop 3 ATR: hit 0.45; mean fwd of those hit (if held)=-363bp; not hit=414bp
+   stop 4 ATR: hit 0.35; mean fwd of those hit (if held)=-464bp; not hit=345bp
+   stop 5 ATR: hit 0.25; mean fwd of those hit (if held)=-568bp; not hit=273bp
+   bars to the low within hold: q25/50/75 = [2.0, 12.0, 26.0]

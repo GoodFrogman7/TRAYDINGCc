@@ -1,0 +1,58 @@
+### a) flips of slow premium average, faded
+prem_ma48 flips UP after 48h<=0 -> SHORT 12h
+    n=403 mean=-0.3 med=11.9 hit=0.52 t=-0.02 | byday t=-0.55 days=308 | 2022:16(160) 2023:-25(153) 2024:13(90) | S:-0(403) | maj=-32(56) alts=5(347) | delay1=9.9 | fund=-1.1
+prem_ma48 flips DOWN after 48h>=0 -> LONG 12h
+    n=389 mean=-11.7 med=-6.1 hit=0.49 t=-0.68 | byday t=-1.04 days=285 | 2022:-34(94) 2023:-5(161) 2024:-4(134) | L:-12(389) | maj=-23(60) alts=-10(329) | delay1=-1.9 | fund=-1.0
+prem_ma48 flips UP after 48h<=0 -> SHORT 24h
+    n=403 mean=-1.3 med=0.6 hit=0.50 t=-0.06 | byday t=-0.25 days=308 | 2022:9(160) 2023:-16(153) 2024:5(90) | S:-1(403) | maj=-22(56) alts=2(347) | delay1=15.0 | fund=-1.7
+prem_ma48 flips DOWN after 48h>=0 -> LONG 24h
+    n=389 mean=41.1 med=36.1 hit=0.54 t=1.65 | byday t=0.86 days=285 | 2022:32(94) 2023:27(161) 2024:65(134) | L:41(389) | maj=-20(60) alts=52(329) | delay1=34.5 | fund=-1.5
+prem_ma48 flips UP after 48h<=0 -> SHORT 48h
+    n=403 mean=-11.3 med=9.4 hit=0.51 t=-0.38 | byday t=-0.34 days=308 | 2022:30(160) 2023:-65(153) 2024:6(90) | S:-11(403) | maj=-12(56) alts=-11(347) | delay1=1.7 | fund=-2.3
+prem_ma48 flips DOWN after 48h>=0 -> LONG 48h
+    n=389 mean=68.4 med=16.6 hit=0.52 t=1.95 | byday t=1.29 days=285 | 2022:48(94) 2023:50(161) 2024:105(134) | L:68(389) | maj=24(60) alts=76(329) | delay1=66.9 | fund=-2.3
+prem_ma72 flips UP after 72h<=0 -> SHORT 12h
+    n=287 mean=43.5 med=20.6 hit=0.54 t=2.18 | byday t=1.60 days=235 | 2022:59(115) 2023:9(113) 2024:78(59) | S:43(287) | maj=55(33) alts=42(254) | delay1=51.9 | fund=-1.5
+prem_ma72 flips DOWN after 72h>=0 -> LONG 12h
+    n=280 mean=75.4 med=13.3 hit=0.55 t=3.43 | byday t=2.67 days=202 | 2022:13(66) 2023:43(116) 2024:156(98) | L:75(280) | maj=10(48) alts=89(232) | delay1=79.7 | fund=-1.3
+prem_ma72 flips UP after 72h<=0 -> SHORT 24h
+    n=287 mean=38.7 med=39.4 hit=0.56 t=1.43 | byday t=0.80 days=235 | 2022:61(115) 2023:2(113) 2024:65(59) | S:39(287) | maj=136(33) alts=26(254) | delay1=40.1 | fund=-2.1
+prem_ma72 flips DOWN after 72h>=0 -> LONG 24h
+    n=280 mean=83.3 med=58.8 hit=0.57 t=2.68 | byday t=2.25 days=202 | 2022:29(66) 2023:64(116) 2024:142(98) | L:83(280) | maj=80(48) alts=84(232) | delay1=86.2 | fund=-2.0
+prem_ma72 flips UP after 72h<=0 -> SHORT 48h
+    n=287 mean=1.5 med=-15.8 hit=0.49 t=0.04 | byday t=-0.39 days=235 | 2022:47(115) 2023:-48(113) 2024:7(59) | S:1(287) | maj=53(33) alts=-5(254) | delay1=-13.3 | fund=-2.9
+prem_ma72 flips DOWN after 72h>=0 -> LONG 48h
+    n=280 mean=85.4 med=50.7 hit=0.54 t=1.99 | byday t=1.67 days=202 | 2022:33(66) 2023:83(116) 2024:123(98) | L:85(280) | maj=70(48) alts=89(232) | delay1=89.2 | fund=-3.1
+### d) trapped longs: price -3%/24h, OI up, premium still positive -> SHORT
+trapped longs short 12h
+    n=1053 mean=0.0 med=-10.7 hit=0.48 t=0.00 | byday t=-1.87 days=410 | 2023:14(310) 2024:-6(743) | S:0(1053) | maj=-47(77) alts=4(976) | delay1=-6.9 | fund=-3.2
+trapped longs (stronger) short 12h
+    n=398 mean=-43.5 med=-52.9 hit=0.42 t=-1.77 | byday t=-2.34 days=230 | 2023:-4(103) 2024:-57(295) | S:-43(398) | maj=-86(17) alts=-42(381) | delay1=-35.4 | fund=-3.4
+trapped longs short 24h
+    n=782 mean=-11.9 med=-5.2 hit=0.50 t=-0.63 | byday t=-1.56 days=380 | 2023:29(227) 2024:-28(556) | S:-12(783) | maj=-70(56) alts=-7(726) | delay1=-18.1 | fund=-6.1
+trapped longs (stronger) short 24h
+    n=317 mean=-54.7 med=-48.9 hit=0.45 t=-1.62 | byday t=-2.07 days=203 | 2023:-35(84) 2024:-62(233) | S:-55(317) | maj=-110(15) alts=-52(302) | delay1=-46.6 | fund=-6.6
+### g) blow-off: price +8%/24h, OI +20%/24h, premium rich -> SHORT
+blowoff short 12h
+    n=98 mean=39.0 med=153.7 hit=0.62 t=0.52 | byday t=1.09 days=66 | 2023:-6(23) 2024:53(75) | S:39(98) | maj=164(4) alts=34(94) | delay1=16.6 | fund=-8.6
+blowoff short 24h
+    n=79 mean=30.3 med=116.7 hit=0.63 t=0.33 | byday t=0.73 days=60 | 2023:-63(18) 2024:58(61) | S:30(79) | maj=271(3) alts=21(76) | delay1=51.3 | fund=-15.6
+blowoff short 48h
+    n=74 mean=67.0 med=218.2 hit=0.61 t=0.58 | byday t=0.88 days=55 | 2023:-224(16) 2024:147(58) | S:67(74) | maj=637(3) alts=43(71) | delay1=65.5 | fund=-28.8
+### long-only breakout by premium bucket (trend-filter hypothesis)
+don96 high break & prem_ma24 in (-1000000000.0,-2] long 48h
+    n=269 mean=67.7 med=-45.4 hit=0.47 t=1.54 | byday t=0.85 days=178 | 2022:-61(127) 2023:151(116) 2024:325(26) | L:68(269) | maj=115(17) alts=64(252) | delay1=58.9 | fund=-6.1
+don96 high break & prem_ma24 in (-2,2] long 48h
+    n=510 mean=19.8 med=-24.0 hit=0.48 t=0.77 | byday t=0.01 days=262 | 2022:-97(165) 2023:26(210) 2024:152(137) | L:20(512) | maj=37(120) alts=15(390) | delay1=17.2 | fund=1.2
+don96 high break & prem_ma24 in (2,6] long 48h
+    n=384 mean=97.7 med=-17.2 hit=0.48 t=2.70 | byday t=1.30 days=221 | 2022:-87(39) 2023:31(149) 2024:185(197) | L:98(385) | maj=120(97) alts=90(287) | delay1=99.3 | fund=7.4
+don96 high break & prem_ma24 in (6,1000000000.0] long 48h
+    n=346 mean=63.0 med=-18.0 hit=0.49 t=1.41 | byday t=1.41 days=192 | 2022:58(7) 2023:128(105) 2024:34(234) | L:63(346) | maj=17(63) alts=73(283) | delay1=54.8 | fund=22.0
+don96 high break & prem_ma24 in (-1000000000.0,-2] long 96h
+    n=237 mean=10.0 med=-42.8 hit=0.47 t=0.16 | byday t=0.43 days=162 | 2022:-178(109) 2023:147(102) 2024:264(26) | L:10(237) | maj=158(16) alts=-1(221) | delay1=5.9 | fund=-10.4
+don96 high break & prem_ma24 in (-2,2] long 96h
+    n=436 mean=14.8 med=-46.5 hit=0.47 t=0.38 | byday t=-0.39 days=232 | 2022:-209(136) 2023:67(183) 2024:194(119) | L:15(438) | maj=42(105) alts=6(331) | delay1=5.4 | fund=2.3
+don96 high break & prem_ma24 in (2,6] long 96h
+    n=333 mean=88.2 med=-77.4 hit=0.45 t=1.49 | byday t=0.58 days=205 | 2022:-116(38) 2023:54(130) 2024:162(166) | L:88(334) | maj=115(81) alts=79(252) | delay1=100.5 | fund=13.0
+don96 high break & prem_ma24 in (6,1000000000.0] long 96h
+    n=275 mean=118.5 med=-127.8 hit=0.45 t=1.42 | byday t=1.63 days=172 | 2022:115(6) 2023:203(86) 2024:79(183) | L:118(275) | maj=-2(49) alts=145(226) | delay1=118.1 | fund=40.3

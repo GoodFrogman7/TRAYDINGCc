@@ -1,0 +1,34 @@
+### donchian72 breakout, hold 24h, by OI 72h change before the break
+don72 break fuel=None range=None hold 24
+    n=2428 mean=-11.2 med=-48.2 hit=0.44 t=-1.09 | byday t=-3.21 days=582 | 2023:-22(1027) 2024:-3(1404) | L:42(1295) S:-72(1136) | maj=8(454) alts=-16(1974) | delay1=-9.6 | fund=1.9
+don72 break fuel=None range=tight hold 24
+    n=1244 mean=0.0 med=-41.3 hit=0.45 t=0.00 | byday t=-2.64 days=400 | 2023:-26(509) 2024:18(738) | L:21(662) S:-24(585) | maj=17(240) alts=-4(1004) | delay1=0.3 | fund=1.4
+don72 break fuel=build range=None hold 24
+    n=579 mean=23.8 med=-52.9 hit=0.44 t=1.02 | byday t=0.60 days=346 | 2023:10(233) 2024:33(346) | L:56(361) S:-29(218) | maj=-5(38) alts=26(541) | delay1=30.7 | fund=3.0
+don72 break fuel=build range=tight hold 24
+    n=254 mean=-28.4 med=-71.5 hit=0.41 t=-0.93 | byday t=-1.90 days=180 | 2023:-61(92) 2024:-10(162) | L:-61(155) S:22(99) | maj=-136(8) alts=-25(246) | delay1=-9.1 | fund=2.4
+don72 break fuel=flat range=None hold 24
+    n=1056 mean=-5.7 med=-27.5 hit=0.46 t=-0.38 | byday t=-2.89 days=454 | 2023:10(451) 2024:-17(608) | L:32(588) S:-52(471) | maj=14(283) alts=-13(773) | delay1=2.9 | fund=1.6
+don72 break fuel=flat range=tight hold 24
+    n=528 mean=-2.7 med=-21.8 hit=0.46 t=-0.16 | byday t=-0.95 days=266 | 2023:-19(219) 2024:9(311) | L:-2(289) S:-4(241) | maj=25(159) alts=-15(369) | delay1=-5.6 | fund=1.1
+don72 break fuel=drop range=None hold 24
+    n=388 mean=-113.2 med=-133.8 hit=0.40 t=-3.47 | byday t=-2.23 days=252 | 2023:-77(156) 2024:-137(232) | L:2(178) S:-211(210) | maj=-43(20) alts=-117(368) | delay1=-118.5 | fund=1.9
+don72 break fuel=drop range=tight hold 24
+    n=120 mean=-12.5 med=-78.2 hit=0.43 t=-0.24 | byday t=-0.54 days=110 | 2023:-6(51) 2024:-17(69) | L:54(59) S:-77(61) | maj=524(2) alts=-22(118) | delay1=-33.0 | fund=1.7
+### donchian72 breakout, hold 48h, by OI 72h change before the break
+don72 break fuel=None range=None hold 48
+    n=1944 mean=16.3 med=-22.9 hit=0.47 t=1.07 | byday t=-0.33 days=552 | 2023:3(833) 2024:26(1118) | L:91(1016) S:-65(935) | maj=14(377) alts=17(1567) | delay1=18.9 | fund=2.9
+don72 break fuel=None range=tight hold 48
+    n=1117 mean=21.5 med=-17.3 hit=0.48 t=1.15 | byday t=0.12 days=386 | 2023:-7(470) 2024:42(654) | L:48(591) S:-8(533) | maj=-18(222) alts=31(895) | delay1=20.4 | fund=2.3
+don72 break fuel=build range=None hold 48
+    n=516 mean=39.7 med=-24.6 hit=0.48 t=1.12 | byday t=0.77 days=321 | 2023:42(211) 2024:38(305) | L:95(313) S:-46(203) | maj=6(38) alts=42(478) | delay1=48.7 | fund=5.3
+don72 break fuel=build range=tight hold 48
+    n=244 mean=-42.0 med=-32.6 hit=0.46 t=-0.96 | byday t=-1.19 days=178 | 2023:-22(91) 2024:-54(153) | L:-82(148) S:20(96) | maj=-193(8) alts=-37(236) | delay1=-38.7 | fund=4.2
+don72 break fuel=flat range=None hold 48
+    n=938 mean=19.0 med=-15.6 hit=0.49 t=0.90 | byday t=-0.51 days=426 | 2023:26(409) 2024:14(535) | L:71(517) S:-44(427) | maj=24(249) alts=17(689) | delay1=27.4 | fund=2.7
+don72 break fuel=flat range=tight hold 48
+    n=494 mean=18.6 med=-15.0 hit=0.48 t=0.74 | byday t=0.95 days=255 | 2023:3(213) 2024:31(286) | L:40(271) S:-7(228) | maj=-8(147) alts=30(347) | delay1=16.3 | fund=2.1
+don72 break fuel=drop range=None hold 48
+    n=352 mean=-83.9 med=-138.0 hit=0.42 t=-1.79 | byday t=-0.66 days=236 | 2023:-35(141) 2024:-117(211) | L:54(160) S:-198(192) | maj=-9(18) alts=-88(334) | delay1=-92.3 | fund=3.1
+don72 break fuel=drop range=tight hold 48
+    n=117 mean=4.9 med=-52.7 hit=0.44 t=0.07 | byday t=-0.08 days=107 | 2023:33(51) 2024:-17(66) | L:24(57) S:-13(60) | maj=70(2) alts=4(115) | delay1=-20.2 | fund=2.8

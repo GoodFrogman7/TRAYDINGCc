@@ -1,0 +1,38 @@
+{
+ "schema": 1,
+ "book": "challenger_1",
+ "started_bar": "2026-11-18T18:00:00+00:00",
+ "updated_utc": "2026-11-28T12:13:08+00:00",
+ "engine": {
+  "cash": 10011.133380332829,
+  "equity": 10011.133380332829,
+  "positions": {},
+  "orders": {},
+  "day": 20785,
+  "day_start_equity": 10011.133380332829,
+  "consec_losses": 1,
+  "halted": false,
+  "halt_reason": "",
+  "halt_day": -1,
+  "last_time": "2026-11-28T11:00:00+00:00",
+  "n_trades": 3
+ },
+ "strategy": {
+  "module": "desk.strategies.s_cross_weekend_follow_alts",
+  "name": "cross_weekend_follow_alts",
+  "params": {
+   "look": 48,
+   "thr": 0.0,
+   "stop_atr": 4.0,
+   "n_alt": 3
+  },
+  "valid_bars": 1,
+  "max_hold": 24,
+  "equity0": 10000.0
+ },
+ "log_bytes": {
+  "decisions": 3061,
+  "ledger": 1743,
+  "equity": 16823
+ }
+}

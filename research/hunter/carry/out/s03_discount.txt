@@ -1,0 +1,297 @@
+== discount long: prem_ma1 rank30d<=0.01, hold 12h, declustered 12h
+  all    n= 1211 mean=    49.4bp med=    30.1bp hit=0.55 t= 3.84
+  2022   n=  349 mean=   -18.6bp med=   -23.5bp hit=0.46 t=-0.69
+  2023   n=  405 mean=    46.9bp med=    33.8bp hit=0.59 t= 3.33
+  2024   n=  457 mean=   103.5bp med=    67.7bp hit=0.59 t= 4.34
+  long   n= 1211 mean=    49.4bp med=    30.1bp hit=0.55 t= 3.84
+  BTCETH n=  256 mean=   -10.5bp med=    -4.8bp hit=0.48 t=-0.58
+  alts   n=  955 mean=    65.4bp med=    53.1bp hit=0.57 t= 4.22
+  delay1 n= 1211 mean=    43.5bp med=    21.7bp hit=0.55 t= 3.22
+  funding paid over hold (signed, bps): mean=-2.21
+  by-day n=  495 mean=    53.1bp med=    27.6bp hit=0.57 t= 3.77 (distinct days=496)
+== discount long: prem_ma1 rank30d<=0.01, hold 24h, declustered 24h
+  all    n= 1017 mean=    59.5bp med=    27.7bp hit=0.53 t= 3.18
+  2022   n=  294 mean=   -17.2bp med=   -29.3bp hit=0.48 t=-0.40
+  2023   n=  347 mean=    77.4bp med=    31.1bp hit=0.55 t= 3.68
+  2024   n=  376 mean=   103.1bp med=    78.0bp hit=0.56 t= 3.18
+  long   n= 1017 mean=    59.5bp med=    27.7bp hit=0.53 t= 3.18
+  BTCETH n=  216 mean=   -18.1bp med=     4.6bp hit=0.51 t=-0.75
+  alts   n=  801 mean=    80.5bp med=    45.9bp hit=0.54 t= 3.52
+  delay1 n= 1017 mean=    49.6bp med=    26.3bp hit=0.53 t= 2.43
+  funding paid over hold (signed, bps): mean=-2.63
+  by-day n=  474 mean=    53.0bp med=    37.9bp hit=0.55 t= 2.50 (distinct days=475)
+== discount long: prem_ma1 rank30d<=0.01, hold 48h, declustered 48h
+  all    n=  822 mean=    49.8bp med=    35.7bp hit=0.53 t= 1.88
+  2022   n=  239 mean=  -117.1bp med=   -65.0bp hit=0.45 t=-2.10
+  2023   n=  289 mean=   102.9bp med=    37.2bp hit=0.55 t= 3.04
+  2024   n=  294 mean=   133.1bp med=   100.6bp hit=0.56 t= 2.82
+  long   n=  822 mean=    49.8bp med=    35.7bp hit=0.53 t= 1.88
+  BTCETH n=  176 mean=     9.2bp med=    11.0bp hit=0.53 t= 0.24
+  alts   n=  646 mean=    60.8bp med=    39.3bp hit=0.53 t= 1.90
+  delay1 n=  822 mean=    32.5bp med=    21.4bp hit=0.53 t= 1.22
+  funding paid over hold (signed, bps): mean=-2.79
+  by-day n=  423 mean=    26.7bp med=    31.2bp hit=0.53 t= 0.83 (distinct days=424)
+== discount long: prem_ma1 rank30d<=0.02, hold 12h, declustered 12h
+  all    n= 1950 mean=    45.4bp med=    29.6bp hit=0.55 t= 4.78
+  2022   n=  561 mean=     2.1bp med=    -3.9bp hit=0.49 t= 0.10
+  2023   n=  632 mean=    56.6bp med=    38.4bp hit=0.59 t= 5.07
+  2024   n=  757 mean=    68.1bp med=    46.9bp hit=0.56 t= 4.14
+  long   n= 1950 mean=    45.4bp med=    29.6bp hit=0.55 t= 4.78
+  BTCETH n=  429 mean=    -0.6bp med=     7.7bp hit=0.53 t=-0.05
+  alts   n= 1521 mean=    58.4bp med=    45.4bp hit=0.56 t= 5.04
+  delay1 n= 1950 mean=    36.1bp med=    19.6bp hit=0.54 t= 3.64
+  funding paid over hold (signed, bps): mean=-1.81
+  by-day n=  641 mean=    48.3bp med=    34.7bp hit=0.59 t= 4.85 (distinct days=641)
+== discount long: prem_ma1 rank30d<=0.02, hold 24h, declustered 24h
+  all    n= 1551 mean=    49.5bp med=    26.9bp hit=0.54 t= 3.35
+  2022   n=  453 mean=   -14.6bp med=     4.6bp hit=0.51 t=-0.42
+  2023   n=  518 mean=    82.7bp med=    30.5bp hit=0.56 t= 4.97
+  2024   n=  580 mean=    70.0bp med=    45.0bp hit=0.54 t= 2.90
+  long   n= 1551 mean=    49.5bp med=    26.9bp hit=0.54 t= 3.35
+  BTCETH n=  351 mean=   -26.5bp med=     6.4bp hit=0.52 t=-1.36
+  alts   n= 1200 mean=    71.7bp med=    38.5bp hit=0.54 t= 3.94
+  delay1 n= 1551 mean=    43.3bp med=    21.6bp hit=0.53 t= 2.90
+  funding paid over hold (signed, bps): mean=-2.16
+  by-day n=  620 mean=    51.7bp med=    29.8bp hit=0.55 t= 3.04 (distinct days=621)
+== discount long: prem_ma1 rank30d<=0.02, hold 48h, declustered 48h
+  all    n= 1189 mean=    62.1bp med=    46.4bp hit=0.54 t= 2.93
+  2022   n=  346 mean=   -69.5bp med=    -8.9bp hit=0.49 t=-1.59
+  2023   n=  414 mean=   115.7bp med=    63.7bp hit=0.56 t= 4.14
+  2024   n=  429 mean=   116.4bp med=    76.9bp hit=0.56 t= 3.07
+  long   n= 1189 mean=    62.1bp med=    46.4bp hit=0.54 t= 2.93
+  BTCETH n=  269 mean=    14.7bp med=    34.5bp hit=0.55 t= 0.51
+  alts   n=  920 mean=    75.9bp med=    51.3bp hit=0.54 t= 2.91
+  delay1 n= 1189 mean=    50.9bp med=    44.2bp hit=0.54 t= 2.42
+  funding paid over hold (signed, bps): mean=-1.90
+  by-day n=  545 mean=    43.3bp med=    47.3bp hit=0.55 t= 1.60 (distinct days=546)
+== discount long: prem_ma1 rank30d<=0.05, hold 12h, declustered 12h
+  all    n= 3604 mean=    29.0bp med=    10.4bp hit=0.52 t= 4.50
+  2022   n= 1044 mean=     8.0bp med=    -9.0bp hit=0.48 t= 0.58
+  2023   n= 1189 mean=    39.7bp med=    17.3bp hit=0.55 t= 5.28
+  2024   n= 1371 mean=    35.7bp med=    14.6bp hit=0.52 t= 3.08
+  long   n= 3604 mean=    29.0bp med=    10.4bp hit=0.52 t= 4.50
+  BTCETH n=  787 mean=     5.3bp med=     6.3bp hit=0.52 t= 0.59
+  alts   n= 2817 mean=    35.6bp med=    12.5bp hit=0.52 t= 4.53
+  delay1 n= 3604 mean=    26.6bp med=     9.4bp hit=0.52 t= 4.11
+  funding paid over hold (signed, bps): mean=-1.36
+  by-day n=  825 mean=    34.8bp med=    17.0bp hit=0.55 t= 3.94 (distinct days=825)
+== discount long: prem_ma1 rank30d<=0.05, hold 24h, declustered 24h
+  all    n= 2634 mean=    29.2bp med=    17.2bp hit=0.52 t= 2.94
+  2022   n=  783 mean=   -16.8bp med=    -5.6bp hit=0.49 t=-0.77
+  2023   n=  891 mean=    52.4bp med=    25.7bp hit=0.54 t= 4.59
+  2024   n=  960 mean=    45.1bp med=    50.7bp hit=0.54 t= 2.55
+  long   n= 2634 mean=    29.2bp med=    17.2bp hit=0.52 t= 2.94
+  BTCETH n=  590 mean=     5.3bp med=     8.0bp hit=0.53 t= 0.38
+  alts   n= 2044 mean=    36.0bp med=    25.8bp hit=0.52 t= 2.96
+  delay1 n= 2634 mean=    25.2bp med=    16.8bp hit=0.52 t= 2.47
+  funding paid over hold (signed, bps): mean=-1.57
+  by-day n=  803 mean=    40.2bp med=    32.4bp hit=0.56 t= 3.07 (distinct days=804)
+== discount long: prem_ma1 rank30d<=0.05, hold 48h, declustered 48h
+  all    n= 1857 mean=    35.7bp med=    27.0bp hit=0.52 t= 2.19
+  2022   n=  549 mean=   -70.0bp med=   -36.0bp hit=0.47 t=-2.16
+  2023   n=  637 mean=    83.5bp med=    49.0bp hit=0.56 t= 4.08
+  2024   n=  671 mean=    76.8bp med=    59.3bp hit=0.54 t= 2.52
+  long   n= 1857 mean=    35.7bp med=    27.0bp hit=0.52 t= 2.19
+  BTCETH n=  407 mean=    -0.0bp med=    15.9bp hit=0.53 t=-0.00
+  alts   n= 1450 mean=    45.7bp med=    33.6bp hit=0.52 t= 2.30
+  delay1 n= 1857 mean=    36.2bp med=    21.6bp hit=0.52 t= 2.22
+  funding paid over hold (signed, bps): mean=-1.28
+  by-day n=  720 mean=    31.8bp med=    28.3bp hit=0.54 t= 1.45 (distinct days=722)
+== discount long: prem_ma4 rank30d<=0.01, hold 12h, declustered 12h
+  all    n=  827 mean=    54.1bp med=    35.9bp hit=0.57 t= 3.30
+  2022   n=  249 mean=    -8.7bp med=     7.6bp hit=0.50 t=-0.26
+  2023   n=  252 mean=    59.0bp med=    41.9bp hit=0.61 t= 3.34
+  2024   n=  326 mean=    98.2bp med=    67.5bp hit=0.60 t= 3.28
+  long   n=  827 mean=    54.1bp med=    35.9bp hit=0.57 t= 3.30
+  BTCETH n=  171 mean=    -2.5bp med=    10.4bp hit=0.53 t=-0.10
+  alts   n=  656 mean=    68.8bp med=    49.5bp hit=0.59 t= 3.51
+  delay1 n=  827 mean=    41.9bp med=    30.6bp hit=0.56 t= 2.57
+  funding paid over hold (signed, bps): mean=-2.62
+  by-day n=  377 mean=    34.4bp med=    29.5bp hit=0.55 t= 2.09 (distinct days=377)
+== discount long: prem_ma4 rank30d<=0.01, hold 24h, declustered 24h
+  all    n=  697 mean=    89.3bp med=    59.0bp hit=0.57 t= 3.53
+  2022   n=  205 mean=     4.6bp med=    18.9bp hit=0.52 t= 0.08
+  2023   n=  217 mean=   106.2bp med=    62.2bp hit=0.60 t= 3.53
+  2024   n=  275 mean=   139.1bp med=    90.5bp hit=0.59 t= 3.33
+  long   n=  697 mean=    89.3bp med=    59.0bp hit=0.57 t= 3.53
+  BTCETH n=  141 mean=    -2.1bp med=    16.5bp hit=0.53 t=-0.06
+  alts   n=  556 mean=   112.4bp med=    84.9bp hit=0.58 t= 3.71
+  delay1 n=  697 mean=    78.0bp med=    49.7bp hit=0.54 t= 3.03
+  funding paid over hold (signed, bps): mean=-3.44
+  by-day n=  363 mean=    55.5bp med=    46.8bp hit=0.56 t= 2.13 (distinct days=363)
+== discount long: prem_ma4 rank30d<=0.01, hold 48h, declustered 48h
+  all    n=  567 mean=   129.1bp med=   105.5bp hit=0.57 t= 3.65
+  2022   n=  166 mean=   -62.8bp med=    12.3bp hit=0.51 t=-0.95
+  2023   n=  181 mean=   196.0bp med=   122.6bp hit=0.63 t= 4.44
+  2024   n=  220 mean=   218.8bp med=   131.0bp hit=0.58 t= 3.31
+  long   n=  567 mean=   129.1bp med=   105.5bp hit=0.57 t= 3.65
+  BTCETH n=  115 mean=    10.5bp med=    -4.1bp hit=0.50 t= 0.19
+  alts   n=  452 mean=   159.3bp med=   130.1bp hit=0.60 t= 3.80
+  delay1 n=  567 mean=   114.2bp med=    72.7bp hit=0.57 t= 3.27
+  funding paid over hold (signed, bps): mean=-4.20
+  by-day n=  319 mean=   108.0bp med=    82.9bp hit=0.58 t= 2.43 (distinct days=319)
+== discount long: prem_ma4 rank30d<=0.02, hold 12h, declustered 12h
+  all    n= 1323 mean=    47.5bp med=    24.3bp hit=0.55 t= 3.79
+  2022   n=  371 mean=   -27.9bp med=   -23.8bp hit=0.46 t=-0.99
+  2023   n=  414 mean=    67.3bp med=    40.9bp hit=0.60 t= 4.92
+  2024   n=  538 mean=    84.2bp med=    45.9bp hit=0.58 t= 3.96
+  long   n= 1323 mean=    47.5bp med=    24.3bp hit=0.55 t= 3.79
+  BTCETH n=  287 mean=     2.1bp med=    11.7bp hit=0.54 t= 0.12
+  alts   n= 1036 mean=    60.1bp med=    33.3bp hit=0.56 t= 3.94
+  delay1 n= 1323 mean=    37.1bp med=    20.8bp hit=0.54 t= 2.93
+  funding paid over hold (signed, bps): mean=-2.16
+  by-day n=  505 mean=    29.5bp med=    17.4bp hit=0.56 t= 2.32 (distinct days=505)
+== discount long: prem_ma4 rank30d<=0.02, hold 24h, declustered 24h
+  all    n= 1052 mean=    64.8bp med=    44.0bp hit=0.56 t= 3.32
+  2022   n=  294 mean=   -10.0bp med=     6.6bp hit=0.51 t=-0.21
+  2023   n=  334 mean=    81.1bp med=    44.7bp hit=0.57 t= 3.66
+  2024   n=  424 mean=   103.8bp med=    65.9bp hit=0.58 t= 3.32
+  long   n= 1052 mean=    64.8bp med=    44.0bp hit=0.56 t= 3.32
+  BTCETH n=  233 mean=     3.0bp med=    16.9bp hit=0.54 t= 0.12
+  alts   n=  819 mean=    82.4bp med=    53.3bp hit=0.56 t= 3.43
+  delay1 n= 1052 mean=    53.0bp med=    42.8bp hit=0.55 t= 2.73
+  funding paid over hold (signed, bps): mean=-2.82
+  by-day n=  485 mean=    33.8bp med=    39.3bp hit=0.56 t= 1.67 (distinct days=485)
+== discount long: prem_ma4 rank30d<=0.02, hold 48h, declustered 48h
+  all    n=  800 mean=    88.4bp med=    69.8bp hit=0.55 t= 3.18
+  2022   n=  226 mean=   -98.7bp med=  -104.2bp hit=0.46 t=-1.82
+  2023   n=  268 mean=   169.6bp med=    91.6bp hit=0.58 t= 4.43
+  2024   n=  306 mean=   155.3bp med=    98.4bp hit=0.58 t= 3.15
+  long   n=  800 mean=    88.4bp med=    69.8bp hit=0.55 t= 3.18
+  BTCETH n=  177 mean=    51.1bp med=    29.1bp hit=0.54 t= 1.28
+  alts   n=  623 mean=    99.0bp med=    79.6bp hit=0.55 t= 2.93
+  delay1 n=  800 mean=    75.3bp med=    51.5bp hit=0.55 t= 2.73
+  funding paid over hold (signed, bps): mean=-3.20
+  by-day n=  429 mean=    40.1bp med=    31.1bp hit=0.53 t= 1.17 (distinct days=429)
+== discount long: prem_ma4 rank30d<=0.05, hold 12h, declustered 12h
+  all    n= 2467 mean=    32.6bp med=    11.1bp hit=0.52 t= 3.86
+  2022   n=  702 mean=    -3.4bp med=   -14.2bp hit=0.47 t=-0.18
+  2023   n=  754 mean=    43.4bp med=    17.6bp hit=0.55 t= 4.42
+  2024   n= 1011 mean=    49.4bp med=    29.5bp hit=0.55 t= 3.51
+  long   n= 2467 mean=    32.6bp med=    11.1bp hit=0.52 t= 3.86
+  BTCETH n=  526 mean=    12.3bp med=    11.8bp hit=0.54 t= 1.08
+  alts   n= 1941 mean=    38.1bp med=    10.5bp hit=0.52 t= 3.71
+  delay1 n= 2467 mean=    29.8bp med=    15.3bp hit=0.53 t= 3.54
+  funding paid over hold (signed, bps): mean=-1.70
+  by-day n=  701 mean=    30.5bp med=    18.3bp hit=0.54 t= 3.17 (distinct days=702)
+== discount long: prem_ma4 rank30d<=0.05, hold 24h, declustered 24h
+  all    n= 1817 mean=    46.4bp med=    26.2bp hit=0.54 t= 3.54
+  2022   n=  536 mean=     7.5bp med=     6.8bp hit=0.51 t= 0.25
+  2023   n=  574 mean=    67.5bp med=    24.2bp hit=0.55 t= 4.60
+  2024   n=  707 mean=    58.7bp med=    43.6bp hit=0.55 t= 2.73
+  long   n= 1817 mean=    46.4bp med=    26.2bp hit=0.54 t= 3.54
+  BTCETH n=  398 mean=    14.5bp med=    20.8bp hit=0.55 t= 0.82
+  alts   n= 1419 mean=    55.3bp med=    28.1bp hit=0.53 t= 3.45
+  delay1 n= 1817 mean=    40.8bp med=    18.5bp hit=0.53 t= 3.12
+  funding paid over hold (signed, bps): mean=-2.27
+  by-day n=  670 mean=    46.9bp med=    48.1bp hit=0.56 t= 3.09 (distinct days=672)
+== discount long: prem_ma4 rank30d<=0.05, hold 48h, declustered 48h
+  all    n= 1310 mean=    46.2bp med=    32.0bp hit=0.53 t= 2.36
+  2022   n=  386 mean=   -60.5bp med=   -49.9bp hit=0.48 t=-1.48
+  2023   n=  433 mean=    87.5bp med=    46.0bp hit=0.55 t= 3.49
+  2024   n=  491 mean=    93.7bp med=    73.0bp hit=0.55 t= 2.72
+  long   n= 1310 mean=    46.2bp med=    32.0bp hit=0.53 t= 2.36
+  BTCETH n=  288 mean=    10.9bp med=    27.5bp hit=0.54 t= 0.38
+  alts   n= 1022 mean=    56.2bp med=    33.6bp hit=0.52 t= 2.36
+  delay1 n= 1310 mean=    40.6bp med=    19.5bp hit=0.52 t= 2.03
+  funding paid over hold (signed, bps): mean=-2.67
+  by-day n=  600 mean=    36.9bp med=    28.7bp hit=0.54 t= 1.58 (distinct days=602)
+== discount long: prem_ma8 rank30d<=0.01, hold 12h, declustered 12h
+  all    n=  662 mean=    89.2bp med=    61.6bp hit=0.62 t= 4.74
+  2022   n=  187 mean=     3.0bp med=    12.7bp hit=0.54 t= 0.07
+  2023   n=  190 mean=    70.2bp med=    46.8bp hit=0.62 t= 3.85
+  2024   n=  285 mean=   158.6bp med=   120.3bp hit=0.67 t= 4.88
+  long   n=  662 mean=    89.2bp med=    61.6bp hit=0.62 t= 4.74
+  BTCETH n=  132 mean=    40.0bp med=    50.0bp hit=0.64 t= 1.48
+  alts   n=  530 mean=   101.5bp med=    66.9bp hit=0.61 t= 4.50
+  delay1 n=  662 mean=    78.1bp med=    59.6bp hit=0.60 t= 4.06
+  funding paid over hold (signed, bps): mean=-2.64
+  by-day n=  321 mean=    51.3bp med=    39.0bp hit=0.61 t= 2.82 (distinct days=321)
+== discount long: prem_ma8 rank30d<=0.01, hold 24h, declustered 24h
+  all    n=  553 mean=   118.6bp med=    69.2bp hit=0.55 t= 4.22
+  2022   n=  156 mean=   -13.2bp med=    -9.1bp hit=0.49 t=-0.22
+  2023   n=  156 mean=   135.1bp med=    68.7bp hit=0.56 t= 3.97
+  2024   n=  241 mean=   193.3bp med=   129.4bp hit=0.59 t= 4.16
+  long   n=  553 mean=   118.6bp med=    69.2bp hit=0.55 t= 4.22
+  BTCETH n=  112 mean=    43.4bp med=    33.5bp hit=0.54 t= 0.97
+  alts   n=  441 mean=   137.7bp med=    86.7bp hit=0.56 t= 4.14
+  delay1 n=  553 mean=   108.8bp med=    66.5bp hit=0.58 t= 3.93
+  funding paid over hold (signed, bps): mean=-3.54
+  by-day n=  302 mean=    71.3bp med=    62.0bp hit=0.56 t= 2.41 (distinct days=302)
+== discount long: prem_ma8 rank30d<=0.01, hold 48h, declustered 48h
+  all    n=  455 mean=   155.7bp med=    84.6bp hit=0.57 t= 3.81
+  2022   n=  131 mean=   -70.9bp med=   -19.3bp hit=0.49 t=-0.89
+  2023   n=  134 mean=   180.2bp med=    90.6bp hit=0.63 t= 3.88
+  2024   n=  190 mean=   294.7bp med=   134.6bp hit=0.58 t= 4.08
+  long   n=  455 mean=   155.7bp med=    84.6bp hit=0.57 t= 3.81
+  BTCETH n=   89 mean=    29.6bp med=     5.7bp hit=0.51 t= 0.45
+  alts   n=  366 mean=   186.4bp med=   121.7bp hit=0.58 t= 3.87
+  delay1 n=  455 mean=   146.6bp med=    92.1bp hit=0.58 t= 3.66
+  funding paid over hold (signed, bps): mean=-4.39
+  by-day n=  275 mean=    85.0bp med=    58.8bp hit=0.57 t= 1.81 (distinct days=275)
+== discount long: prem_ma8 rank30d<=0.02, hold 12h, declustered 12h
+  all    n= 1082 mean=    55.8bp med=    31.6bp hit=0.57 t= 3.98
+  2022   n=  282 mean=    19.2bp med=    11.7bp hit=0.51 t= 0.60
+  2023   n=  323 mean=    49.6bp med=    23.9bp hit=0.58 t= 3.27
+  2024   n=  477 mean=    81.6bp med=    53.5bp hit=0.59 t= 3.51
+  long   n= 1082 mean=    55.8bp med=    31.6bp hit=0.57 t= 3.98
+  BTCETH n=  225 mean=    13.2bp med=    18.5bp hit=0.57 t= 0.61
+  alts   n=  857 mean=    66.9bp med=    39.1bp hit=0.56 t= 4.00
+  delay1 n= 1082 mean=    51.2bp med=    32.4bp hit=0.57 t= 3.69
+  funding paid over hold (signed, bps): mean=-2.15
+  by-day n=  450 mean=    45.2bp med=    26.5bp hit=0.57 t= 3.17 (distinct days=450)
+== discount long: prem_ma8 rank30d<=0.02, hold 24h, declustered 24h
+  all    n=  845 mean=    85.2bp med=    52.6bp hit=0.56 t= 3.92
+  2022   n=  224 mean=    -3.2bp med=     8.6bp hit=0.52 t=-0.06
+  2023   n=  260 mean=   106.2bp med=    51.4bp hit=0.58 t= 4.05
+  2024   n=  361 mean=   124.9bp med=   100.5bp hit=0.57 t= 3.62
+  long   n=  845 mean=    85.2bp med=    52.6bp hit=0.56 t= 3.92
+  BTCETH n=  185 mean=    28.5bp med=    14.2bp hit=0.54 t= 0.95
+  alts   n=  660 mean=   101.1bp med=    73.9bp hit=0.56 t= 3.82
+  delay1 n=  845 mean=    85.9bp med=    58.9bp hit=0.56 t= 4.09
+  funding paid over hold (signed, bps): mean=-2.97
+  by-day n=  428 mean=    55.7bp med=    46.4bp hit=0.56 t= 2.40 (distinct days=428)
+== discount long: prem_ma8 rank30d<=0.02, hold 48h, declustered 48h
+  all    n=  658 mean=   107.8bp med=    56.7bp hit=0.55 t= 3.43
+  2022   n=  186 mean=   -63.0bp med=   -62.4bp hit=0.48 t=-1.08
+  2023   n=  205 mean=   166.4bp med=    72.7bp hit=0.60 t= 3.90
+  2024   n=  267 mean=   181.9bp med=    67.9bp hit=0.57 t= 3.22
+  long   n=  658 mean=   107.8bp med=    56.7bp hit=0.55 t= 3.43
+  BTCETH n=  142 mean=    41.3bp med=    21.8bp hit=0.52 t= 0.86
+  alts   n=  516 mean=   126.1bp med=    62.4bp hit=0.56 t= 3.33
+  delay1 n=  658 mean=    97.5bp med=    55.2bp hit=0.55 t= 3.11
+  funding paid over hold (signed, bps): mean=-3.41
+  by-day n=  386 mean=    65.5bp med=    39.2bp hit=0.54 t= 1.82 (distinct days=386)
+== discount long: prem_ma8 rank30d<=0.05, hold 12h, declustered 12h
+  all    n= 2034 mean=    33.7bp med=    17.8bp hit=0.54 t= 3.62
+  2022   n=  550 mean=   -10.4bp med=     1.9bp hit=0.50 t=-0.53
+  2023   n=  589 mean=    53.4bp med=    26.1bp hit=0.57 t= 4.72
+  2024   n=  895 mean=    47.9bp med=    25.4bp hit=0.55 t= 3.06
+  long   n= 2034 mean=    33.7bp med=    17.8bp hit=0.54 t= 3.62
+  BTCETH n=  428 mean=     6.0bp med=    10.9bp hit=0.55 t= 0.42
+  alts   n= 1606 mean=    41.2bp med=    21.7bp hit=0.54 t= 3.68
+  delay1 n= 2034 mean=    33.1bp med=    18.0bp hit=0.54 t= 3.50
+  funding paid over hold (signed, bps): mean=-1.71
+  by-day n=  628 mean=    30.1bp med=    14.7bp hit=0.54 t= 2.90 (distinct days=628)
+== discount long: prem_ma8 rank30d<=0.05, hold 24h, declustered 24h
+  all    n= 1450 mean=    58.4bp med=    33.3bp hit=0.53 t= 3.85
+  2022   n=  409 mean=   -10.3bp med=   -32.9bp hit=0.48 t=-0.30
+  2023   n=  436 mean=    83.6bp med=    43.4bp hit=0.57 t= 4.49
+  2024   n=  605 mean=    86.6bp med=    54.9bp hit=0.55 t= 3.52
+  long   n= 1450 mean=    58.4bp med=    33.3bp hit=0.53 t= 3.85
+  BTCETH n=  304 mean=     4.4bp med=     2.6bp hit=0.50 t= 0.20
+  alts   n= 1146 mean=    72.7bp med=    49.6bp hit=0.54 t= 3.97
+  delay1 n= 1450 mean=    56.5bp med=    29.3bp hit=0.54 t= 3.76
+  funding paid over hold (signed, bps): mean=-2.43
+  by-day n=  599 mean=    52.8bp med=    43.3bp hit=0.55 t= 3.01 (distinct days=600)
+== discount long: prem_ma8 rank30d<=0.05, hold 48h, declustered 48h
+  all    n= 1065 mean=    76.3bp med=    40.5bp hit=0.54 t= 3.31
+  2022   n=  311 mean=   -52.0bp med=    -3.3bp hit=0.50 t=-1.13
+  2023   n=  335 mean=   138.1bp med=    46.4bp hit=0.58 t= 4.42
+  2024   n=  419 mean=   122.1bp med=    46.0bp hit=0.54 t= 3.05
+  long   n= 1065 mean=    76.3bp med=    40.5bp hit=0.54 t= 3.31
+  BTCETH n=  227 mean=    13.9bp med=    10.1bp hit=0.52 t= 0.40
+  alts   n=  838 mean=    93.2bp med=    46.7bp hit=0.54 t= 3.36
+  delay1 n= 1064 mean=    75.0bp med=    43.5bp hit=0.54 t= 3.31
+  funding paid over hold (signed, bps): mean=-2.95
+  by-day n=  539 mean=    52.9bp med=    22.8bp hit=0.52 t= 1.88 (distinct days=540)

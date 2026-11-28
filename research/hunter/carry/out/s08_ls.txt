@@ -1,0 +1,33 @@
+ls 24h diff quantiles: {0.01: -0.07, 0.02: -0.05, 0.05: -0.04, 0.5: 0.0, 0.95: 0.04, 0.98: 0.05, 0.99: 0.07}
+ls d_lo 0.04 price24h None -> LONG 24h (negate for short)
+    n=1183 mean=61.5 med=19.4 hit=0.53 t=4.19 | byday t=2.61 days=474 | 2023:28(674) 2024:106(510) | L:61(1184) | maj=45(66) alts=62(1117) | delay1=46.6 | fund=2.5
+ls d_lo 0.04 price24h down -> LONG 24h (negate for short)
+    n=414 mean=67.7 med=56.9 hit=0.57 t=2.40 | byday t=2.88 days=232 | 2023:35(205) 2024:100(209) | L:68(414) | maj=239(14) alts=62(400) | delay1=61.4 | fund=1.5
+ls d_lo 0.04 price24h up -> LONG 24h (negate for short)
+    n=531 mean=83.9 med=-8.6 hit=0.50 t=3.49 | byday t=1.90 days=309 | 2023:52(264) 2024:116(268) | L:84(532) | maj=-28(26) alts=90(505) | delay1=60.4 | fund=4.1
+ls d_lo 0.04 price24h flat -> LONG 24h (negate for short)
+    n=685 mean=21.0 med=7.5 hit=0.51 t=1.40 | byday t=0.70 days=332 | 2023:21(480) 2024:21(206) | L:21(686) | maj=38(40) alts=20(645) | delay1=21.8 | fund=1.4
+ls d_hi 0.04 price24h None -> LONG 24h (negate for short)
+    n=1274 mean=21.3 med=-0.7 hit=0.49 t=1.51 | byday t=0.72 days=497 | 2023:9(707) 2024:37(568) | L:21(1275) | maj=59(73) alts=19(1201) | delay1=15.3 | fund=2.3
+ls d_hi 0.04 price24h down -> LONG 24h (negate for short)
+    n=547 mean=51.3 med=0.0 hit=0.50 t=2.31 | byday t=2.22 days=309 | 2023:48(266) 2024:55(282) | L:51(548) | maj=126(18) alts=49(529) | delay1=45.4 | fund=1.9
+ls d_hi 0.04 price24h up -> LONG 24h (negate for short)
+    n=464 mean=-10.9 med=-37.0 hit=0.46 t=-0.43 | byday t=-0.99 days=264 | 2023:17(236) 2024:-40(229) | L:-11(465) | maj=42(30) alts=-15(434) | delay1=-4.0 | fund=3.2
+ls d_hi 0.04 price24h flat -> LONG 24h (negate for short)
+    n=817 mean=40.9 med=3.7 hit=0.51 t=2.42 | byday t=1.61 days=399 | 2023:6(521) 2024:102(297) | L:41(818) | maj=66(49) alts=39(768) | delay1=34.8 | fund=1.8
+ls lvl_lo 0.05 price24h None -> LONG 24h (negate for short)
+    n=861 mean=72.3 med=15.3 hit=0.52 t=4.21 | byday t=2.73 days=407 | 2023:59(280) 2024:79(582) | L:72(862) | maj=54(155) alts=76(706) | delay1=64.8 | fund=2.7
+ls lvl_lo 0.05 price24h down -> LONG 24h (negate for short)
+    n=297 mean=127.8 med=75.2 hit=0.61 t=3.50 | byday t=2.27 days=185 | 2023:56(65) 2024:148(232) | L:128(297) | maj=160(38) alts=123(259) | delay1=105.0 | fund=1.9
+ls lvl_lo 0.05 price24h up -> LONG 24h (negate for short)
+    n=425 mean=74.4 med=9.6 hit=0.51 t=2.96 | byday t=2.50 days=260 | 2023:98(123) 2024:65(303) | L:74(426) | maj=54(64) alts=78(361) | delay1=61.2 | fund=3.8
+ls lvl_lo 0.05 price24h flat -> LONG 24h (negate for short)
+    n=525 mean=51.3 med=15.5 hit=0.54 t=2.64 | byday t=1.75 days=305 | 2023:79(195) 2024:35(330) | L:51(525) | maj=58(112) alts=50(413) | delay1=55.0 | fund=2.5
+ls lvl_hi 0.05 price24h None -> LONG 24h (negate for short)
+    n=1522 mean=36.3 med=-1.9 hit=0.50 t=2.78 | byday t=1.60 days=513 | 2023:32(578) 2024:39(948) | L:36(1526) | maj=7(270) alts=43(1252) | delay1=36.5 | fund=4.7
+ls lvl_hi 0.05 price24h down -> LONG 24h (negate for short)
+    n=699 mean=56.4 med=23.3 hit=0.53 t=2.77 | byday t=3.65 days=333 | 2023:32(222) 2024:68(479) | L:56(701) | maj=20(88) alts=62(611) | delay1=50.4 | fund=4.3
+ls lvl_hi 0.05 price24h up -> LONG 24h (negate for short)
+    n=589 mean=13.4 med=-45.7 hit=0.46 t=0.55 | byday t=-0.78 days=282 | 2023:-0(193) 2024:20(396) | L:13(589) | maj=20(88) alts=12(501) | delay1=14.6 | fund=6.5
+ls lvl_hi 0.05 price24h flat -> LONG 24h (negate for short)
+    n=1086 mean=23.9 med=-0.6 hit=0.50 t=1.63 | byday t=0.34 days=456 | 2023:36(445) 2024:16(644) | L:24(1089) | maj=13(201) alts=26(885) | delay1=28.2 | fund=4.8

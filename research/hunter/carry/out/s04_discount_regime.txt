@@ -1,0 +1,23 @@
+prem_ma8 rank<=2% long 24h [all]
+    n=845 mean=85.2 med=52.6 hit=0.56 t=3.92 | byday t=2.40 days=428 | 2022:-3(224) 2023:106(260) 2024:125(361) | L:85(845) | maj=29(185) alts=101(660) | delay1=85.9 | fund=-3.0
+prem_ma8 rank<=2% long 24h [own_up]
+    n=260 mean=77.9 med=10.8 hit=0.52 t=2.28 | byday t=1.79 days=194 | 2022:-87(67) 2023:104(93) 2024:164(100) | L:78(260) | maj=-15(59) alts=105(201) | delay1=82.9 | fund=-1.7
+prem_ma8 rank<=2% long 24h [own_dn]
+    n=625 mean=92.2 med=68.0 hit=0.58 t=3.57 | byday t=2.36 days=312 | 2022:4(163) 2023:106(180) 2024:135(282) | L:92(625) | maj=31(137) alts=109(488) | delay1=87.3 | fund=-3.2
+prem_ma8 rank<=2% long 24h [btc_up]
+    n=332 mean=81.5 med=30.3 hit=0.54 t=2.63 | byday t=1.54 days=198 | 2022:-52(65) 2023:105(113) 2024:120(154) | L:82(332) | maj=64(71) alts=86(261) | delay1=85.4 | fund=-0.9
+prem_ma8 rank<=2% long 24h [btc_dn]
+    n=562 mean=99.2 med=78.8 hit=0.59 t=3.50 | byday t=2.19 days=265 | 2022:-1(167) 2023:108(153) 2024:163(242) | L:99(562) | maj=24(127) alts=121(435) | delay1=95.6 | fund=-3.9
+prem_ma8 rank<=2% long 24h [own_up168]
+    n=246 mean=85.3 med=32.5 hit=0.55 t=2.69 | byday t=1.83 days=201 | 2022:-53(72) 2023:155(92) 2024:128(82) | L:85(246) | maj=67(54) alts=90(192) | delay1=95.0 | fund=-3.1
+prem_ma8 rank<=2% long 24h [own_dn168]
+    n=672 mean=95.9 med=67.0 hit=0.57 t=3.74 | byday t=2.00 days=319 | 2022:10(171) 2023:93(187) 2024:145(314) | L:96(672) | maj=29(148) alts=115(524) | delay1=91.0 | fund=-2.8
+prem_ma8 rank<=2% long 24h [drop24]
+    n=436 mean=118.8 med=126.7 hit=0.60 t=3.28 | byday t=2.28 days=207 | 2022:22(116) 2023:114(96) 2024:171(224) | L:119(436) | maj=-7(61) alts=139(375) | delay1=109.5 | fund=-3.1
+prem_ma8 rank<=2% long 24h [nodrop24]
+    n=588 mean=79.8 med=40.2 hit=0.55 t=3.88 | byday t=1.66 days=350 | 2022:27(146) 2023:100(204) 2024:95(238) | L:80(588) | maj=50(144) alts=89(444) | delay1=88.1 | fund=-2.5
+prem_ma8 rank<=2% long 24h [abs10]
+    n=215 mean=109.5 med=40.3 hit=0.54 t=1.99 | byday t=0.30 days=145 | 2022:30(107) 2023:148(82) 2024:314(26) | L:109(215) | maj=15(17) alts=118(198) | delay1=122.3 | fund=-10.5
+prem_ma8 rank<=2% long 24h [abs20]
+    n=57 mean=500.3 med=336.5 hit=0.72 t=3.20 | byday t=2.23 days=37 | 2022:263(21) 2023:470(24) 2024:977(12) | L:500(57) | maj=173(8) alts=554(49) | delay1=481.0 | fund=-21.7
+premium ma8 level at events (bps): {'count': 6872.0, 'mean': -8.4, 'std': 14.5, 'min': -217.1, '25%': -10.1, '50%': -5.5, '75%': -1.7, 'max': 9.1}
